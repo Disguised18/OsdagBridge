@@ -1,0 +1,18 @@
+Baseline: upstream/dev d74f56dd7f22925fb8148cabf5740ed8d1e39ff3
+Fixture: scripts/report_layout_fixture.py --baseline
+Compiler: Tectonic 0.17.0 (XeTeX)
+Input: Layout_Before.tex
+Result: compilation failed; no valid baseline PDF produced.
+
+error: Layout_Before.tex:253: Misplaced \noalign
+! Misplaced \noalign.
+\hline ->\noalign
+                  {\ifnum 0=`}\fi \penalty \@M \futurelet \@let@token \LT@@h...
+l.253 \hline
+
+The preceding longtable caption has no terminating row break. The original
+sources were not changed to manufacture a successful baseline.
+
+Additional baseline warning:
+Package fancyhdr Warning: \headheight is too small (12.0pt).
+Make it at least 17.49998pt.

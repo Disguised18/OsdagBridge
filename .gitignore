@@ -239,6 +239,21 @@ cython_debug/
 .cursorignore
 .cursorindexingignore
 
+# Report visual QA intermediates; retain the sample PDF, TeX and plot assets.
+/validation/layout/page-*.png
+/validation/layout/final-page-*.png
+/validation/layout/contact*.png
+/validation/layout/*.aux
+/validation/layout/*.out
+/validation/layout/*.xdv
+/validation/desktop-startup.txt
+/validation/desktop-errors.txt
+/validation/design/review-*.png
+/validation/design/*_compiler.json
+/validation/design-run.txt
+/validation/report-generation.txt
+/validation/baseline-generation.txt
+
 # macOS
 .DS_Store
 **/.DS_Store
