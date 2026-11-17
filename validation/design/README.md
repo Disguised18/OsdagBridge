@@ -26,6 +26,12 @@ The scripts use the real backend and normal material-property dialog extraction;
 they do not claim a completed click-by-click GUI workflow. Missing upstream
 centrifugal-force and end-diaphragm quantity/design values remain explicitly N/A.
 
+The subsequent visible GUI attempt opened the app and input-file selector but
+the process closed with Windows exceptions 0x8001010d, 0x80010108 and 0x80010012.
+The full interactive workflow could not be verified. `Report_Validation.osi`
+contains the saved inputs for a future GUI retry; it has JSON syntax, which is
+also valid YAML for the application's input loader.
+
 Reproduce the enhanced PDF with `scripts/generate_validation_report.py` in the
 installed environment. Reproduce the baseline with the unchanged sources first
 on PYTHONPATH and the script's `--baseline` flag. The baseline TeX references

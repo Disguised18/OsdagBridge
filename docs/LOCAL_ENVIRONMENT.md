@@ -18,3 +18,9 @@ startup check. The Osdag Core section database was initialized from its SQL.
 
 This resolves the earlier missing-dependency blocker. A full bridge design and
 GUI-generated report comparison still require separate validation.
+
+Subsequent validation completed a backend design and generated calculated
+comparison PDFs. A visible GUI check initialized the OpenGL/CAD display but the
+application closed during input-file selection with Windows exceptions
+0x8001010d, 0x80010108 and 0x80010012. Offscreen construction success must not be
+interpreted as a successful interactive GUI workflow. See `SUBMISSION.md`.
