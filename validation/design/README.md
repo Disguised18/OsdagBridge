@@ -3,7 +3,7 @@
 | File | Contents |
 |---|---|
 | `inputs.json`, `Report_Validation.osi` | Design inputs (identical; the `.osi` loads in the app) |
-| `outputs.json` | Complete backend design result for those inputs |
+| `outputs.json` | Complete solver result for those inputs, plus the Chapter 4 summaries the GUI passes to the report |
 | `Report_Before.pdf` / `.tex` | Unchanged upstream report code (`d74f56d`) |
 | `Report_After.pdf` / `.tex` | This branch's report code |
 | `Report_After_assets/` | Charts and logo referenced by `Report_After.tex` |
@@ -19,7 +19,7 @@ state of the chart and tables is visible.
 | pdfTeX exit codes (2 passes) | 1, 1 | 0, 0 |
 | LaTeX errors | 138 | 0 |
 | Overfull boxes | 61 | 0 |
-| Pages | 51 | 57 |
+| Pages | 54 | 60 |
 
 The original generator runs pdfTeX in non-stop mode and keeps the PDF even when
 compilation fails, so `Report_Before.pdf` is the real original output.

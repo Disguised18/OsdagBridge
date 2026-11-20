@@ -31,7 +31,7 @@ All under `src/osdagbridge/core/reports/` unless noted.
 | `styles.py` (new) | Preamble, geometry, palette, header/footer, named spacing and font commands, chart theme, `report_section` decorator. |
 | `plots.py` (new) | Reads stored design results and BOQ totals, draws the UR and quantity charts with Matplotlib's Agg canvas, and returns PyLaTeX figures. |
 | `load_tables.py` (new) | Builds the vehicle and footway live-load tables and interprets the GUI checkbox values. |
-| `report_generator.py` | Uses `styles.preamble`. Generates chart assets into the report's temporary folder and keeps a sibling `<report>_assets` folder so the saved `.tex` can be recompiled. Reports success only when the current compiler run produced the PDF. Always emits Chapter 6 so Chapter 7 keeps its number. |
+| `report_generator.py` | Uses `styles.preamble`. Generates chart assets into the report's temporary folder and keeps a sibling `<report>_assets` folder so the saved `.tex` can be recompiled. Reports success only when the current compiler run produced the PDF. Always emits Chapter 6 so Chapter 7 keeps its number. Generates the Chapter 5/7 charts whether or not *Drawings* is ticked (the GUI ties `include_figures` to that checkbox). |
 | `chap1.py` – `chap9.py`, `executive_summary.py` | Converted to `longtable` with repeated headers. Use the shared style commands. Consistent header capitalisation. Chapter 3 uses the new load tables. Chapter 5 removes tall `multirow` cells, embeds the UR chart and adds the missing summary rows. Chapter 7 embeds the quantity charts. |
 | `report_utils.py` | Single-pass LaTeX escaping, so backslashes are not escaped twice. Removed negative figure spacing. |
 | `tests/unit/test_reports.py` (new) | 34 regression tests (see Section 6). |
@@ -112,8 +112,16 @@ default materials. The inputs are saved in `validation/design/inputs.json` and
 the matching `Report_Validation.osi` (loadable in the app). The complete
 backend result is in `outputs.json`.
 
-**Before / After.** Both PDFs are generated from the same inputs and result
-snapshot by `scripts/generate_validation_report.py`. `Report_Before` uses the
+**How the reports were made.** `scripts/run_design_validation.py` runs the
+real solver (`PlateGirderBridge.design()`) on the inputs above and saves the
+result, including the Chapter 4 load-case and reaction summaries, exactly as
+`PlateGirderBridge.generate_design_report` hands them to the report generator
+when *Generate Report* is clicked. Running the design twice gives identical
+results; only the solver log's timestamp changes.
+
+**Before / After.** Both PDFs are generated from that same snapshot by
+`scripts/generate_validation_report.py`, through the same
+`build_report_payload` / `generate_report` calls the GUI uses. `Report_Before` uses the
 unchanged upstream report code at `d74f56d`; `Report_After` uses this branch.
 
 | | Report_Before | Report_After |
@@ -121,10 +129,13 @@ unchanged upstream report code at `d74f56d`; `Report_After` uses this branch.
 | pdfTeX exit codes (2 passes) | 1, 1 | 0, 0 |
 | LaTeX errors | 138 | 0 |
 | Overfull boxes | 61 | 0 |
-| Pages | 51 | 57 |
+| Pages | 54 | 60 |
 
 The upstream generator runs pdfTeX in non-stop mode and keeps the PDF despite
 the errors, so `Report_Before.pdf` is the real original output, errors included.
+Every numeric value in `Report_Before.pdf` also appears in `Report_After.pdf`,
+and spot checks against the solver output (girder moment, fatigue stress, SLS
+stress, LTB, governing UR) match in both.
 
 **Tests.** `pytest tests` → 34 passed (Python 3.12, PyLaTeX 1.4.2, Matplotlib
 3.10). They cover header repetition in every table, checkbox parsing, vehicle

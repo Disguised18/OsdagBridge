@@ -34,6 +34,11 @@ def main():
     bridge.set_input(inputs)
     bridge.design()
     outputs = dict(bridge.output_dict)
+    # Same Chapter 4 hand-off as PlateGirderBridge.generate_design_report (the GUI path).
+    lc_sum = getattr(bridge, '_lc_summary', None)
+    rxn_sum = getattr(bridge, '_reaction_summary', None)
+    if lc_sum is not None or rxn_sum is not None:
+        outputs['analysis_summary'] = {'load_cases': lc_sum or {}, 'reactions': rxn_sum or {}}
     (folder / 'outputs.json').write_text(json.dumps(outputs, indent=2, default=str))
     print('DESIGN_OUTPUT_SAVED', len(outputs), flush=True)
 

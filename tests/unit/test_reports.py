@@ -168,19 +168,21 @@ def test_full_pipeline_keeps_assets_and_rejects_stale_pdf(tmp_path, monkeypatch,
     assert_headers(tex)
 
 
-def test_disabled_figures_skip_plots_and_missing_compiler_keeps_tex(tmp_path, monkeypatch, metadata):
-    options = report.ReportOptions(['loads'], False, False, True)
+def test_charts_do_not_depend_on_drawings_and_missing_compiler_keeps_tex(tmp_path, monkeypatch, metadata):
+    # The GUI sets include_figures only when "Drawings" is ticked; the Chapter 5
+    # and 7 charts must still be produced without it.
+    options = report.ReportOptions(['loads', 'design_checks'], False, False, True)
     payload = report.ReportPayload(metadata, options, {}, {}, [], report.ReportFigures())
-    request = report.ReportRequest(metadata, options, str(tmp_path), 'No_Figures')
-    def no_plot(*args, **kwargs):
-        pytest.fail('Charts must respect include_figures=False')
+    request = report.ReportRequest(metadata, options, str(tmp_path), 'No_Drawings')
     def missing_compiler(*args, **kwargs):
         raise FileNotFoundError('pdflatex missing')
-    monkeypatch.setattr(report, 'save_plots', no_plot)
     monkeypatch.setattr(report.subprocess, 'run', missing_compiler)
     result = report.generate_report(payload, request)
     assert result.pdf_path is None and Path(result.tex_path).exists()
-    assert 'utilization.png' not in Path(result.tex_path).read_text(encoding='utf-8')
+    tex = Path(result.tex_path).read_text(encoding='utf-8')
+    for chart in ('utilization.png', 'structural_steel.png', 'concrete_reinforcement.png'):
+        assert chart in tex
+    assert 'Drawings were requested' not in tex and 'Drawings were not selected' in tex
 
 
 def test_successful_compiler_returns_new_pdf(tmp_path, monkeypatch, metadata):

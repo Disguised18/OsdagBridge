@@ -1781,7 +1781,7 @@
         "R_kN": 303.73
       }
     },
-    "report_text": "==============================================================================\n               IRC 22:2015 COMPOSITE BRIDGE DESIGN CHECK REPORT               \n          Demand (Analyser)  -->  IRC 22 Capacity  -->  DCR Pipeline          \n                        Generated: 2026-11-20 23:57:20                        \n==============================================================================\n\nBRIDGE CONFIGURATION\n--------------------\n  Span                    : 20.00 m\n  Support                 : simply_supported\n  Carriageway Width       : 7.50 m\n  Girder Spacing          : 2.43 m\n  No. of Girders          : 7\n  Beam Type               : inner\n  Steel Grade             : E 350A (fy = 350.0 MPa)\n  Concrete Grade          : M40 (fck = 40.0 MPa)\n  Rebar Grade             : Fe 500\n\nSTEEL SECTION (Plate Girder - Welded)\n-------------------------------------\n  Overall Depth D         : 1,120.00 mm\n  Top Flange              : 340.0 x 16.0 mm\n  Bottom Flange           : 340.0 x 16.0 mm\n  Web                     : 1088 x 8.0 mm\n  A_steel                 : 19,584 mm2\n  Iz_steel                : 4,174,020,608 mm4\n\nCONCRETE SLAB\n-------------\n  Slab Thickness          : 250.00 mm\n  Haunch Depth            : 0.000 mm\n\nDESIGN DEMANDS (Envelope ULS)\n-----------------------------\n  Location                : critical element\n  Member                  : G4\n  Source                  : grillage_analysis\n\n  Mu (factored)           : 1,341.55 kNm\n  Vu (factored)           : 226.41 kN\n  Nu (factored)           : 18.00 kN\n  delta_live              : 11.03 mm\n  delta_total             : 24.50 mm\n  Stress Range            : 237.20 MPa\n  Shear Range             : 49.30 MPa\n  Nsc                     : 2,000,000 cycles\n  M_sls (service)         : 1,279.85 kNm\n  V_sls (service)         : 214.55 kN\n\nIRC 22:2015 CAPACITY COMPUTATIONS\n---------------------------------\n\n  1. Effective Width (Cl.603.2.1)\n     beff = 2430.0 mm\n\n  2. Section Classification (Cl.603)\n     epsilon = 0.8450\n     Web: Slender  (d/tw = 136.0)\n     Flange: Semi-Compact  (b/tf = 10.4)\n     Governing: Slender\n\n  3. Positive Moment Capacity (Cl.603.3.1)\n     PNA Location: slab\n     xu = 179.41 mm\n     Mp = Md = 4,600.16 kNm  (\u03b3m0 and \u03b3c embedded)\n\n  4. Plastic Shear Resistance (Cl.603.3.3.2)\n     Av = 8,704 mm\u00b2\n     Vn = 1,758.84 kN\n     Vd = 1,598.94 kN\n\n  4b. Shear Buckling Resistance (Cl.603.3.3.2 \u2014 Post-Critical)\n     Kv = 7.121  |  \u03bbw = 1.704\n     \u03c4b = 69.60 MPa  |  Vcr = 550.70 kN\n\n  5. Buckling Resistance Moment (Cl.603.3.3.1)\n     Mcr = 12,769.32 kNm  |  \u03bb_LT = 0.4520  |  \u03c7_LT = 0.8695\n     Mb = 2,316.41 kNm\n\n  6. Bending\u2013Shear Interaction (Cl.603.3.3.3)\n     beta = 0.0000  |  Mdv = 4,600.16 kNm\n\n  7. Composite Section Properties (Cl.604.3)\n     Short-term (n=7.5):  I = 11,996,013,861 mm\u2074  |  y_top = 258.4 mm  |  y_bot = 1111.6 mm\n     Long-term  (n=15.0):  I = 10,579,065,478 mm\u2074\n\n  8. SLS Stress Limits (Cl.604.3.1)\n     Concrete limit   : \u03c3c  \u2264 0.48 fck = 19.2 MPa\n     Steel equiv. limit: fe  \u2264 0.90 fy  = 315.0 MPa\n     Rebar limit      : \u03c3r  \u2264 0.80 fyk = 400.0 MPa\n     --- Actual stresses (M_sls = 1279.8 kNm) ---\n     \u03c3c (concrete)  = 3.675 MPa  OK\n     fe (steel)     = 126.050 MPa  OK\n     \u03c3r (rebar)     = 21.591 MPa  OK\n     \u03c4 (web shear)  = 24.650 MPa\n\n  9. Deflection Limits (Cl.604.3.2)\n     Live + impact \u2264 L/800 = 25.00 mm\n     Total         \u2264 L/600 = 33.33 mm\n\n  10. Fatigue Assessment (Cl.605)\n     f_fd  = 92.491 MPa  |  \u03c4_fd = 52.493 MPa\n\n  11. Shear Stud Capacity (Cl.606.3.1)\n     Qu = 95.363 kN / stud\n     Required ULS spacing = 1566.1 mm\n\n  12. Shear Connector Spacing Limits (Cl.606.9)\n     Max spacing = min(600, 3t_slab, 4h_stud) = 400 mm\n     Min spacing = 75 mm\n\nDESIGN CHECK RESULTS (DCR = Demand / Capacity)\n----------------------------------------------\n  -------------------------------------------------------------------------\n    #  Check                            Demand    Capacity      DCR  Status\n  -------------------------------------------------------------------------\n    1  ULS Flexure                     1341.55     4600.16    0.292   PASS \n    2  ULS Shear                        226.41     1598.94    0.142   PASS \n    2  ULS Shear Buckling               226.41      550.70    0.411   PASS \n    3  M-V Interaction                 1341.55     4600.16    0.292   PASS \n    4  M-N Interaction                    0.29        1.00    0.294   PASS \n    5  LTB (Girder SW Only)              44.40      304.75    0.146   PASS \n    5  LTB (Construction Stage)         705.30     2316.41    0.304   PASS \n    7  Stud Spacing Feasibility (Cl.606.9)      75.00      303.81    0.247   PASS \n    7  Stud Detailing                     0.00        1.00    0.000   PASS \n    8  Fatigue Normal Stress            237.20       92.49    2.565  *FAIL*\n    9  Fatigue Shear Stress              49.30       52.49    0.939   WARN \n   11  SLS Steel Equiv. Stress          126.05      315.00    0.400   PASS \n   13  SLS Deflection (Live)             11.03       25.00    0.441   PASS \n   14  SLS Deflection (Total)            24.50       33.33    0.735   PASS \n   20  Int.Stiff: Leg \u2264 H_limit         165.00      169.03    0.976   WARN \n   20  Int.Stiff: Iys \u2265 Iys_min      417792.00  32178300.00    0.013   PASS \n   21  Brg.Stiff: Web Buckling          303.73   109506.26    0.003   PASS \n   21  Brg.Stiff: Local Crushing        303.73      364.82    0.833   PASS \n   21  Brg.Stiff: Bearing Contact       303.73     2100.00    0.145   PASS \n   21  Brg.Stiff: Column Buckling       303.73     1864.55    0.163   PASS \n  -------------------------------------------------------------------------\n\nDCR BAR CHART\n-------------\n  ULS Flexure            [|||||||||||||................................] 0.292\n  ULS Shear              [||||||.......................................] 0.142\n  ULS Shear Buckling     [||||||||||||||||||...........................] 0.411\n  M-V Interaction        [|||||||||||||................................] 0.292\n  M-N Interaction        [|||||||||||||................................] 0.294\n  LTB (Girder SW Only)   [||||||.......................................] 0.146\n  LTB (Construction Stage) [|||||||||||||................................] 0.304\n  Stud Spacing Feasibility (Cl.606.9) [|||||||||||..................................] 0.247\n  Stud Detailing         [.............................................] 0.000\n  Fatigue Normal Stress  [XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX] 2.565\n  Fatigue Shear Stress   [##########################################...] 0.939\n  SLS Steel Equiv. Stress [||||||||||||||||||...........................] 0.400\n  SLS Deflection (Live)  [|||||||||||||||||||..........................] 0.441\n  SLS Deflection (Total) [|||||||||||||||||||||||||||||||||............] 0.735\n  Int.Stiff: Leg \u2264 H_limit [###########################################..] 0.976\n  Int.Stiff: Iys \u2265 Iys_min [.............................................] 0.013\n  Brg.Stiff: Web Buckling [.............................................] 0.003\n  Brg.Stiff: Local Crushing [|||||||||||||||||||||||||||||||||||||........] 0.833\n  Brg.Stiff: Bearing Contact [||||||.......................................] 0.145\n  Brg.Stiff: Column Buckling [|||||||......................................] 0.163\n\nOVERALL VERDICT\n---------------\n\n  Status           : FAIL\n  Checks Run       : 20\n  PASS / WARN / FAIL: 12 / 1 / 1\n  Maximum DCR      : 2.5646\n  Critical Check   : Fatigue Normal Stress (Cl.605)\n\n  >>> DESIGN FAILS ONE OR MORE CHECKS - REVISION REQUIRED <<<\n",
+    "report_text": "==============================================================================\n               IRC 22:2015 COMPOSITE BRIDGE DESIGN CHECK REPORT               \n          Demand (Analyser)  -->  IRC 22 Capacity  -->  DCR Pipeline          \n                        Generated: 2026-11-21 01:00:43                        \n==============================================================================\n\nBRIDGE CONFIGURATION\n--------------------\n  Span                    : 20.00 m\n  Support                 : simply_supported\n  Carriageway Width       : 7.50 m\n  Girder Spacing          : 2.43 m\n  No. of Girders          : 7\n  Beam Type               : inner\n  Steel Grade             : E 350A (fy = 350.0 MPa)\n  Concrete Grade          : M40 (fck = 40.0 MPa)\n  Rebar Grade             : Fe 500\n\nSTEEL SECTION (Plate Girder - Welded)\n-------------------------------------\n  Overall Depth D         : 1,120.00 mm\n  Top Flange              : 340.0 x 16.0 mm\n  Bottom Flange           : 340.0 x 16.0 mm\n  Web                     : 1088 x 8.0 mm\n  A_steel                 : 19,584 mm2\n  Iz_steel                : 4,174,020,608 mm4\n\nCONCRETE SLAB\n-------------\n  Slab Thickness          : 250.00 mm\n  Haunch Depth            : 0.000 mm\n\nDESIGN DEMANDS (Envelope ULS)\n-----------------------------\n  Location                : critical element\n  Member                  : G4\n  Source                  : grillage_analysis\n\n  Mu (factored)           : 1,341.55 kNm\n  Vu (factored)           : 226.41 kN\n  Nu (factored)           : 18.00 kN\n  delta_live              : 11.03 mm\n  delta_total             : 24.50 mm\n  Stress Range            : 237.20 MPa\n  Shear Range             : 49.30 MPa\n  Nsc                     : 2,000,000 cycles\n  M_sls (service)         : 1,279.85 kNm\n  V_sls (service)         : 214.55 kN\n\nIRC 22:2015 CAPACITY COMPUTATIONS\n---------------------------------\n\n  1. Effective Width (Cl.603.2.1)\n     beff = 2430.0 mm\n\n  2. Section Classification (Cl.603)\n     epsilon = 0.8450\n     Web: Slender  (d/tw = 136.0)\n     Flange: Semi-Compact  (b/tf = 10.4)\n     Governing: Slender\n\n  3. Positive Moment Capacity (Cl.603.3.1)\n     PNA Location: slab\n     xu = 179.41 mm\n     Mp = Md = 4,600.16 kNm  (\u03b3m0 and \u03b3c embedded)\n\n  4. Plastic Shear Resistance (Cl.603.3.3.2)\n     Av = 8,704 mm\u00b2\n     Vn = 1,758.84 kN\n     Vd = 1,598.94 kN\n\n  4b. Shear Buckling Resistance (Cl.603.3.3.2 \u2014 Post-Critical)\n     Kv = 7.121  |  \u03bbw = 1.704\n     \u03c4b = 69.60 MPa  |  Vcr = 550.70 kN\n\n  5. Buckling Resistance Moment (Cl.603.3.3.1)\n     Mcr = 12,769.32 kNm  |  \u03bb_LT = 0.4520  |  \u03c7_LT = 0.8695\n     Mb = 2,316.41 kNm\n\n  6. Bending\u2013Shear Interaction (Cl.603.3.3.3)\n     beta = 0.0000  |  Mdv = 4,600.16 kNm\n\n  7. Composite Section Properties (Cl.604.3)\n     Short-term (n=7.5):  I = 11,996,013,861 mm\u2074  |  y_top = 258.4 mm  |  y_bot = 1111.6 mm\n     Long-term  (n=15.0):  I = 10,579,065,478 mm\u2074\n\n  8. SLS Stress Limits (Cl.604.3.1)\n     Concrete limit   : \u03c3c  \u2264 0.48 fck = 19.2 MPa\n     Steel equiv. limit: fe  \u2264 0.90 fy  = 315.0 MPa\n     Rebar limit      : \u03c3r  \u2264 0.80 fyk = 400.0 MPa\n     --- Actual stresses (M_sls = 1279.8 kNm) ---\n     \u03c3c (concrete)  = 3.675 MPa  OK\n     fe (steel)     = 126.050 MPa  OK\n     \u03c3r (rebar)     = 21.591 MPa  OK\n     \u03c4 (web shear)  = 24.650 MPa\n\n  9. Deflection Limits (Cl.604.3.2)\n     Live + impact \u2264 L/800 = 25.00 mm\n     Total         \u2264 L/600 = 33.33 mm\n\n  10. Fatigue Assessment (Cl.605)\n     f_fd  = 92.491 MPa  |  \u03c4_fd = 52.493 MPa\n\n  11. Shear Stud Capacity (Cl.606.3.1)\n     Qu = 95.363 kN / stud\n     Required ULS spacing = 1566.1 mm\n\n  12. Shear Connector Spacing Limits (Cl.606.9)\n     Max spacing = min(600, 3t_slab, 4h_stud) = 400 mm\n     Min spacing = 75 mm\n\nDESIGN CHECK RESULTS (DCR = Demand / Capacity)\n----------------------------------------------\n  -------------------------------------------------------------------------\n    #  Check                            Demand    Capacity      DCR  Status\n  -------------------------------------------------------------------------\n    1  ULS Flexure                     1341.55     4600.16    0.292   PASS \n    2  ULS Shear                        226.41     1598.94    0.142   PASS \n    2  ULS Shear Buckling               226.41      550.70    0.411   PASS \n    3  M-V Interaction                 1341.55     4600.16    0.292   PASS \n    4  M-N Interaction                    0.29        1.00    0.294   PASS \n    5  LTB (Girder SW Only)              44.40      304.75    0.146   PASS \n    5  LTB (Construction Stage)         705.30     2316.41    0.304   PASS \n    7  Stud Spacing Feasibility (Cl.606.9)      75.00      303.81    0.247   PASS \n    7  Stud Detailing                     0.00        1.00    0.000   PASS \n    8  Fatigue Normal Stress            237.20       92.49    2.565  *FAIL*\n    9  Fatigue Shear Stress              49.30       52.49    0.939   WARN \n   11  SLS Steel Equiv. Stress          126.05      315.00    0.400   PASS \n   13  SLS Deflection (Live)             11.03       25.00    0.441   PASS \n   14  SLS Deflection (Total)            24.50       33.33    0.735   PASS \n   20  Int.Stiff: Leg \u2264 H_limit         165.00      169.03    0.976   WARN \n   20  Int.Stiff: Iys \u2265 Iys_min      417792.00  32178300.00    0.013   PASS \n   21  Brg.Stiff: Web Buckling          303.73   109506.26    0.003   PASS \n   21  Brg.Stiff: Local Crushing        303.73      364.82    0.833   PASS \n   21  Brg.Stiff: Bearing Contact       303.73     2100.00    0.145   PASS \n   21  Brg.Stiff: Column Buckling       303.73     1864.55    0.163   PASS \n  -------------------------------------------------------------------------\n\nDCR BAR CHART\n-------------\n  ULS Flexure            [|||||||||||||................................] 0.292\n  ULS Shear              [||||||.......................................] 0.142\n  ULS Shear Buckling     [||||||||||||||||||...........................] 0.411\n  M-V Interaction        [|||||||||||||................................] 0.292\n  M-N Interaction        [|||||||||||||................................] 0.294\n  LTB (Girder SW Only)   [||||||.......................................] 0.146\n  LTB (Construction Stage) [|||||||||||||................................] 0.304\n  Stud Spacing Feasibility (Cl.606.9) [|||||||||||..................................] 0.247\n  Stud Detailing         [.............................................] 0.000\n  Fatigue Normal Stress  [XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX] 2.565\n  Fatigue Shear Stress   [##########################################...] 0.939\n  SLS Steel Equiv. Stress [||||||||||||||||||...........................] 0.400\n  SLS Deflection (Live)  [|||||||||||||||||||..........................] 0.441\n  SLS Deflection (Total) [|||||||||||||||||||||||||||||||||............] 0.735\n  Int.Stiff: Leg \u2264 H_limit [###########################################..] 0.976\n  Int.Stiff: Iys \u2265 Iys_min [.............................................] 0.013\n  Brg.Stiff: Web Buckling [.............................................] 0.003\n  Brg.Stiff: Local Crushing [|||||||||||||||||||||||||||||||||||||........] 0.833\n  Brg.Stiff: Bearing Contact [||||||.......................................] 0.145\n  Brg.Stiff: Column Buckling [|||||||......................................] 0.163\n\nOVERALL VERDICT\n---------------\n\n  Status           : FAIL\n  Checks Run       : 20\n  PASS / WARN / FAIL: 12 / 1 / 1\n  Maximum DCR      : 2.5646\n  Critical Check   : Fatigue Normal Stress (Cl.605)\n\n  >>> DESIGN FAILS ONE OR MORE CHECKS - REVISION REQUIRED <<<\n",
     "per_girder": {
       "G1": {
         "demand": {
@@ -109496,5 +109496,575 @@
   "steeldesign.deflection.live_mm.G4": 27.955,
   "steeldesign.deflection.total_mm.G4": 69.308,
   "steeldesign.deflection.live_mm.G5": 25.941,
-  "steeldesign.deflection.total_mm.G5": 66.628
+  "steeldesign.deflection.total_mm.G5": 66.628,
+  "analysis_summary": {
+    "load_cases": {
+      "Envelope ULS": {
+        "max_bm": -1341.548,
+        "bm_girder": "G3",
+        "bm_location": 9.231,
+        "max_sf": 303.733,
+        "sf_girder": "G1",
+        "sf_location": 0.0
+      },
+      "WL Longitudinal": {
+        "max_bm": 0.0,
+        "bm_girder": "\u2014",
+        "bm_location": null,
+        "max_sf": 0.0,
+        "sf_girder": "\u2014",
+        "sf_location": null
+      },
+      "1.5 EQ (c)": {
+        "max_bm": 113.631,
+        "bm_girder": "G3",
+        "bm_location": 10.769,
+        "max_sf": 27.828,
+        "sf_girder": "G1",
+        "sf_location": 18.462
+      },
+      "BASIC_2: 1.35DL + 1.75DW + 1.15LL + 1.5WL": {
+        "max_bm": -1279.855,
+        "bm_girder": "G3",
+        "bm_location": 9.231,
+        "max_sf": 288.625,
+        "sf_girder": "G1",
+        "sf_location": 0.0
+      },
+      "1.5 EQ (a)": {
+        "max_bm": 34.089,
+        "bm_girder": "G3",
+        "bm_location": 9.231,
+        "max_sf": 8.349,
+        "sf_girder": "G1",
+        "sf_location": 0.0
+      },
+      "SLS_RARE_6: 1.0DL + 1.0DW + 0.75LL + 0.6WL": {
+        "max_bm": -1279.855,
+        "bm_girder": "G3",
+        "bm_location": 9.231,
+        "max_sf": 288.625,
+        "sf_girder": "G1",
+        "sf_location": 0.0
+      },
+      "DD": {
+        "max_bm": 557.513,
+        "bm_girder": "G3",
+        "bm_location": 10.769,
+        "max_sf": 140.062,
+        "sf_girder": "G1",
+        "sf_location": 18.462
+      },
+      "SLS_RARE_5: 1.0DL + 1.0DW + 0.75LL + 1.0WL": {
+        "max_bm": -1279.855,
+        "bm_girder": "G3",
+        "bm_location": 9.231,
+        "max_sf": 288.625,
+        "sf_girder": "G1",
+        "sf_location": 0.0
+      },
+      "SLS_FREQUENT_5: 1.0DL + 1.0DW + 0.2LL + 0.6WL": {
+        "max_bm": -1279.855,
+        "bm_girder": "G3",
+        "bm_location": 9.231,
+        "max_sf": 288.625,
+        "sf_girder": "G1",
+        "sf_location": 0.0
+      },
+      "SLS_RARE_3: 1.0DL + 1.2DW + 0.75LL + 0.6WL": {
+        "max_bm": -1279.855,
+        "bm_girder": "G3",
+        "bm_location": 9.231,
+        "max_sf": 288.625,
+        "sf_girder": "G1",
+        "sf_location": 0.0
+      },
+      "SLS_FREQUENT_3: 1.0DL + 1.2DW + 0.2LL + 0.5WL": {
+        "max_bm": -1279.855,
+        "bm_girder": "G3",
+        "bm_location": 9.231,
+        "max_sf": 288.625,
+        "sf_girder": "G1",
+        "sf_location": 0.0
+      },
+      "BASIC_1: 1.35DL + 1.75DW + 1.5LL + 0.9WL": {
+        "max_bm": -1279.855,
+        "bm_girder": "G3",
+        "bm_location": 9.231,
+        "max_sf": 288.625,
+        "sf_girder": "G1",
+        "sf_location": 0.0
+      },
+      "WL Transverse": {
+        "max_bm": 0.0,
+        "bm_girder": "\u2014",
+        "bm_location": null,
+        "max_sf": 0.0,
+        "sf_girder": "\u2014",
+        "sf_location": null
+      },
+      "ACCIDENTAL_3: 1.0DL + 1.0DW + 0.75LL": {
+        "max_bm": -1341.548,
+        "bm_girder": "G3",
+        "bm_location": 9.231,
+        "max_sf": 303.733,
+        "sf_girder": "G1",
+        "sf_location": 0.0
+      },
+      "SEISMIC_4: 1.0DL + 1.0DW + 0.2LL + 0.75EL": {
+        "max_bm": 1265.794,
+        "bm_girder": "G3",
+        "bm_location": 9.231,
+        "max_sf": 285.181,
+        "sf_girder": "G1",
+        "sf_location": 0.0
+      },
+      "Railing load": {
+        "max_bm": 13.547,
+        "bm_girder": "G1",
+        "bm_location": 10.769,
+        "max_sf": 4.03,
+        "sf_girder": "G1",
+        "sf_location": 18.462
+      },
+      "SLS_FREQUENT_2: 1.0DL + 1.2DW + 0.2LL + 0.6WL": {
+        "max_bm": -1279.855,
+        "bm_girder": "G3",
+        "bm_location": 9.231,
+        "max_sf": 288.625,
+        "sf_girder": "G1",
+        "sf_location": 0.0
+      },
+      "SLS_RARE_1: 1.0DL + 1.2DW + 1.0LL + 0.6WL": {
+        "max_bm": -1279.855,
+        "bm_girder": "G3",
+        "bm_location": 9.231,
+        "max_sf": 288.625,
+        "sf_girder": "G1",
+        "sf_location": 0.0
+      },
+      "Envelope SLS": {
+        "max_bm": -1279.855,
+        "bm_girder": "G3",
+        "bm_location": 9.231,
+        "max_sf": 288.625,
+        "sf_girder": "G1",
+        "sf_location": 0.0
+      },
+      "ACCIDENTAL_1: 1.0DL + 1.0DW + 0.75LL": {
+        "max_bm": -1341.548,
+        "bm_girder": "G3",
+        "bm_location": 9.231,
+        "max_sf": 303.733,
+        "sf_girder": "G1",
+        "sf_location": 0.0
+      },
+      "1.0 DL": {
+        "max_bm": 705.304,
+        "bm_girder": "G3",
+        "bm_location": 9.231,
+        "max_sf": 179.744,
+        "sf_girder": "G1",
+        "sf_location": 0.0
+      },
+      "1.0 WL": {
+        "max_bm": 61.693,
+        "bm_girder": "G3",
+        "bm_location": 9.231,
+        "max_sf": 15.109,
+        "sf_girder": "G1",
+        "sf_location": 18.462
+      },
+      "WL Uplift": {
+        "max_bm": 61.693,
+        "bm_girder": "G3",
+        "bm_location": 10.769,
+        "max_sf": 15.109,
+        "sf_girder": "G1",
+        "sf_location": 18.462
+      },
+      "EQ_X": {
+        "max_bm": 0.0,
+        "bm_girder": "\u2014",
+        "bm_location": null,
+        "max_sf": 0.0,
+        "sf_girder": "\u2014",
+        "sf_location": null
+      },
+      "SLS_FREQUENT_1: 1.0DL + 1.2DW + 0.75LL + 0.5WL": {
+        "max_bm": -1279.855,
+        "bm_girder": "G3",
+        "bm_location": 9.231,
+        "max_sf": 288.625,
+        "sf_girder": "G1",
+        "sf_location": 0.0
+      },
+      "SLS_FREQUENT_6: 1.0DL + 1.0DW + 0.2LL + 0.5WL": {
+        "max_bm": -1279.855,
+        "bm_girder": "G3",
+        "bm_location": 9.231,
+        "max_sf": 288.625,
+        "sf_girder": "G1",
+        "sf_location": 0.0
+      },
+      "1.0 DL + 1.0 LL": {
+        "max_bm": 1234.505,
+        "bm_girder": "G3",
+        "bm_location": 9.231,
+        "max_sf": 276.842,
+        "sf_girder": "G1",
+        "sf_location": 0.0
+      },
+      "EQ_Z": {
+        "max_bm": 0.0,
+        "bm_girder": "\u2014",
+        "bm_location": null,
+        "max_sf": 0.0,
+        "sf_girder": "\u2014",
+        "sf_location": null
+      },
+      "SEISMIC_1: 1.35DL + 1.75DW + 0.2LL + 1.5EL": {
+        "max_bm": 1265.794,
+        "bm_girder": "G3",
+        "bm_location": 9.231,
+        "max_sf": 285.181,
+        "sf_girder": "G1",
+        "sf_location": 0.0
+      },
+      "SW": {
+        "max_bm": 44.404,
+        "bm_girder": "G3",
+        "bm_location": 10.769,
+        "max_sf": 10.73,
+        "sf_girder": "G1",
+        "sf_location": 18.462
+      },
+      "1.0 DW": {
+        "max_bm": 107.043,
+        "bm_girder": "G3",
+        "bm_location": 9.231,
+        "max_sf": 26.892,
+        "sf_girder": "G1",
+        "sf_location": 0.0
+      },
+      "BASIC_6: 1.0DL + 1.0DW + 1.15LL + 0.9WL": {
+        "max_bm": -1279.855,
+        "bm_girder": "G3",
+        "bm_location": 9.231,
+        "max_sf": 288.625,
+        "sf_girder": "G1",
+        "sf_location": 0.0
+      },
+      "BASIC_5: 1.0DL + 1.0DW + 1.15LL + 1.5WL": {
+        "max_bm": -1279.855,
+        "bm_girder": "G3",
+        "bm_location": 9.231,
+        "max_sf": 288.625,
+        "sf_girder": "G1",
+        "sf_location": 0.0
+      },
+      "Footpath load": {
+        "max_bm": 104.677,
+        "bm_girder": "G1",
+        "bm_location": 9.231,
+        "max_sf": 28.953,
+        "sf_girder": "G1",
+        "sf_location": 0.0
+      },
+      "ACCIDENTAL_2: 1.0DL + 1.0DW + 0.75LL": {
+        "max_bm": -1341.548,
+        "bm_girder": "G3",
+        "bm_location": 9.231,
+        "max_sf": 303.733,
+        "sf_girder": "G1",
+        "sf_location": 0.0
+      },
+      "SEISMIC_3: 1.0DL + 1.0DW + 0.2LL + 1.5EL": {
+        "max_bm": 1265.794,
+        "bm_girder": "G3",
+        "bm_location": 9.231,
+        "max_sf": 285.181,
+        "sf_girder": "G1",
+        "sf_location": 0.0
+      },
+      "1.5 EQ (b)": {
+        "max_bm": 34.089,
+        "bm_girder": "G3",
+        "bm_location": 9.231,
+        "max_sf": 8.349,
+        "sf_girder": "G1",
+        "sf_location": 0.0
+      },
+      "SLS_QP_2: 1.0DL + 1.0DW": {
+        "max_bm": 812.347,
+        "bm_girder": "G3",
+        "bm_location": 9.231,
+        "max_sf": 206.636,
+        "sf_girder": "G1",
+        "sf_location": 0.0
+      },
+      "SLS_RARE_2: 1.0DL + 1.2DW + 0.75LL + 1.0WL": {
+        "max_bm": -1279.855,
+        "bm_girder": "G3",
+        "bm_location": 9.231,
+        "max_sf": 288.625,
+        "sf_girder": "G1",
+        "sf_location": 0.0
+      },
+      "SLS_QP_1: 1.0DL + 1.2DW": {
+        "max_bm": 812.347,
+        "bm_girder": "G3",
+        "bm_location": 9.231,
+        "max_sf": 206.636,
+        "sf_girder": "G1",
+        "sf_location": 0.0
+      },
+      "EQ_Y": {
+        "max_bm": 75.754,
+        "bm_girder": "G3",
+        "bm_location": 10.769,
+        "max_sf": 18.552,
+        "sf_girder": "G1",
+        "sf_location": 18.462
+      },
+      "BASIC_4: 1.0DL + 1.0DW + 1.5LL + 0.9WL": {
+        "max_bm": -1279.855,
+        "bm_girder": "G3",
+        "bm_location": 9.231,
+        "max_sf": 288.625,
+        "sf_girder": "G1",
+        "sf_location": 0.0
+      },
+      "SEISMIC_2: 1.35DL + 1.75DW + 0.2LL + 0.75EL": {
+        "max_bm": 1265.794,
+        "bm_girder": "G3",
+        "bm_location": 9.231,
+        "max_sf": 285.181,
+        "sf_girder": "G1",
+        "sf_location": 0.0
+      },
+      "SLS_RARE_4: 1.0DL + 1.0DW + 1.0LL + 0.6WL": {
+        "max_bm": -1279.855,
+        "bm_girder": "G3",
+        "bm_location": 9.231,
+        "max_sf": 288.625,
+        "sf_girder": "G1",
+        "sf_location": 0.0
+      },
+      "SLS_FREQUENT_4: 1.0DL + 1.0DW + 0.75LL + 0.5WL": {
+        "max_bm": -1279.855,
+        "bm_girder": "G3",
+        "bm_location": 9.231,
+        "max_sf": 288.625,
+        "sf_girder": "G1",
+        "sf_location": 0.0
+      },
+      "BASIC_3: 1.35DL + 1.75DW + 1.15LL + 0.9WL": {
+        "max_bm": -1279.855,
+        "bm_girder": "G3",
+        "bm_location": 9.231,
+        "max_sf": 288.625,
+        "sf_girder": "G1",
+        "sf_location": 0.0
+      },
+      "Crash barrier load": {
+        "max_bm": 60.26,
+        "bm_girder": "G3",
+        "bm_location": 10.769,
+        "max_sf": 15.549,
+        "sf_girder": "G1",
+        "sf_location": 18.462
+      }
+    },
+    "reactions": {
+      "Envelope ULS": {
+        "left_kN": -1255.531,
+        "right_kN": 1195.819
+      },
+      "WL Longitudinal": {
+        "left_kN": -0.0,
+        "right_kN": 0.0
+      },
+      "1.5 EQ (c)": {
+        "left_kN": 118.178,
+        "right_kN": -118.178
+      },
+      "BASIC_2: 1.35DL + 1.75DW + 1.15LL + 1.5WL": {
+        "left_kN": -1191.369,
+        "right_kN": 1131.657
+      },
+      "1.5 EQ (a)": {
+        "left_kN": 35.453,
+        "right_kN": -35.453
+      },
+      "SLS_RARE_6: 1.0DL + 1.0DW + 0.75LL + 0.6WL": {
+        "left_kN": -1191.369,
+        "right_kN": 1131.657
+      },
+      "DD": {
+        "left_kN": -586.168,
+        "right_kN": 586.168
+      },
+      "SLS_RARE_5: 1.0DL + 1.0DW + 0.75LL + 1.0WL": {
+        "left_kN": -1191.369,
+        "right_kN": 1131.657
+      },
+      "SLS_FREQUENT_5: 1.0DL + 1.0DW + 0.2LL + 0.6WL": {
+        "left_kN": -1191.369,
+        "right_kN": 1131.657
+      },
+      "SLS_RARE_3: 1.0DL + 1.2DW + 0.75LL + 0.6WL": {
+        "left_kN": -1191.369,
+        "right_kN": 1131.657
+      },
+      "SLS_FREQUENT_3: 1.0DL + 1.2DW + 0.2LL + 0.5WL": {
+        "left_kN": -1191.369,
+        "right_kN": 1131.657
+      },
+      "BASIC_1: 1.35DL + 1.75DW + 1.5LL + 0.9WL": {
+        "left_kN": -1191.369,
+        "right_kN": 1131.657
+      },
+      "WL Transverse": {
+        "left_kN": -0.0,
+        "right_kN": 0.0
+      },
+      "ACCIDENTAL_3: 1.0DL + 1.0DW + 0.75LL": {
+        "left_kN": -1255.531,
+        "right_kN": 1195.819
+      },
+      "SEISMIC_4: 1.0DL + 1.0DW + 0.2LL + 0.75EL": {
+        "left_kN": -1176.745,
+        "right_kN": 1117.034
+      },
+      "Railing load": {
+        "left_kN": -12.542,
+        "right_kN": 13.597
+      },
+      "SLS_FREQUENT_2: 1.0DL + 1.2DW + 0.2LL + 0.6WL": {
+        "left_kN": -1191.369,
+        "right_kN": 1131.657
+      },
+      "SLS_RARE_1: 1.0DL + 1.2DW + 1.0LL + 0.6WL": {
+        "left_kN": -1191.369,
+        "right_kN": 1131.657
+      },
+      "Envelope SLS": {
+        "left_kN": -1191.369,
+        "right_kN": 1131.657
+      },
+      "ACCIDENTAL_1: 1.0DL + 1.0DW + 0.75LL": {
+        "left_kN": -1255.531,
+        "right_kN": 1195.819
+      },
+      "1.0 DL": {
+        "left_kN": -739.046,
+        "right_kN": 738.368
+      },
+      "1.0 WL": {
+        "left_kN": 64.162,
+        "right_kN": -64.162
+      },
+      "WL Uplift": {
+        "left_kN": 64.162,
+        "right_kN": -64.162
+      },
+      "EQ_X": {
+        "left_kN": 0.0,
+        "right_kN": -0.0
+      },
+      "SLS_FREQUENT_1: 1.0DL + 1.2DW + 0.75LL + 0.5WL": {
+        "left_kN": -1191.369,
+        "right_kN": 1131.657
+      },
+      "SLS_FREQUENT_6: 1.0DL + 1.0DW + 0.2LL + 0.5WL": {
+        "left_kN": -1191.369,
+        "right_kN": 1131.657
+      },
+      "1.0 DL + 1.0 LL": {
+        "left_kN": -1142.986,
+        "right_kN": 1083.275
+      },
+      "EQ_Z": {
+        "left_kN": 0.0,
+        "right_kN": -0.0
+      },
+      "SEISMIC_1: 1.35DL + 1.75DW + 0.2LL + 1.5EL": {
+        "left_kN": -1176.745,
+        "right_kN": 1117.034
+      },
+      "SW": {
+        "left_kN": -46.175,
+        "right_kN": 46.175
+      },
+      "1.0 DW": {
+        "left_kN": -112.544,
+        "right_kN": 112.544
+      },
+      "BASIC_6: 1.0DL + 1.0DW + 1.15LL + 0.9WL": {
+        "left_kN": -1191.369,
+        "right_kN": 1131.657
+      },
+      "BASIC_5: 1.0DL + 1.0DW + 1.15LL + 1.5WL": {
+        "left_kN": -1191.369,
+        "right_kN": 1131.657
+      },
+      "Footpath load": {
+        "left_kN": -106.703,
+        "right_kN": 106.025
+      },
+      "ACCIDENTAL_2: 1.0DL + 1.0DW + 0.75LL": {
+        "left_kN": -1255.531,
+        "right_kN": 1195.819
+      },
+      "SEISMIC_3: 1.0DL + 1.0DW + 0.2LL + 1.5EL": {
+        "left_kN": -1176.745,
+        "right_kN": 1117.034
+      },
+      "1.5 EQ (b)": {
+        "left_kN": 35.453,
+        "right_kN": -35.453
+      },
+      "SLS_QP_2: 1.0DL + 1.0DW": {
+        "left_kN": -851.59,
+        "right_kN": 850.913
+      },
+      "SLS_RARE_2: 1.0DL + 1.2DW + 0.75LL + 1.0WL": {
+        "left_kN": -1191.369,
+        "right_kN": 1131.657
+      },
+      "SLS_QP_1: 1.0DL + 1.2DW": {
+        "left_kN": -851.59,
+        "right_kN": 850.913
+      },
+      "EQ_Y": {
+        "left_kN": 78.785,
+        "right_kN": -78.785
+      },
+      "BASIC_4: 1.0DL + 1.0DW + 1.5LL + 0.9WL": {
+        "left_kN": -1191.369,
+        "right_kN": 1131.657
+      },
+      "SEISMIC_2: 1.35DL + 1.75DW + 0.2LL + 0.75EL": {
+        "left_kN": -1176.745,
+        "right_kN": 1117.034
+      },
+      "SLS_RARE_4: 1.0DL + 1.0DW + 1.0LL + 0.6WL": {
+        "left_kN": -1191.369,
+        "right_kN": 1131.657
+      },
+      "SLS_FREQUENT_4: 1.0DL + 1.0DW + 0.75LL + 0.5WL": {
+        "left_kN": -1191.369,
+        "right_kN": 1131.657
+      },
+      "BASIC_3: 1.35DL + 1.75DW + 1.15LL + 0.9WL": {
+        "left_kN": -1191.369,
+        "right_kN": 1131.657
+      },
+      "Crash barrier load": {
+        "left_kN": -58.002,
+        "right_kN": 62.8
+      }
+    }
+  }
 }

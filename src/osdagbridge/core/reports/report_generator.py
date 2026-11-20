@@ -734,9 +734,11 @@ def generate_report(payload, request):
             quantities = calculate_material_quantities(payload.inputs, payload.output_dict)
             payload.inputs.update(quantities)
 
-            if payload.options.include_figures:
-                fig_paths.update(save_plots(payload.output_dict, payload.inputs, tmp_images,
-                                            include_ur='design_checks' in payload.options.sections))
+            # Summary charts belong to Chapters 5 and 7, not to the Drawings chapter:
+            # the GUI sets include_figures only when "Drawings" is ticked, and the
+            # charts must not disappear with it. Missing results are drawn as N/A.
+            fig_paths.update(save_plots(payload.output_dict, payload.inputs, tmp_images,
+                                        include_ur='design_checks' in payload.options.sections))
 
             # ── Assemble LaTeX document (fig_paths now has tmp_dir paths) ──
             bridge = ReportDataBridge(payload.output_dict, payload.inputs, payload)
