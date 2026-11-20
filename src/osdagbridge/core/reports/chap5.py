@@ -62,7 +62,6 @@ from osdagbridge.core.utils.common import (
     KEY_DS_TOP_CLEAR_COVER,
     KEY_MATERIAL_DECK_FCK,
     KEY_MATERIAL_DECK_FCTM,
-    KEY_MP_ED_TYPE,
     KEY_SD_BOTTOM_FLANGE_THICKNESS,
     KEY_SD_BOTTOM_FLANGE_WIDTH,
     KEY_SD_BS_FCD,
@@ -145,7 +144,9 @@ from osdagbridge.core.reports.report_utils import _tex, _render_value, get_girde
 
 if TYPE_CHECKING:
     pass
-from .plots import figure_latex
+from .plots import (
+    figure_latex, CB_SLENDERNESS_LIMITS, deck_group_ur, end_diaphragm_is_bracing,
+)
 from .styles import report_section
 
 @report_section
@@ -978,7 +979,7 @@ Fatigue Shear Resistance, $Q_r$ & IRC 22 Table 8 ($\phi d$, $N_{sc}$) & """
                     sf = float(s)
                 except (TypeError, ValueError):
                     continue
-                lim = 400.0 if member == "chord" else 250.0
+                lim = CB_SLENDERNESS_LIMITS.get(member, CB_SLENDERNESS_LIMITS["diagonal"])
                 ratio = sf / lim
                 if best is None or ratio > best[0]:
                     best = (ratio, sf, lim)
@@ -1016,15 +1017,13 @@ Fatigue Shear Resistance, $Q_r$ & IRC 22 Table 8 ($\phi d$, $N_{sc}$) & """
     # End diaphragm: when configured as Cross Bracing it is designed as bracing
     # members → mirror the cross-bracing axial rows. For Rolled / Welded beam end
     # diaphragms the moment/shear design is not implemented yet → show a message.
-    _ed_type = ""
-    for _k, _v in bridge.input_dict.items():
-        if str(_k).startswith(KEY_MP_ED_TYPE) and _v:
-            _ed_type = str(_v)
-            break
-    _ed_is_cb = "brac" in _ed_type.strip().lower()
+    _ed_is_cb = end_diaphragm_is_bracing(bridge.input_dict)
     if _ed_is_cb:
-        _ed_moment_row = _row522(r"End Diaphragm --- Moment", _cb_row("compression"))
-        _ed_shear_row  = _row522(r"End Diaphragm --- Shear",  _cb_row("tension"))
+        # A bracing-type diaphragm carries axial force, so name the rows after the
+        # bracing checks they mirror (including slenderness, as in the UR chart).
+        _ed_moment_row = _row522(r"End Diaphragm --- Compression (as bracing)", _cb_row("compression"))
+        _ed_shear_row  = (_row522(r"End Diaphragm --- Tension (as bracing)", _cb_row("tension")) + "\n"
+                          + _row522(r"End Diaphragm --- Slenderness (as bracing)", _cb_slender_row()))
     else:
         _ed_msg = r"Rolled / Welded section --- design to be added"
         _ed_moment_row = _row522_msg(r"End Diaphragm --- Moment", _ed_msg)
@@ -1055,6 +1054,14 @@ Fatigue Shear Resistance, $Q_r$ & IRC 22 Table 8 ($\phi d$, $N_{sc}$) & """
         (_ur_522(_dk_gov_wk / _wk_lim) if (_dk_has and _wk_lim > 0) else "---"),
     )
 
+    def _deck_group_row(group):
+        ur = deck_group_ur(_dd_522, group)
+        return ("---", "---", "---", _ur_522(ur) if ur is not None else "---")
+
+    _trans_shear_cells = _dcr_row({16})
+    if _trans_shear_cells[-1] == "---":
+        _trans_shear_cells = _deck_group_row("transverse_shear")
+
     _t522 = [
         _row522(r"Girder --- Moment",             _dcr_row({1})),
         _row522(r"Girder --- Shear",              _dcr_row({2})),
@@ -1062,13 +1069,15 @@ Fatigue Shear Resistance, $Q_r$ & IRC 22 Table 8 ($\phi d$, $N_{sc}$) & """
         _row522(r"Girder --- Deflection",         _dcr_row({13, 14}, fallback_unit="mm")),
         _row522(r"Girder --- Stress",             _dcr_row({11}, fallback_unit="MPa")),
         _row522(r"Girder --- Fatigue",            _dcr_row({8, 9}, fallback_unit="MPa")),
-        _row522(r"Transverse Shear (slab)",       _dcr_row({16})),
+        _row522(r"Transverse Shear (slab)",       _trans_shear_cells),
         _row522(r"Crack Width (slab)",            _crack_cells),
         _row522(r"Deck --- Flexure (sagging)",    _deck_row(KEY_DD_M_ULS_SAG, KEY_DD_MU_BOT, "kN-m/m")),
         _row522(r"Deck --- Flexure (hogging)",    _deck_row(KEY_DD_M_ULS_HOG, KEY_DD_MU_TOP, "kN-m/m")),
         _row522(r"Deck --- Cantilever Overhang",  _deck_row(KEY_DD_M_ULS_OH, KEY_DD_MU_OH, "kN-m/m", is_oh=True)),
         _row522(r"Deck --- Punching Shear",       _deck_row(KEY_DD_PUNCH_VED, KEY_DD_VRD_C_MPA, "MPa")),
         _row522(r"Deck --- One-Way Shear",        _deck_row(KEY_DD_SHEAR_VED, KEY_DD_SHEAR_VRDC, "kN/m")),
+        _row522(r"Deck --- SLS Stress (steel/concrete)", _deck_group_row("sls_stress")),
+        _row522(r"Deck --- Min. Reinforcement (crack control)", _deck_group_row("min_reinforcement")),
         _row522(r"Cross Bracing --- Compression", _cb_row("compression")),
         _row522(r"Cross Bracing --- Tension",     _cb_row("tension")),
         _row522(r"Cross Bracing --- Slenderness", _cb_slender_row()),
@@ -1120,11 +1129,11 @@ This section presents all structural design checks performed by OsdagBridge. For
 \begin{longtable}{|C{2.5cm}|C{3.5cm}|C{3.5cm}|>{\centering\arraybackslash}p{4.2cm}|C{1.8cm}|}
 \caption{\textbf{Moment Capacity Check}}\\
 \hline
-\textbf{} & \textbf{Parameter} & \textbf{Formula} & \textbf{Value} & \textbf{Status} \\[6pt]
+\textbf{Girder} & \textbf{Parameter} & \textbf{Formula} & \textbf{Value} & \textbf{Status} \\[6pt]
 \hline
 \endfirsthead
 \hline
-\textbf{} & \textbf{Parameter} & \textbf{Formula} & \textbf{Value} & \textbf{Status} \\[6pt]
+\textbf{Girder} & \textbf{Parameter} & \textbf{Formula} & \textbf{Value} & \textbf{Status} \\[6pt]
 \hline
 \endhead
 
@@ -1136,11 +1145,11 @@ This section presents all structural design checks performed by OsdagBridge. For
 \begin{longtable}{|C{2.5cm}|C{3.5cm}|C{3.5cm}|>{\centering\arraybackslash}p{4.2cm}|C{1.8cm}|}
 \caption{\textbf{Shear Capacity Check}}\\
 \hline
-\textbf{} & \textbf{Parameter} & \textbf{Formula} & \textbf{Value} & \textbf{Status} \\[6pt]
+\textbf{Girder} & \textbf{Parameter} & \textbf{Formula} & \textbf{Value} & \textbf{Status} \\[6pt]
 \hline
 \endfirsthead
 \hline
-\textbf{} & \textbf{Parameter} & \textbf{Formula} & \textbf{Value} & \textbf{Status} \\[6pt]
+\textbf{Girder} & \textbf{Parameter} & \textbf{Formula} & \textbf{Value} & \textbf{Status} \\[6pt]
 \hline
 \endhead
 
@@ -1168,11 +1177,11 @@ This section presents all structural design checks performed by OsdagBridge. For
 \begin{longtable}{|C{2.5cm}|C{3.5cm}|C{3.5cm}|>{\centering\arraybackslash}p{4.2cm}|C{1.8cm}|}
 \caption{\textbf{Lateral Torsional Buckling Check -- Construction Stage}}\\
 \hline
-\textbf{} & \textbf{Parameter} & \textbf{Formula} & \textbf{Value} & \textbf{Status} \\[6pt]
+\textbf{Girder} & \textbf{Parameter} & \textbf{Formula} & \textbf{Value} & \textbf{Status} \\[6pt]
 \hline
 \endfirsthead
 \hline
-\textbf{} & \textbf{Parameter} & \textbf{Formula} & \textbf{Value} & \textbf{Status} \\[6pt]
+\textbf{Girder} & \textbf{Parameter} & \textbf{Formula} & \textbf{Value} & \textbf{Status} \\[6pt]
 \hline
 \endhead
 
@@ -1670,12 +1679,12 @@ End diaphragms at the supports transfer transverse loads to the bearings, restra
 % ===========================
 \section{Overall Design Check Summary}
 \label{sec:overall-summary}
-""" + figure_latex((fig_paths or {}).get("utilization"), "Governing utilization ratios by primary element. N/A denotes unavailable design results.") + r"""
+""" + figure_latex((fig_paths or {}).get("utilization"), r"Governing (maximum) utilization ratio of each primary element, taken from the checks listed in Table~\ref{tab:overall-summary}. N/A denotes unavailable design results.", escape=False) + r"""
 % ===========================
 
 \ReportTableGap
 \begin{longtable}{|C{3.4cm}|L{4.5cm}|C{2.3cm}|C{2.3cm}|>{\centering\arraybackslash}p{1.6cm}|}
-\caption{\textbf{Overall Design Check Summary --- All Members}}\\
+\caption{\textbf{Overall Design Check Summary --- All Members}}\label{tab:overall-summary}\\
 \hline
 \textbf{Member / Check} & \textbf{Governing Load Combo} & \textbf{Demand} & \textbf{Capacity} & \textbf{UR} \\[6pt]
 \hline
@@ -1687,7 +1696,7 @@ End diaphragms at the supports transfer transverse loads to the bearings, restra
 
 """ + t522_content + r"""
 \end{longtable}
-\noindent\textit{Note: UR = Demand / Capacity. All values $\leq 1.0$ indicate passing checks. The governing check for each component is highlighted in the individual design check sections above.}
+\noindent\textit{Note: UR = Demand / Capacity. A value $\leq 1.0$ is a passing check; values above 1.0 are shown in red. Slenderness rows give KL/r divided by its limit. A bracing-type end diaphragm is reported with the cross-bracing member results. Rows showing only a UR use the stored design ratio. The governing check for each component is highlighted in the individual design check sections above.}
 
 """
 

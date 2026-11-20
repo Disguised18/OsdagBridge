@@ -163,3 +163,12 @@ This section presents CAD-generated views of the designed bridge and its compone
             + ed_sections_row + r"""
 
 """)
+
+
+@report_section
+def ch6_omitted(reason):
+    """Keep Chapter 6 in the numbering when drawings are not part of the report."""
+    return (r'\chapter{Drawings and Visualizations}' + '\n'
+            r'\label{chap:drawings}' + '\n'
+            r'\noindent\textit{' + reason + r'} '
+            r'Chapter numbering is kept so that the Material Take-off remains Chapter 7.' + '\n')

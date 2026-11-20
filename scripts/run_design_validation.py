@@ -19,7 +19,8 @@ def main():
     state = next(s for s in get_state_list(False) if 'MAHARASHTRA' in s.upper())
     station = get_station_list(state, False)[0]
     weather = get_weather(state, station)
-    inputs.update({KEY_SPAN: 20, KEY_CARRIAGEWAY_WIDTH: 7.5, KEY_SKEW_ANGLE: 0,
+    # Footways on both sides so the report exercises the separate footway live-load table.
+    inputs.update({KEY_SPAN: 20, KEY_CARRIAGEWAY_WIDTH: 7.5, KEY_SKEW_ANGLE: 0, KEY_FOOTPATH: 'Both Sides',
                    KEY_PROJECT_LOCATION: {'method': 'location_name', 'data': {'state': state, 'district': station}}})
     inputs.update({'wind_speed': weather['wind_speed'], 'seismic_zone': weather['zone'],
                    'shade_temp_max': weather['max_temp'], 'shade_temp_min': weather['min_temp'],

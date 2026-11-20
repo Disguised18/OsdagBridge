@@ -193,3 +193,68 @@ def test_successful_compiler_returns_new_pdf(tmp_path, monkeypatch, metadata):
     monkeypatch.setattr(report.subprocess, 'run', compiler)
     result = report.generate_report(payload, request)
     assert Path(result.pdf_path).read_bytes() == b'%PDF-test-compiler-output'
+
+
+def test_bracing_slenderness_uses_compression_result_and_member_limit():
+    from osdagbridge.core.reports.plots import member_ur
+    results = {'G1-G2': {
+        'diagonal': {'compression': {'Member.efficiency': .2, 'Member.Slenderness': 125.0},
+                     'tension': {'Member.efficiency': .1, 'Member.Slenderness': 240.0}},
+        'chord': {'tension': {'Member.efficiency': .05, 'Member.Slenderness': 200.0}},
+    }}
+    # Diagonal: 125/250 = 0.5 (tension KL/r is not compared with the 250 limit).
+    # Chord: no compression result, so tension KL/r 200/400 = 0.5.
+    assert member_ur(results) == pytest.approx(.5)
+
+
+def test_bracing_type_end_diaphragm_matches_summary_table_rule(outputs):
+    outputs = dict(outputs, end_diaphragm_design_results={})
+    assert list(utilization_values(outputs).values())[-1] is None
+    inputs = {keys.KEY_MP_ED_TYPE + '.G1G2.E1M1': 'Cross Bracing'}
+    values = utilization_values(outputs, inputs)
+    assert values['End diaphragms\n(as bracing)'] == values['Cross\nbracing']
+
+
+VALIDATION = Path(__file__).resolve().parents[2] / 'validation' / 'design'
+
+
+@pytest.mark.skipif(not (VALIDATION / 'outputs.json').exists(), reason='validation snapshot not present')
+def test_ur_chart_matches_overall_summary_table():
+    """Every bar must equal the largest UR of that element's rows in Section 5.5."""
+    import json
+    outputs = json.loads((VALIDATION / 'outputs.json').read_text(encoding='utf-8'))
+    inputs = json.loads((VALIDATION / 'inputs.json').read_text(encoding='utf-8'))
+    tex = ch5_design_checks([], report.ReportDataBridge(outputs, inputs, None), {})
+    table = tex[tex.index(r'\label{tab:overall-summary}'):]
+    table = table[:table.index(r'\end{longtable}')]
+    rows = {}
+    for line in table.splitlines():
+        cells = line.split(' & ')
+        if len(cells) == 5:
+            match = re.search(r'([0-9]+\.[0-9]+)', cells[-1])
+            if match:
+                rows[cells[0].strip()] = float(match.group(1))
+    groups = {'Steel plate\ngirders': ('Girder',), 'Concrete\ndeck slab': ('Deck', 'Crack Width', 'Transverse Shear'),
+              'Cross\nbracing': ('Cross Bracing',), 'End diaphragms\n(as bracing)': ('End Diaphragm',)}
+    for bar, value in utilization_values(outputs, inputs).items():
+        table_max = max(v for label, v in rows.items() if label.startswith(groups[bar]))
+        assert round(value, 2) == pytest.approx(table_max, abs=.006), bar
+
+
+def test_header_omits_empty_job_number_and_palette_is_single_source():
+    from osdagbridge.core.reports.styles import PALETTE, CHART
+    tex = preamble('Project', '', 'Date')
+    assert r'\fancyhead[L]{Project}' in tex
+    assert r'\fancyhead[L]{Project $|$ Job}' in preamble('Project', 'Job', 'Date')
+    for name, value in PALETTE.items():
+        assert r'\definecolor{%s}{HTML}{%s}' % (name, value) in tex
+    assert CHART['fail'] == '#' + PALETTE['reportFail']
+
+
+def test_chapter_six_is_kept_when_drawings_are_omitted(tmp_path, monkeypatch, metadata):
+    options = report.ReportOptions(['loads'], False, False, True)
+    payload = report.ReportPayload(metadata, options, {}, {}, [], report.ReportFigures())
+    request = report.ReportRequest(metadata, options, str(tmp_path), 'No_Drawings')
+    monkeypatch.setattr(report.subprocess, 'run', lambda *a, **k: SimpleNamespace(returncode=1, stdout=b'', stderr=b''))
+    tex = Path(report.generate_report(payload, request).tex_path).read_text(encoding='utf-8')
+    assert tex.index(r'\chapter{Drawings and Visualizations}') < tex.index(r'\setcounter{chapter}{6}')

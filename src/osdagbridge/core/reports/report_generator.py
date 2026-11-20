@@ -127,7 +127,7 @@ from .chap2 import ch2_input_parameters
 from .chap3 import ch3_loads
 from .chap4 import ch4_analysis
 from .chap5 import ch5_design_checks
-from .chap6 import ch6_drawings
+from .chap6 import ch6_drawings, ch6_omitted
 from .chap7 import ch7_quantities
 from .chap8 import ch8_design_log
 from .chap9 import references
@@ -766,6 +766,10 @@ def generate_report(payload, request):
                 doc_parts.append(ch5_design_checks(payload.design_checks, bridge, fig_paths))
             if 'drawings' in secs and payload.options.include_figures:
                 doc_parts.append(ch6_drawings(fig_paths))
+            elif 'drawings' in secs:
+                doc_parts.append(ch6_omitted('Drawings were requested, but figure export was disabled for this report.'))
+            else:
+                doc_parts.append(ch6_omitted('Drawings were not selected for this report.'))
 
             # Optional drawing sections must not renumber the required quantity chapter.
             doc_parts.append(r'\setcounter{chapter}{6}')

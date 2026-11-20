@@ -1,39 +1,38 @@
-# Calculated report comparison
+# Before / After report comparison
 
-`inputs.json` and `outputs.json` preserve a completed backend design run using
-the application's material dialog defaults: 20 m span, 7.5 m carriageway, zero
-skew and a database-backed project location. The run completed structural
-analysis, girder checks, deck design and transverse-member design. This is a
-demonstration case: fatigue and deflection checks fail, and those failures are
-intentionally visible in the report and utilization chart. It is not a certified
-or passing bridge design.
+| File | Contents |
+|---|---|
+| `inputs.json`, `Report_Validation.osi` | Design inputs (identical; the `.osi` loads in the app) |
+| `outputs.json` | Complete backend design result for those inputs |
+| `Report_Before.pdf` / `.tex` | Unchanged upstream report code (`d74f56d`) |
+| `Report_After.pdf` / `.tex` | This branch's report code |
+| `Report_After_assets/` | Charts and logo referenced by `Report_After.tex` |
 
-`Report_After.pdf` is generated from the modified report code and the recorded
-result snapshot. Both compiler passes return zero, with no overfull-box warnings.
-All pages were reviewed in a rendered overview; text-coordinate checks found no
-text outside a 35pt horizontal safety margin. Geometry drawings and analysis
-plot exports were not supplied, so the existing report placeholders remain.
+**Design case:** 20 m span, 7.5 m carriageway, 1.5 m footways on both sides,
+zero skew, Maharashtra location, all IRC vehicle classes, optimized design with
+default materials. The full structural analysis and girder, deck and bracing
+designs ran to completion. The fatigue check fails (UR 2.56), so the failing
+state of the chart and tables is visible.
 
-`Report_Before.pdf` is the actual output of unchanged upstream dev code at
-`d74f56dd7f22925fb8148cabf5740ed8d1e39ff3` using the same inputs and outputs.
-The original generator runs pdfTeX in nonstop mode and saves its PDF even when
-compilation fails. Both passes return 1 with 138 LaTeX errors, beginning with
-table caption/rule alignment errors. This file is retained to show the original
-behavior, not as a successfully compiled report. The baseline code was not
-modified to manufacture a clean output.
+| | Before | After |
+|---|---|---|
+| pdfTeX exit codes (2 passes) | 1, 1 | 0, 0 |
+| LaTeX errors | 138 | 0 |
+| Overfull boxes | 61 | 0 |
+| Pages | 51 | 57 |
 
-The scripts use the real backend and normal material-property dialog extraction;
-they do not claim a completed click-by-click GUI workflow. Missing upstream
-centrifugal-force and end-diaphragm quantity/design values remain explicitly N/A.
+The original generator runs pdfTeX in non-stop mode and keeps the PDF even when
+compilation fails, so `Report_Before.pdf` is the real original output.
+Drawings need CAD exports from the GUI and are not included in either report.
 
-The subsequent visible GUI attempt opened the app and input-file selector but
-the process closed with Windows exceptions 0x8001010d, 0x80010108 and 0x80010012.
-The full interactive workflow could not be verified. `Report_Validation.osi`
-contains the saved inputs for a future GUI retry; it has JSON syntax, which is
-also valid YAML for the application's input loader.
+## Regenerate
 
-Reproduce the enhanced PDF with `scripts/generate_validation_report.py` in the
-installed environment. Reproduce the baseline with the unchanged sources first
-on PYTHONPATH and the script's `--baseline` flag. The baseline TeX references
-temporary image paths inherited from upstream; the enhanced TeX includes a
-persisted sibling asset directory and remains rebuildable.
+From the repository root with `PYTHONPATH=src` in the OsdagBridge environment:
+
+```bash
+python scripts/run_design_validation.py
+python scripts/generate_validation_report.py
+```
+
+For the baseline, put the `src` folder of an upstream `d74f56d` checkout first
+on `PYTHONPATH` and add `--baseline`.

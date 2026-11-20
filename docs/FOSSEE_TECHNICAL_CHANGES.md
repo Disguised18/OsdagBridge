@@ -1,140 +1,175 @@
-# OsdagBridge report generator screening task
+# OsdagBridge LaTeX Report Generator — Technical Changes
 
-This change improves report tables, layout and visual summaries for the FOSSEE
-LaTeX Report Generator Refactoring and Enhancements assignment. The implementation
-is isolated on `fossee-latex-refactor`, based on upstream `dev` commit
-`d74f56dd7f22925fb8148cabf5740ed8d1e39ff3`. No upstream changes have been pushed.
-The submission repository is https://github.com/Disguised18/OsdagBridge, on branch
-`fossee-latex-refactor`. A collaborator invitation to Nidhikhare12 has been sent.
+FOSSEE Osdag Winter Internship 2026 screening task: *LaTeX Report Generator
+Refactoring & Enhancements*.
 
-The four-page uploaded assignment was recovered from the referenced chat's
-attachment and read directly. This document records the implementation and its
-validation limits; it does not certify a bridge design.
+- Repository: <https://github.com/Disguised18/OsdagBridge>, branch `fossee-latex-refactor`
+- Base: upstream `dev` at `d74f56d` (Nidhikhare12/OsdagBridge)
+- Reports: `validation/design/Report_Before.pdf` and `validation/design/Report_After.pdf`
 
-## Requirement coverage
+Only the report layer (`src/osdagbridge/core/reports/`) was refactored. No
+analysis, design or CAD code was changed, so every number in the report still
+comes from the existing OsdagBridge solver.
 
-| Requirement | Implementation | Validation |
-| --- | --- | --- |
-| Repeated table headers | Explicit `endfirsthead` and `endhead` blocks in the chapter generators, including the formerly empty continuation header in Chapter 2. Body tabular tables become longtable tables. Captions terminate before the first rule. | Generated chapter and full report strings are checked for nonempty continuation headings and consistent caption placement. |
-| Page and footer spacing | The shared preamble reserves header/footer space with geometry `includeheadfoot`, 28pt head height, 18mm foot skip and a 32mm bottom margin. Negative footer shifts are removed. Table starts request seven baselines of space. Tall Chapter 5 multirow body boxes are replaced with independent labels, repeated through per-girder rows. | Tests verify the layout settings and absence of multirow boxes in Chapter 5. PDF inspection remains essential. |
-| Vehicle and footway loads | Separate longtables with parameter, value and unit columns. Vehicle rows follow the eight GUI vehicle flags and custom vehicle names. Serialized `False` is treated as unchecked. Automatic/custom footway pressure and absent footways are handled independently. | Selection, escaping, custom pressure, no footway, automatic pressure and no-vehicle cases are covered. |
-| Utilization plots in Section 5.5 | One bar per primary component with the governing stored ratio. Per-girder and per-load-case checks are scanned; edge-beam pseudo girders are excluded. Deck `ur_` fields and actual cross-bracing/end-diaphragm result dumps supply the other components. Red dashed UR=1 reference line; values above one are red. | Known result fixtures verify numerical values, excluded members, missing data and the threshold line. The figure is inserted after `sec:overall-summary`. |
-| Material charts in Chapter 7 | Steel tonnage by girders, cross bracing and end diaphragms. Concrete volume and reinforcement weight occupy separate panels and unit axes. Plots use the same BOQ values as the table. | Tests check total bracing aggregation, partial/missing totals, units, real PNG creation and chapter embedding. |
-| Central formatting | `styles.py` owns the preamble, geometry, palette, footer theme, body/caption fonts, row spacing, table padding, section gaps and chart theme. Every chapter entry point consumes it. | Tests exercise the shared preamble. Column widths remain with each table's structural schema. |
+## 1. Summary of the six requested changes
 
-## Files and architecture
+| # | Requirement | What was done |
+|---|---|---|
+| 1 | Repeated table headers | Every body table is a `longtable` with an explicit `\endfirsthead` / `\endhead` pair, so the column header row repeats on each new page. Captions sit only in the first head and end with a row break, so they are not repeated or renumbered. An empty continuation header in Chapter 2 was filled in. |
+| 2 | Footer overlap and spacing | `geometry` now uses `includeheadfoot` with a 28 pt head height, 18 mm foot skip and 32 mm bottom margin, so the body can never run into the footer. Negative `\vspace` hacks near the footer were removed. Every table and longtable starts with `\Needspace{7\baselineskip}`, which moves it to the next page instead of leaving a header stranded at the bottom. Tall `multirow` cells in Chapter 5 (these caused the "G4" bleed) were replaced by a girder label on every row, so a table can break between any two rows. |
+| 3 | Live-load tables | Vehicle live loads and footway live loads are now two separate tables (Tables 3.3 and 3.4), each with Parameter / Value / Unit columns. The vehicle rows follow the eight IRC vehicle checkboxes and the custom vehicles from the *Loading* tab of Additional Inputs. A serialized `"False"` is treated as unchecked. Impact factor, braking load, Class SV braking and centrifugal force each have their own row with a unit. The footway table covers none / single / both sides, and automatic (IRC 6 Cl. 206.1) or user-defined pressure. |
+| 4 | Utilization-ratio chart | A bar chart in Section 5.5 shows the governing UR of steel plate girders, the concrete deck slab, cross bracing and end diaphragms, with a red dashed line at UR = 1.0. Bars above 1.0 are red and the rest green. Each bar is the maximum UR of that element's rows in the Section 5.5 summary table, and a regression test checks this against real design output. |
+| 5 | Material quantity charts | Chapter 7 has two figures built from the same BOQ values as Table 7.1: structural steel tonnage (girders, cross bracing, end diaphragms), and concrete volume (m³) beside reinforcement weight (MT). The last two are drawn on separate axes because they have different units. Plots are saved as PNGs during generation and embedded with PyLaTeX `Figure`. |
+| 6 | Central style module | New `styles.py` is the single source of truth for page geometry, fonts, colours, header/footer, table spacing, section gaps and the chart theme. Every chapter imports it, and no chapter defines its own colours, margins or font sizes. |
 
-`styles.py` contains the shared LaTeX preamble, named report commands, chart
-palette and the `report_section` decorator. Chapter generators import this
-decorator to apply the same body style. Named gap, font, table-padding and
-caption commands replace local formatting values. Table schemas retain column
-counts, widths and headings because these describe their specific data.
+## 2. Files changed
 
-`load_tables.py` formats the two live-load tables, interprets GUI checkbox
-serialization and escapes user-provided text. Existing IRC helpers remain the
-source of automatic values. No structural analysis logic has been changed.
+All under `src/osdagbridge/core/reports/` unless noted.
 
-`plots.py` reads stored design results and quantities, validates finite
-nonnegative numbers, writes PNGs using a FigureCanvasAgg canvas, and emits
-PyLaTeX Figure objects. It avoids pyplot and backend switching so report
-generation does not alter the desktop's plotting state. Missing values appear
-as N/A, with no fabricated zero-height bars. The two material units are never
-compared against a common numerical axis.
+| File | Change |
+|---|---|
+| `styles.py` (new) | Preamble, geometry, palette, header/footer, named spacing and font commands, chart theme, `report_section` decorator. |
+| `plots.py` (new) | Reads stored design results and BOQ totals, draws the UR and quantity charts with Matplotlib's Agg canvas, and returns PyLaTeX figures. |
+| `load_tables.py` (new) | Builds the vehicle and footway live-load tables and interprets the GUI checkbox values. |
+| `report_generator.py` | Uses `styles.preamble`. Generates chart assets into the report's temporary folder and keeps a sibling `<report>_assets` folder so the saved `.tex` can be recompiled. Reports success only when the current compiler run produced the PDF. Always emits Chapter 6 so Chapter 7 keeps its number. |
+| `chap1.py` – `chap9.py`, `executive_summary.py` | Converted to `longtable` with repeated headers. Use the shared style commands. Consistent header capitalisation. Chapter 3 uses the new load tables. Chapter 5 removes tall `multirow` cells, embeds the UR chart and adds the missing summary rows. Chapter 7 embeds the quantity charts. |
+| `report_utils.py` | Single-pass LaTeX escaping, so backslashes are not escaped twice. Removed negative figure spacing. |
+| `tests/unit/test_reports.py` (new) | 34 regression tests (see Section 6). |
+| `scripts/` (new) | `run_design_validation.py` (backend design run), `generate_validation_report.py` (Before/After PDFs), `report_layout_fixture.py` (synthetic layout stress test), `check_environment.py`. |
+| `pyproject.toml`, `requirements-reports.txt` | Declare PyLaTeX and Matplotlib, and a light install for running the report tests. |
 
-`report_generator.py` generates chart assets in its temporary directory and
-passes their paths to Chapters 5 and 7. A sibling `<report>_assets` directory
-preserves assets referenced by the saved TeX, allowing it to be recompiled after
-temporary files are removed. It reports PDF success only when the current
-compiler run succeeds, so an older PDF cannot be mistaken for a new report.
+## 3. Structure of the central style module (`styles.py`)
 
-`report_utils.py` escapes LaTeX special characters in a single pass, preventing
-backslash commands from being re-escaped. Negative figure spacing is removed.
-`executive_summary.py` and ReportDataBridge read serialized member summaries
-without importing the structural solver merely to format report data.
+```
+styles.py
+├── PALETTE        one dict of named colours (osdagGreen, reportPass, reportFail,
+│                  reportInfo, reportMissing); emitted as \definecolor in LaTeX
+├── CHART          chart colours derived from PALETTE + DPI and font size
+├── FIGURE_WIDTH   width used for every embedded chart
+├── report_section decorator: prefixes each chapter with \ReportSectionStyle
+├── preamble()     document class, packages, geometry, table spacing
+│                  (\tabcolsep, \arraystretch, \LTpre/\LTpost, rule widths),
+│                  \Needspace guards, named commands, header/footer page styles,
+│                  chapter title format
+└── toc_section()  table-of-contents styling
+```
 
-All nine chapter files, the executive summary, report utilities and the report
-orchestrator are changed. `pyproject.toml` declares PyLaTeX and configures the
-test import path. `requirements-reports.txt` supports lightweight report testing.
-`tests/unit/test_reports.py` contains the new regression tests.
+Named commands defined in the preamble and used by the chapters:
 
-## Reproducing the checks
+| Purpose | Commands |
+|---|---|
+| Body / table style | `\ReportSectionStyle`, `\ReportCompactTable`, `\ReportWideRows`, `\ReportTableLeft`, `\ReportCaptionStyle` |
+| Vertical rhythm | `\ReportTableGap`, `\ReportMinorGap`, `\ReportSectionGap`, `\ReportMajorGap`, `\ReportCoverTopSpace` |
+| Type sizes | `\ReportSmallFont`, `\ReportFootnoteFont`, `\ReportNormalFont`, `\ReportLargeFont`, `\ReportHeadingFont`, `\ReportBrandFont` |
+| Colours | `osdagGreen`, `reportPass`, `reportFail`, `reportInfo`, `reportMissing` |
 
-For the full application, follow `environment.yml`:
+Changing a margin, colour, gap or font size in `styles.py` changes it across the
+whole report and in the charts. Column widths stay with each table, because
+they describe that table's data rather than the report's style.
 
-```powershell
+## 4. Rationale
+
+- **Explicit longtable heads instead of a wrapper class.** The chapters already
+  write raw LaTeX, so adding `\endfirsthead` / `\endhead` in place keeps the diff
+  reviewable and avoids rewriting about 3,200 lines of chapter code into PyLaTeX objects.
+- **Reserving footer space instead of patching individual pages.** Overlap came
+  from geometry that did not count the header and footer, plus unbreakable
+  `multirow` blocks. Fixing both removes the whole class of bug rather than one
+  page of it.
+- **Charts read the same data as the tables.** The UR chart applies the same
+  rules as the Section 5.5 table: compression KL/r against the member limit for
+  slenderness, and a bracing-type end diaphragm reported with the bracing
+  members. A test fails if a bar ever differs from its table rows.
+- **Missing data is shown as N/A, never as a zero bar.** A zero-height bar would
+  look like a passing check.
+- **Matplotlib Agg canvas, no `pyplot`.** Report generation runs inside the Qt
+  desktop app, and using `pyplot` could switch the global backend or touch GUI
+  state.
+- **No solver changes.** The task is about presentation. Engineering issues found
+  along the way are listed in Section 7 for maintainers rather than silently
+  "fixed".
+
+## 5. Visual enhancements and polish
+
+- Consistent table headers ("Parameter / Value / Unit") and bold captions throughout.
+- A girder column heading on the per-girder check tables (previously blank).
+- Failing UR values in the summary table are shown in red, matching the chart.
+- The page header no longer shows a stray "|" when the job number is empty.
+- Chapter 6 is kept, with a short note, when drawings are not selected, so the
+  contents never jump from Chapter 5 to 7.
+- Section 5.5 gained the deck SLS-stress, deck minimum-reinforcement and
+  end-diaphragm slenderness rows, so every governing value in the chart appears
+  in the table.
+- Bracing-type end-diaphragm rows are labelled Compression / Tension /
+  Slenderness ("as bracing") instead of Moment / Shear, which they are not.
+- The saved `.tex` stays recompilable because its images are kept beside it.
+
+## 6. Validation
+
+**Design case.** 20 m span, 7.5 m carriageway, footways on both sides (1.5 m),
+zero skew, Maharashtra location, all IRC vehicles selected, optimized design,
+default materials. The inputs are saved in `validation/design/inputs.json` and
+the matching `Report_Validation.osi` (loadable in the app). The complete
+backend result is in `outputs.json`.
+
+**Before / After.** Both PDFs are generated from the same inputs and result
+snapshot by `scripts/generate_validation_report.py`. `Report_Before` uses the
+unchanged upstream report code at `d74f56d`; `Report_After` uses this branch.
+
+| | Report_Before | Report_After |
+|---|---|---|
+| pdfTeX exit codes (2 passes) | 1, 1 | 0, 0 |
+| LaTeX errors | 138 | 0 |
+| Overfull boxes | 61 | 0 |
+| Pages | 51 | 57 |
+
+The upstream generator runs pdfTeX in non-stop mode and keeps the PDF despite
+the errors, so `Report_Before.pdf` is the real original output, errors included.
+
+**Tests.** `pytest tests` → 34 passed (Python 3.12, PyLaTeX 1.4.2, Matplotlib
+3.10). They cover header repetition in every table, checkbox parsing, vehicle
+and footway cases, invalid and missing data, chart/table agreement on the real
+design snapshot, PNG creation and embedding, shared styles and palette, the
+Chapter 6 placeholder, and the generator's asset and compiler handling.
+
+## 7. Known limitations (upstream, not changed here)
+
+- **Braking load shows N/A.** `IRC6_2017.cl_211_2_braking_force` raises
+  `UnboundLocalError` (`braking_force_2`) for every lane count, so the report
+  falls back to N/A.
+- **Deflection values disagree inside the report.** The design module's girder
+  check gives a live-load deflection within L/800 (used in Section 5.5 and the
+  chart). The older deflection table in Sections 4 and 5.1 shows a larger value
+  marked FAIL. Both values come from existing upstream code; the Before report
+  shows the same mismatch.
+- **Centrifugal force** is not produced by the analysis, so it is shown as N/A.
+- **End-diaphragm steel tonnage** is not in the BOQ, so the quantity chart shows
+  N/A. A bracing-type end diaphragm has no separate design results, so it is
+  reported with the cross-bracing members, as the upstream table already did.
+- **Wind and earthquake load tables** have empty rows that upstream does not fill.
+- **Drawings** (Chapter 6 figures) need CAD exports from the GUI and were not
+  part of the backend validation run.
+- **GUI run.** The desktop app starts and its CAD view initialises, but on the
+  test machine it closed during the input-file dialog (Windows COM errors
+  0x8001010d / 0x80010108). The reports were therefore produced by the backend
+  scripts, which run the same solver and report code as the *Design* and
+  *Generate Report* buttons.
+- The fatigue check fails for this case (UR 2.56). It is left visible on purpose
+  to show the failing state of the chart and table.
+
+## 8. Reproducing
+
+```bash
 conda env create -f environment.yml
 conda activate osdagbridge-env
-python -m osdagbridge.desktop
+pip install -r requirements-reports.txt      # report tests only
+pytest tests -q
+
+# from the repository root, with PYTHONPATH=src
+python scripts/run_design_validation.py        # writes validation/design/inputs.json, outputs.json
+python scripts/generate_validation_report.py   # Report_After.pdf
+# Report_Before: put an upstream d74f56d checkout's src first on PYTHONPATH, then
+python scripts/generate_validation_report.py --baseline
 ```
 
-For report tests alone, Python 3.11 or 3.12 is sufficient:
-
-```powershell
-python -m venv .venv
-./.venv/Scripts/python.exe -m pip install -r requirements-reports.txt
-./.venv/Scripts/python.exe -m pytest tests -q
-$env:PYTHONPATH = 'src'
-./.venv/Scripts/python.exe scripts/report_layout_fixture.py
-```
-
-Compile the synthetic fixture with pdflatex twice from `validation/layout`, or
-use Tectonic. The fixture marks its data as synthetic and deliberately includes
-a failing girder ratio. It must not be presented as a successfully designed
-bridge or as the assignment's GUI comparison reports.
-
-## Known limitations and remaining submission work
-
-The original five placeholder tests passed before edits. After implementation,
-all **29 tests passed**, including the new report regressions. Python 3.12.14,
-pytest 9.2.0, Matplotlib 3.11.2 and PyLaTeX 1.4.2 were used. The enhanced synthetic
-layout fixture compiles to a 39-page A4 PDF with Tectonic 0.17.0. The rendered
-overview and detailed continuation/chart pages were inspected. Its final log has
-no overfull-box warnings. Narrow headings still emit underfull-box warnings.
-
-The unchanged baseline fixture fails at line 253 with `Misplaced \noalign` on
-`\hline`, following a longtable caption without a terminating row break. That
-failure is preserved in validation evidence. It prevents producing a valid
-baseline PDF with this compiler; it must not be described as a successful run.
-
-The full environment is now installed at `C:\ob-env`. Qt, CAD and analysis
-imports, the bundled pdfTeX compiler and desktop window construction passed.
-The report suite also passes in this environment (29 tests). See
-`LOCAL_ENVIRONMENT.md` for the installation details. The full GUI Design →
-Generate Report workflow has not yet been validated.
-
-The current upstream braking helper raises an unbound-variable error for one
-or two lanes. The reporting layer retains its N/A fallback. The shared AA/70R
-impact helper also has loading-type assumptions inherited from upstream. These
-engineering calculations need maintainer review; this refactor does not silently
-change the structural model. Centrifugal forces are not supplied by the current
-analysis and are explicitly marked unavailable.
-
-The current BOQ supplies no end-diaphragm tonnage. The plot accepts
-`end_diaphragms_wt_total` if supplied and otherwise displays N/A. Reinforcement
-quantity retains the existing BOQ estimate of 120 kg per cubic metre of concrete;
-it is not a detailed bar schedule. Existing end-diaphragm tabular sections reuse
-cross-bracing rows upstream; the new chart reads the actual independent
-end-diaphragm results instead. These existing tabular limitations remain for
-engineering review.
-
-The personal fork has been created and GitHub CLI is authenticated. Only the
-personal submission branch is published; no upstream branch is overwritten.
-
-A reproducible backend design has now completed, including analysis, girder,
-deck and transverse-member checks. The calculated inputs and output snapshot
-are saved under `validation/design`, together with `Report_Before.pdf` and
-`Report_After.pdf`. The enhanced report compiles with exit code zero and no
-overfull-box warnings. The original code emits a PDF in nonstop mode despite
-138 LaTeX errors; its two compiler passes return 1. That original output is
-retained as baseline evidence, not a clean compilation. See the comparison
-README for reproduction details and limitations.
-
-The demonstration includes failing fatigue and deflection checks, which remain
-visible. CAD and analysis image exports were not supplied, so existing report
-placeholders remain. The calculated comparison does not claim a completed
-click-by-click GUI workflow or a certified bridge design.
-
-## References
-
-The explicit header structure follows the [LaTeX longtable documentation](https://mirrors.ctan.org/macros/latex/required/tools/longtable.pdf).
-The report-only plotting approach follows Matplotlib's [Agg canvas example](https://matplotlib.org/stable/gallery/user_interfaces/canvasagg.html).
+See `docs/LOCAL_ENVIRONMENT.md` for Windows installation notes.

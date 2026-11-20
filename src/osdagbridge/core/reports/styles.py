@@ -4,8 +4,17 @@ Column widths remain with their table schemas; visual policy lives here.
 """
 from functools import wraps
 
-CHART = {"pass": "#688510", "fail": "#C43C39", "neutral": "#245A81",
-         "missing": "#777777", "dpi": 160, "font_size": 10}
+# Single colour palette: LaTeX \definecolor names and chart colours both come from here.
+PALETTE = {
+    "osdagGreen": "91B014",   # brand rules in header/footer
+    "reportPass": "688510",   # passing bars (darker green for contrast on white)
+    "reportFail": "C43C39",   # failing values, UR = 1.0 reference line
+    "reportInfo": "245A81",   # neutral bars (quantities)
+    "reportMissing": "777777",
+}
+CHART = {"pass": "#" + PALETTE["reportPass"], "fail": "#" + PALETTE["reportFail"],
+         "neutral": "#" + PALETTE["reportInfo"], "missing": "#" + PALETTE["reportMissing"],
+         "dpi": 160, "font_size": 10}
 FIGURE_WIDTH = r"0.94\textwidth"
 
 
@@ -23,6 +32,8 @@ def preamble(project_name, job_number, report_date, report_version='Rev 0'):
     jn = _tex(job_number)
     rd = _tex(report_date)
     rv = _tex(report_version)
+    head_left = pn + (r" $|$ " + jn if str(job_number or '').strip() else "")
+    colours = "\n".join(r"\definecolor{%s}{HTML}{%s}" % item for item in PALETTE.items())
     return r"""
 \documentclass[12pt,a4paper]{report}
 
@@ -73,13 +84,11 @@ def preamble(project_name, job_number, report_date, report_version='Rev 0'):
 \setlength{\extrarowheight}{0.6pt}
 
 % Prevent tables from overflowing past the page bottom:
-% if fewer than 5 baseline-skips remain, break to the next page first.
+% if fewer than 7 baseline-skips remain, break to the next page first.
 \BeforeBeginEnvironment{table}{\Needspace{7\baselineskip}}
 \BeforeBeginEnvironment{longtable}{\Needspace{7\baselineskip}}
 
-\definecolor{osdagGreen}{HTML}{91B014}
-\definecolor{reportFail}{HTML}{C43C39}
-\definecolor{reportInfo}{HTML}{245A81}
+""" + colours + r"""
 \newcommand{\ReportSectionStyle}{\small\setlength{\tabcolsep}{3pt}\renewcommand{\arraystretch}{1.15}}
 \newcommand{\ReportCompactTable}{\setlength{\tabcolsep}{2pt}}
 \newcommand{\ReportCaptionStyle}{\setlength{\abovecaptionskip}{2pt}\setlength{\belowcaptionskip}{2pt}}
@@ -100,7 +109,7 @@ def preamble(project_name, job_number, report_date, report_version='Rev 0'):
 
 \fancypagestyle{main}{
   \fancyhf{}
-  \fancyhead[L]{""" + pn + r""" $|$ """ + jn + r"""}
+  \fancyhead[L]{""" + head_left + r"""}
   \fancyhead[R]{""" + rd + r""" $|$ """ + rv + r"""}
   \fancyfoot[L]{\scriptsize Osdag $|$ FOSSEE $|$ Indian Institute of Technology Bombay}
   \fancyfoot[R]{\scriptsize Page \thepage\ of \pageref{LastPage}}
@@ -118,7 +127,7 @@ def preamble(project_name, job_number, report_date, report_version='Rev 0'):
 }
 \fancypagestyle{plain}{
   \fancyhf{}
-  \fancyhead[L]{""" + pn + r""" $|$ """ + jn + r"""}
+  \fancyhead[L]{""" + head_left + r"""}
   \fancyhead[R]{""" + rd + r""" $|$ """ + rv + r"""}
   \fancyfoot[L]{\scriptsize Osdag $|$ FOSSEE $|$ Indian Institute of Technology Bombay}
   \fancyfoot[R]{\scriptsize Page \thepage\ of \pageref{LastPage}}
@@ -175,7 +184,7 @@ def preamble(project_name, job_number, report_date, report_version='Rev 0'):
 
 
 # ═══════════════════════════════════════════════════════════════════════════════
-# TITLE PAGE
+# TABLE OF CONTENTS
 # ═══════════════════════════════════════════════════════════════════════════════
 
 

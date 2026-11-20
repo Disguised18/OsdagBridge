@@ -24,15 +24,55 @@ def maximum(values):
     return max(valid) if valid else None
 
 
+# Slenderness limits used for bracing members (KL/r). Shared with the Section 5.5
+# summary table so the chart and the table always rank the same checks.
+CB_SLENDERNESS_LIMITS = {'chord': 400.0, 'diagonal': 250.0}
+
+# Deck checks reported as single summary rows in Section 5.5. Every other `ur_`
+# field already has its own row (flexure, shear, punching, crack width).
+DECK_SUMMARY_GROUPS = {
+    'sls_stress': ('ur_bot_sls_s', 'ur_top_sls_s', 'ur_oh_sls_s',
+                   'ur_bot_sls_c', 'ur_top_sls_c', 'ur_oh_sls_c',
+                   'ur_composite_conc_stress', 'ur_composite_rebar_stress'),
+    'min_reinforcement': ('ur_composite_crack',),
+    'transverse_shear': ('ur_composite_trans_shear',),
+}
+
+
+def deck_group_ur(deck_results, group):
+    deck_results = deck_results or {}
+    return maximum(deck_results.get(key) for key in DECK_SUMMARY_GROUPS[group])
+
+
 def member_ur(results):
-    """Osdag tension/compression result schemas, same keys as results_data."""
+    """Governing ratio of Osdag bracing results: strength efficiency and KL/r / limit.
+
+    Slenderness follows the Section 5.5 table: the compression result's KL/r is
+    used (tension only when compression is missing), against the member limit.
+    """
     values = []
     for members in (results or {}).values():
-        for forces in (members or {}).values():
-            for raw in (forces or {}).values():
-                if isinstance(raw, dict):
-                    values.append(osdag_summary(raw)['efficiency'])
+        for member, forces in (members or {}).items():
+            forces = {k: v for k, v in (forces or {}).items() if isinstance(v, dict)}
+            for raw in forces.values():
+                values.append(osdag_summary(raw)['efficiency'])
+            limit = CB_SLENDERNESS_LIMITS.get(str(member).lower())
+            for force_type in ('compression', 'tension'):
+                slenderness = number(osdag_summary(forces.get(force_type))['slenderness'])
+                if slenderness is not None:
+                    if limit:
+                        values.append(slenderness / limit)
+                    break
     return maximum(values)
+
+
+def end_diaphragm_is_bracing(input_dict):
+    """True when the end diaphragm is configured as a cross-bracing frame."""
+    from osdagbridge.core.utils.common import KEY_MP_ED_TYPE
+    for key, value in (input_dict or {}).items():
+        if str(key).startswith(KEY_MP_ED_TYPE) and value:
+            return 'brac' in str(value).strip().lower()
+    return False
 
 
 def osdag_summary(result):
@@ -49,7 +89,7 @@ def osdag_summary(result):
     }
 
 
-def utilization_values(outputs):
+def utilization_values(outputs, input_dict=None):
     girder_urs = []
     for label, girder in ((outputs.get('design_results') or {}).get('per_girder', {}) or {}).items():
         if str(label).startswith('EB'):
@@ -57,12 +97,19 @@ def utilization_values(outputs):
         girder_urs.extend(c.get('dcr') for c in (girder.get('checks') or []))
         for case in (girder.get('per_lc') or {}).values():
             girder_urs.extend(c.get('dcr') for c in (case.get('checks') or []))
+    bracing = member_ur(outputs.get('crossbracing_design_results'))
+    diaphragm = member_ur(outputs.get('end_diaphragm_design_results'))
+    diaphragm_label = 'End\ndiaphragms'
+    if diaphragm is None and end_diaphragm_is_bracing(input_dict):
+        # Same rule as the Section 5.5 table: a bracing-type end diaphragm is
+        # reported with the cross-bracing member results.
+        diaphragm, diaphragm_label = bracing, 'End diaphragms\n(as bracing)'
     return {
         'Steel plate\ngirders': maximum(girder_urs),
         'Concrete\ndeck slab': maximum(v for k, v in (outputs.get('deck_design_results') or {}).items()
                                         if str(k).startswith('ur_')),
-        'Cross\nbracing': member_ur(outputs.get('crossbracing_design_results')),
-        'End\ndiaphragms': member_ur(outputs.get('end_diaphragm_design_results')),
+        'Cross\nbracing': bracing,
+        diaphragm_label: diaphragm,
     }
 
 
@@ -111,13 +158,16 @@ def _bars(ax, values, ylabel, threshold=False):
 
 
 def save_plots(outputs, quantities, asset_dir, include_ur=True):
-    """Save figures inside the caller's temporary report directory."""
+    """Save figures inside the caller's temporary report directory.
+
+    `quantities` is the report input dictionary with BOQ totals merged in.
+    """
     directory = Path(asset_dir)
     directory.mkdir(parents=True, exist_ok=True)
     paths = {}
     if include_ur:
         fig = _figure()
-        _bars(fig.subplots(), utilization_values(outputs), 'Utilization Ratio', threshold=True)
+        _bars(fig.subplots(), utilization_values(outputs, quantities), 'Utilization Ratio', threshold=True)
         path = directory / 'utilization.png'
         fig.savefig(path, dpi=CHART['dpi'])
         fig.clear()
@@ -140,11 +190,12 @@ def save_plots(outputs, quantities, asset_dir, include_ur=True):
     return paths
 
 
-def figure_latex(path, caption):
+def figure_latex(path, caption, escape=True):
+    """Embed a saved plot. Pass escape=False for a caption that contains LaTeX."""
     if not path:
         return ''
     from pylatex import Figure, NoEscape
     figure = Figure(position='H')
     figure.add_image(str(path).replace('\\', '/'), width=NoEscape(FIGURE_WIDTH))
-    figure.add_caption(caption)
+    figure.add_caption(caption if escape else NoEscape(caption))
     return figure.dumps()

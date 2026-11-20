@@ -16,7 +16,7 @@ def _table(caption, rows):
     header = (r'\hline' + '\n' + r'\textbf{Parameter} & \textbf{Value} & \textbf{Unit} \\'
               + '\n' + r'\hline' + '\n')
     return (r'\begin{longtable}{|L{4.0cm}|L{9.0cm}|C{2.0cm}|}' + '\n'
-            + r'\caption{' + caption + r'}\\' + '\n' + header
+            + r'\caption{\textbf{' + caption + r'}}\\' + '\n' + header
             + r'\endfirsthead' + '\n' + header + r'\endhead' + '\n'
             + '\n'.join(_tex(label) + ' & ' + _tex(value) + ' & ' + unit + r' \\'
                         + '\n' + r'\hline' for label, value, unit in rows)

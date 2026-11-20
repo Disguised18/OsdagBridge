@@ -15,7 +15,7 @@ def main():
     stem = 'Report_Before' if args.baseline else 'Report_After'
     metadata = report.ReportMetadata('FOSSEE report validation — 20 m bridge', '',
                                      'Disguised18', 'Screening task demonstration', 'FOSSEE applicant',
-                                     report_date='2026-11-18')
+                                     report_date='2026-11-20', job_number='FOSSEE-WI-2026')
     options = report.ReportOptions(['loads', 'analysis', 'design_checks'], True, True, True)
     request = report.ReportRequest(metadata, options, str(folder.resolve()), stem)
     payload = report.build_report_payload(request, inputs, outputs)

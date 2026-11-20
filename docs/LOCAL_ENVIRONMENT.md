@@ -1,26 +1,29 @@
-# Installed Windows environment
+# Windows environment notes
 
-The full dependency environment is installed at `C:\ob-env`, managed by the
-workspace's `.tooling/micromamba/Library/bin/micromamba.exe`.
+The full app was installed from `environment.yml` with two extra pins:
 
-It follows `environment.yml` with `vtk<9.4` and `libboost<1.88` added to avoid
-Windows filename-length failures in newer CAD package archives. The resulting
-CAD versions include VTK 9.3.1 and PythonOCC 7.8.1.1. Python is 3.12.16.
+```
+vtk<9.4
+libboost<1.88
+```
 
-From the workspace folder, double-click `Launch-OsdagBridge.cmd` to start the app.
-The launcher activates the environment's native library paths automatically.
+Newer builds of these CAD packages contain file paths longer than the Windows
+limit and fail to extract. With the pins, the environment resolves to VTK 9.3.1,
+PythonOCC 7.8.1.1 and Python 3.12. The bundled TeX Live 2025 pdfTeX 1.40.28
+compiles the reports.
 
-Verification succeeded for Qt, NumPy, SciPy, Fiona, Shapely, Pydantic, xarray,
-IfcOpenShell, OpenPyXL, OpenCascade, Osdag Core, OpenSeesPy, opsvis and PyLaTeX.
-The bundled compiler reports pdfTeX 1.40.28 (TeX Live 2025). The desktop main
-window and CAD display objects were constructed successfully in an offscreen
-startup check. The Osdag Core section database was initialized from its SQL.
+Start the app from the repository's `src` folder:
 
-This resolves the earlier missing-dependency blocker. A full bridge design and
-GUI-generated report comparison still require separate validation.
+```bash
+python -m osdagbridge.desktop
+```
 
-Subsequent validation completed a backend design and generated calculated
-comparison PDFs. A visible GUI check initialized the OpenGL/CAD display but the
-application closed during input-file selection with Windows exceptions
-0x8001010d, 0x80010108 and 0x80010012. Offscreen construction success must not be
-interpreted as a successful interactive GUI workflow. See `SUBMISSION.md`.
+`scripts/check_environment.py` checks that Qt, the CAD stack, the solvers and
+PyLaTeX import correctly and that the bundled `pdflatex` (from `osdag_latex_env`) runs.
+
+For the report tests alone, a plain Python 3.11+ virtual environment is enough:
+
+```bash
+pip install -r requirements-reports.txt
+pytest tests -q
+```
