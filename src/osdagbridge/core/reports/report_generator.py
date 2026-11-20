@@ -170,7 +170,7 @@ def title_page(m, osdag_logo, org_logo):
 \raggedleft
 """ + rhs + r"""
 \end{minipage}
-\\[1cm]
+\\[\ReportTitleLogoGap]
 """
 
     return r"""
@@ -179,9 +179,9 @@ def title_page(m, osdag_logo, org_logo):
 \centering
 \ReportCoverTopSpace
 """ + logos_tex + r"""
-{\ReportBrandFont \textbf{OsdagBridge}}\\[0.3cm]
-{\ReportLargeFont Open Source Software for Steel Girder Bridge Design}\\[1.5cm]
-{\ReportHeadingFont Design Report}\\[1.5cm]
+{\ReportBrandFont \textbf{OsdagBridge}}\\[\ReportTitleLineGap]
+{\ReportLargeFont Open Source Software for Steel Girder Bridge Design}\\[\ReportTitleBlockGap]
+{\ReportHeadingFont Design Report}\\[\ReportTitleBlockGap]
 \begin{tabular}{|L{4cm}|L{10cm}|}
 \hline
 \textbf{Project Name} & """ + _tex(m.project_name) + r""" \\
@@ -427,8 +427,8 @@ class ReportDataBridge:
             if val is not None:
                 ur = float(val)
                 if ur <= 1.0:
-                    return r"\textcolor{black}{PASS}"
-                return r"\textcolor{red}{FAIL}"
+                    return r"\ReportPass"
+                return r"\ReportFail"
         except (TypeError, ValueError):
             pass
         return ""

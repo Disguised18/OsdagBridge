@@ -42,7 +42,7 @@ def ch4_analysis(asum, fig_paths, bridge: "ReportDataBridge", span_m: float):
             + _tex(bm_d.get('sf_girder', '---')) + r" & "
             + _fmt(bm_d.get('sf_location'))      + r" & "
             + _fmt(rxn_d.get('left_kN'))         + r" & "
-            + _fmt(rxn_d.get('right_kN'))        + r" \\[6pt]"
+            + _fmt(rxn_d.get('right_kN'))        + r" \\[\ReportRowGap]"
         )
 
     all_lcs = list(lc_summary.keys()) + [k for k in rxn_summary if k not in lc_summary]
@@ -50,7 +50,7 @@ def ch4_analysis(asum, fig_paths, bridge: "ReportDataBridge", span_m: float):
     merged_body = ("\n\\hline\n").join(
         _merged_row(lc, lc_summary.get(lc), rxn_summary.get(lc))
         for lc in all_lcs
-    ) if all_lcs else r"--- & --- & --- & --- & --- & --- & --- & --- & --- \\[6pt]"
+    ) if all_lcs else r"--- & --- & --- & --- & --- & --- & --- & --- & --- \\[\ReportRowGap]"
 
     _span_m         = float(bridge.input_dict.get(KEY_SPAN, 0) or 0)
     _allow_live_mm  = _span_m * 1000.0 / 800.0
@@ -147,19 +147,19 @@ A grillage model was used for structural analysis. The deck is idealized as a gr
 \begin{longtable}{|>{\centering\arraybackslash}p{5.2cm}|>{\centering\arraybackslash}p{5.2cm}|>{\centering\arraybackslash}p{5.2cm}|}
 \caption{\textbf{Reactions at Supports}}\\
 \hline
-\textbf{Load Case} & \textbf{Left Support (kN)} & \textbf{Right Support (kN)} \\[6pt]
+\textbf{Load Case} & \textbf{Left Support (kN)} & \textbf{Right Support (kN)} \\[\ReportRowGap]
 \hline
 \endfirsthead
 \hline
-\textbf{Load Case} & \textbf{Left Support (kN)} & \textbf{Right Support (kN)} \\[6pt]
+\textbf{Load Case} & \textbf{Left Support (kN)} & \textbf{Right Support (kN)} \\[\ReportRowGap]
 \hline
 \endhead
 
- & """ + '' + r""" & """ + '' + r""" \\[6pt]
+ & """ + '' + r""" & """ + '' + r""" \\[\ReportRowGap]
 \hline
- & """ + '' + r""" & """ + '' + r""" \\[6pt]
+ & """ + '' + r""" & """ + '' + r""" \\[\ReportRowGap]
 \hline
- & """ + '' + r""" & """ + '' + r""" \\[6pt]
+ & """ + '' + r""" & """ + '' + r""" \\[\ReportRowGap]
 \hline
 \end{longtable}
 
@@ -175,17 +175,17 @@ A grillage model was used for structural analysis. The deck is idealized as a gr
 \hline
 \endhead
 
-\textnormal{Deflection due to Live Load, $\delta_{LL}$} & """ + _live_str + r""" \\[6pt]
+\textnormal{Deflection due to Live Load, $\delta_{LL}$} & """ + _live_str + r""" \\[\ReportRowGap]
 \hline
-\textnormal{Allowable Live Load Deflection ($\Delta_{allow}$)} & """ + _allow_live_str + r""" \\[6pt]
+\textnormal{Allowable Live Load Deflection ($\Delta_{allow}$)} & """ + _allow_live_str + r""" \\[\ReportRowGap]
 \hline
-\textnormal{Live Load Deflection Check Status} & """ + _live_status + r""" \\[6pt]
+\textnormal{Live Load Deflection Check Status} & """ + _live_status + r""" \\[\ReportRowGap]
 \hline
-\textnormal{Deflection due to Total Load, $\delta_{total}$} & """ + _total_str + r""" \\[6pt]
+\textnormal{Deflection due to Total Load, $\delta_{total}$} & """ + _total_str + r""" \\[\ReportRowGap]
 \hline
-\textnormal{Allowable Total Deflection ($\Delta_{allow}$)} & """ + _allow_total_str + r""" \\[6pt]
+\textnormal{Allowable Total Deflection ($\Delta_{allow}$)} & """ + _allow_total_str + r""" \\[\ReportRowGap]
 \hline
-\textnormal{Total Load Deflection Check Status} & """ + _total_status + r""" \\[6pt]
+\textnormal{Total Load Deflection Check Status} & """ + _total_status + r""" \\[\ReportRowGap]
 \hline
 \end{longtable}
 

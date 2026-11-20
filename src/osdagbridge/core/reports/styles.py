@@ -100,6 +100,16 @@ def preamble(project_name, job_number, report_date, report_version='Rev 0'):
 \newcommand{\ReportMinorGap}{\vspace{0.4em}}
 \newcommand{\ReportSectionGap}{\vspace{1.5em}}
 \newcommand{\ReportMajorGap}{\vspace{2em}}
+% Extra space after a table row (\\[\ReportRowGap]) and inside multi-line cells
+\newlength{\ReportRowGap}\setlength{\ReportRowGap}{6pt}
+\newlength{\ReportRowGapLarge}\setlength{\ReportRowGapLarge}{8pt}
+\newlength{\ReportCellLineGap}\setlength{\ReportCellLineGap}{3pt}
+\newlength{\ReportTitleLineGap}\setlength{\ReportTitleLineGap}{0.3cm}
+\newlength{\ReportTitleBlockGap}\setlength{\ReportTitleBlockGap}{1.5cm}
+\newlength{\ReportTitleLogoGap}\setlength{\ReportTitleLogoGap}{1cm}
+% Check status labels
+\newcommand{\ReportPass}{PASS}
+\newcommand{\ReportFail}{\textcolor{reportFail}{FAIL}}
 \newcommand{\ReportSmallFont}{\small}
 \newcommand{\ReportFootnoteFont}{\footnotesize}
 \newcommand{\ReportNormalFont}{\normalsize}

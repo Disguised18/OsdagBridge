@@ -17,10 +17,10 @@ comes from the existing OsdagBridge solver.
 |---|---|---|
 | 1 | Repeated table headers | Every body table is a `longtable` with an explicit `\endfirsthead` / `\endhead` pair, so the column header row repeats on each new page. Captions sit only in the first head and end with a row break, so they are not repeated or renumbered. An empty continuation header in Chapter 2 was filled in. |
 | 2 | Footer overlap and spacing | `geometry` now uses `includeheadfoot` with a 28 pt head height, 18 mm foot skip and 32 mm bottom margin, so the body can never run into the footer. Negative `\vspace` hacks near the footer were removed. Every table and longtable starts with `\Needspace{7\baselineskip}`, which moves it to the next page instead of leaving a header stranded at the bottom. Tall `multirow` cells in Chapter 5 (these caused the "G4" bleed) were replaced by a girder label on every row, so a table can break between any two rows. |
-| 3 | Live-load tables | Vehicle live loads and footway live loads are now two separate tables (Tables 3.3 and 3.4), each with Parameter / Value / Unit columns. The vehicle rows follow the eight IRC vehicle checkboxes and the custom vehicles from the *Loading* tab of Additional Inputs. A serialized `"False"` is treated as unchecked. Impact factor, braking load, Class SV braking and centrifugal force each have their own row with a unit. The footway table covers none / single / both sides, and automatic (IRC 6 Cl. 206.1) or user-defined pressure. |
+| 3 | Live-load tables | Vehicle and footway live loads are two separate tables (3.3 and 3.4). Table 3.3 follows the layout of the example in the brief: one row per vehicle selected in the *Loading* tab (eight IRC classes plus custom vehicles), with Total Load (kN), Impact Factor (1 + IM) and Braking Load (Considered? / Value / Eccentricity). Total loads come from the IRC 6 vehicle definitions the analysis uses; impact factors follow IRC 6 Cl. 208.2 / 208.3 per class; braking follows the Loading tab (Class SV opt-in, eccentricity). Notes under the table explain each N/A, including centrifugal force. A serialized `"False"` is treated as unchecked. The footway table covers none / single / both sides, and automatic (IRC 6 Cl. 206.1) or user-defined pressure. |
 | 4 | Utilization-ratio chart | A bar chart in Section 5.5 shows the governing UR of steel plate girders, the concrete deck slab, cross bracing and end diaphragms, with a red dashed line at UR = 1.0. Bars above 1.0 are red and the rest green. Each bar is the maximum UR of that element's rows in the Section 5.5 summary table, and a regression test checks this against real design output. |
 | 5 | Material quantity charts | Chapter 7 has two figures built from the same BOQ values as Table 7.1: structural steel tonnage (girders, cross bracing, end diaphragms), and concrete volume (m³) beside reinforcement weight (MT). The last two are drawn on separate axes because they have different units. Plots are saved as PNGs during generation and embedded with PyLaTeX `Figure`. |
-| 6 | Central style module | New `styles.py` is the single source of truth for page geometry, fonts, colours, header/footer, table spacing, section gaps and the chart theme. Every chapter imports it, and no chapter defines its own colours, margins or font sizes. |
+| 6 | Central style module | New `styles.py` is the single source of truth for page geometry, fonts, colours, header/footer, row and cell spacing, section and title-page gaps, PASS/FAIL labels and the chart theme. Every chapter imports it. The 259 hardcoded row gaps (`\\[6pt]` etc.) and the raw colours and title-page lengths were replaced by named commands, and a test fails if any report module hardcodes a row gap, colour or font size. |
 
 ## 2. Files changed
 
@@ -30,11 +30,11 @@ All under `src/osdagbridge/core/reports/` unless noted.
 |---|---|
 | `styles.py` (new) | Preamble, geometry, palette, header/footer, named spacing and font commands, chart theme, `report_section` decorator. |
 | `plots.py` (new) | Reads stored design results and BOQ totals, draws the UR and quantity charts with Matplotlib's Agg canvas, and returns PyLaTeX figures. |
-| `load_tables.py` (new) | Builds the vehicle and footway live-load tables and interprets the GUI checkbox values. |
+| `load_tables.py` (new) | Builds Table 3.3 in the brief's per-vehicle layout (total load, impact factor, braking) and the footway table, and interprets the GUI checkbox values. |
 | `report_generator.py` | Uses `styles.preamble`. Generates chart assets into the report's temporary folder and keeps a sibling `<report>_assets` folder so the saved `.tex` can be recompiled. Reports success only when the current compiler run produced the PDF. Always emits Chapter 6 so Chapter 7 keeps its number. Generates the Chapter 5/7 charts whether or not *Drawings* is ticked (the GUI ties `include_figures` to that checkbox). |
 | `chap1.py` – `chap9.py`, `executive_summary.py` | Converted to `longtable` with repeated headers. Use the shared style commands. Consistent header capitalisation. Chapter 3 uses the new load tables. Chapter 5 removes tall `multirow` cells, embeds the UR chart and adds the missing summary rows. Chapter 7 embeds the quantity charts. |
 | `report_utils.py` | Single-pass LaTeX escaping, so backslashes are not escaped twice. Removed negative figure spacing. |
-| `tests/unit/test_reports.py` (new) | 34 regression tests (see Section 6). |
+| `tests/unit/test_reports.py` (new) | 36 regression tests (see Section 6). |
 | `scripts/` (new) | `run_design_validation.py` (backend design run), `generate_validation_report.py` (Before/After PDFs), `report_layout_fixture.py` (synthetic layout stress test), `check_environment.py`. |
 | `pyproject.toml`, `requirements-reports.txt` | Declare PyLaTeX and Matplotlib, and a light install for running the report tests. |
 
@@ -60,6 +60,9 @@ Named commands defined in the preamble and used by the chapters:
 |---|---|
 | Body / table style | `\ReportSectionStyle`, `\ReportCompactTable`, `\ReportWideRows`, `\ReportTableLeft`, `\ReportCaptionStyle` |
 | Vertical rhythm | `\ReportTableGap`, `\ReportMinorGap`, `\ReportSectionGap`, `\ReportMajorGap`, `\ReportCoverTopSpace` |
+| Row / cell spacing (lengths) | `\ReportRowGap` (6 pt), `\ReportRowGapLarge` (8 pt), `\ReportCellLineGap` (3 pt) |
+| Title page (lengths) | `\ReportTitleLineGap`, `\ReportTitleBlockGap`, `\ReportTitleLogoGap` |
+| Check status | `\ReportPass`, `\ReportFail` (red) |
 | Type sizes | `\ReportSmallFont`, `\ReportFootnoteFont`, `\ReportNormalFont`, `\ReportLargeFont`, `\ReportHeadingFont`, `\ReportBrandFont` |
 | Colours | `osdagGreen`, `reportPass`, `reportFail`, `reportInfo`, `reportMissing` |
 
@@ -91,6 +94,7 @@ they describe that table's data rather than the report's style.
 
 ## 5. Visual enhancements and polish
 
+- Table 3.3 uses a two-level header (Braking Load over Considered? / Value / Eccentricity), as in the brief, and repeats it on the next page.
 - Consistent table headers ("Parameter / Value / Unit") and bold captions throughout.
 - A girder column heading on the per-girder check tables (previously blank).
 - Failing UR values in the summary table are shown in red, matching the chart.
@@ -129,7 +133,7 @@ unchanged upstream report code at `d74f56d`; `Report_After` uses this branch.
 | pdfTeX exit codes (2 passes) | 1, 1 | 0, 0 |
 | LaTeX errors | 138 | 0 |
 | Overfull boxes | 61 | 0 |
-| Pages | 54 | 60 |
+| Pages | 54 | 61 |
 
 The upstream generator runs pdfTeX in non-stop mode and keeps the PDF despite
 the errors, so `Report_Before.pdf` is the real original output, errors included.
@@ -137,17 +141,25 @@ Every numeric value in `Report_Before.pdf` also appears in `Report_After.pdf`,
 and spot checks against the solver output (girder moment, fatigue stress, SLS
 stress, LTB, governing UR) match in both.
 
-**Tests.** `pytest tests` → 34 passed (Python 3.12, PyLaTeX 1.4.2, Matplotlib
+**Tests.** `pytest tests` → 36 passed (Python 3.12, PyLaTeX 1.4.2, Matplotlib
 3.10). They cover header repetition in every table, checkbox parsing, vehicle
-and footway cases, invalid and missing data, chart/table agreement on the real
+and footway cases, the per-vehicle table layout, invalid and missing data, chart/table agreement on the real
 design snapshot, PNG creation and embedding, shared styles and palette, the
-Chapter 6 placeholder, and the generator's asset and compiler handling.
+Chapter 6 placeholder, the absence of hardcoded formatting outside `styles.py`,
+and the generator's asset and compiler handling.
 
 ## 7. Known limitations (upstream, not changed here)
 
-- **Braking load shows N/A.** `IRC6_2017.cl_211_2_braking_force` raises
-  `UnboundLocalError` (`braking_force_2`) for every lane count, so the report
-  falls back to N/A.
+- **Braking force value shows N/A.** The analysis does not apply braking load,
+  and `IRC6_2017.cl_211_2_braking_force` raises `UnboundLocalError`
+  (`braking_force_2`) for every lane count. Whether braking is considered and its
+  eccentricity are still reported from the Loading tab.
+- **Vehicle selection does not drive the analysis.** The grillage analysis always
+  places Class A and Class 70R (Wheeled) vehicles per IRC 6 Table 6 and applies
+  the Cl. 208.3 impact factor to all vehicle cases, whatever is ticked in the
+  Loading tab. Table 3.3 lists the vehicles as selected, as the brief asks, and
+  says this in its notes. Class AA and Class 70R (Bogie) have no vehicle
+  definition in the code, so their total load is N/A.
 - **Deflection values disagree inside the report.** The design module's girder
   check gives a live-load deflection within L/800 (used in Section 5.5 and the
   chart). The older deflection table in Sections 4 and 5.1 shows a larger value

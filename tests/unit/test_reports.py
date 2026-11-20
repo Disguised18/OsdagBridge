@@ -260,3 +260,46 @@ def test_chapter_six_is_kept_when_drawings_are_omitted(tmp_path, monkeypatch, me
     monkeypatch.setattr(report.subprocess, 'run', lambda *a, **k: SimpleNamespace(returncode=1, stdout=b'', stderr=b''))
     tex = Path(report.generate_report(payload, request).tex_path).read_text(encoding='utf-8')
     assert tex.index(r'\chapter{Drawings and Visualizations}') < tex.index(r'\setcounter{chapter}{6}')
+
+
+def test_vehicle_table_follows_brief_layout():
+    from osdagbridge.core.reports.load_tables import vehicle_rows
+    inputs = {keys.KEY_SPAN: 20, keys.KEY_LL_ECCENTRICITY: '1.2',
+              keys.KEY_LL_IRC_CLASS_A: True, keys.KEY_LL_IRC_70R_WHEELED: True,
+              keys.KEY_LL_IRC_CLASS_SV: True, keys.KEY_LL_IRC_CLASS_FATIGUE: True,
+              keys.KEY_LL_IRC_AA_TRACKED: True, keys.KEY_BL_IRC_CLASS_SV: 'False',
+              keys.KEY_LL_CUSTOM_VEHICLES: [{'name': 'Crane', 'axle_loads': [100, 150], 'impact_factor': 0.2}]}
+    rows = {r['name']: r for r in vehicle_rows(inputs)}
+    assert list(rows) == ['Class A', 'Class 70R (Wheeled)', 'Class AA (Tracked)', 'Class SV', 'Class Fatigue', 'Crane']
+    assert rows['Class A']['total_kN'] == pytest.approx(543.474)
+    assert rows['Class A']['impact'] == pytest.approx(1.269)          # IRC 6 Cl. 208.2
+    assert rows['Class 70R (Wheeled)']['impact'] == pytest.approx(1.1)  # IRC 6 Cl. 208.3
+    assert rows['Class AA (Tracked)']['total_kN'] is None             # no definition in the code
+    assert rows['Class SV']['braking'] is False                       # follows its own checkbox
+    assert rows['Class Fatigue']['braking'] is False and rows['Class Fatigue']['eccentricity'] is None
+    assert rows['Class A']['braking'] and rows['Class A']['eccentricity'] == 1.2
+    assert rows['Crane']['total_kN'] == 250 and rows['Crane']['impact'] == pytest.approx(1.2)
+    tex = ch3_loads(inputs)
+    table = tex.split('Vehicle Live Loads (LL)')[1].split(r'\end{longtable}')[0]
+    for heading in ('Total Load', 'Impact Factor', 'Braking Load', 'Considered?', 'Value (kN)', 'Eccentricity (m)'):
+        assert heading in table
+    assert 'Class A & 543.5 & 1.269 & Yes & N/A & 1.20' in table
+    assert re.search(r'Class SV & 3776\.\d & N/A & No & -- & --', table)
+
+
+def test_formatting_comes_only_from_styles():
+    folder = Path(report.__file__).parent
+    for path in folder.glob('*.py'):
+        if path.name == 'styles.py':
+            continue
+        source = path.read_text(encoding='utf-8')
+        # Row / line gaps such as \\[6pt] must use the named lengths from styles.py.
+        assert not re.search(r'\\\\\[\d+(\.\d+)?(pt|cm|mm|em)\]', source), path.name
+        assert not re.search(r'\\(text)?color\{(red|black|blue|green)\}', source), path.name
+        assert r'\definecolor' not in source and r'\fontsize' not in source, path.name
+    tex = ch5_design_checks([], report.ReportDataBridge({}, {}, None)) + ch3_loads({})
+    assert r'\\[\ReportRowGap]' in tex
+    assert r'[\\Report' not in tex  # a doubled backslash would break the length
+    pre = preamble('P', 'J', 'D')
+    for name in ('ReportRowGap', 'ReportPass', 'ReportFail', 'ReportTitleBlockGap'):
+        assert '\\' + name in pre
