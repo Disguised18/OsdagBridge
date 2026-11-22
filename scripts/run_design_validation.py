@@ -6,13 +6,17 @@ from pathlib import Path
 from osdagbridge.desktop import __main__ as desktop
 from osdagbridge.core.bridge_types.plate_girder.defaults import BASIC_INPUT_DICT, solve_extend_basic_input_dict
 from osdagbridge.core.bridge_types.plate_girder.ui_fields_project_location import get_state_list, get_station_list, get_weather
-from osdagbridge.core.utils.common import *
+from osdagbridge.core.utils.common import (
+    KEY_CARRIAGEWAY_WIDTH, KEY_CROSS_BRACING, KEY_DECK_CONCRETE_GRADE_BASIC, KEY_END_DIAPHRAGM,
+    KEY_FOOTPATH, KEY_GIRDER, KEY_PROJECT_LOCATION, KEY_SKEW_ANGLE, KEY_SPAN,
+)
 
 
 def main():
     from PySide6.QtWidgets import QApplication
     from osdagbridge.desktop.ui.docks.input_dock import MaterialPropertiesDialog
-    app = QApplication.instance() or QApplication([])
+    # The material dialogs need a QApplication; keep a reference for the whole run.
+    main.app = QApplication.instance() or QApplication([])
     folder = Path('validation/design')
     folder.mkdir(parents=True, exist_ok=True)
     inputs = dict(BASIC_INPUT_DICT)

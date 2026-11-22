@@ -5,17 +5,8 @@
 
 from osdagbridge.core.utils.common import (
     KEY_CB_LOAD,
-    KEY_LL_CUSTOM_VEHICLES,
     KEY_LL_FOOTPATH_PRESSURE_MODE,
     KEY_LL_FOOTPATH_PRESSURE_VALUE,
-    KEY_LL_IRC_70R_BOGIE,
-    KEY_LL_IRC_70R_TRACKED,
-    KEY_LL_IRC_70R_WHEELED,
-    KEY_LL_IRC_AA_TRACKED,
-    KEY_LL_IRC_AA_WHEELED,
-    KEY_LL_IRC_CLASS_A,
-    KEY_LL_IRC_CLASS_FATIGUE,
-    KEY_LL_IRC_CLASS_SV,
     KEY_MATERIAL_DECK_DENSITY,
     KEY_MATERIAL_GIRDER_DENSITY,
     KEY_PL_SELF_WEIGHT_FACTOR,
@@ -33,14 +24,12 @@ from osdagbridge.core.utils.common import (
     KEY_SL_TIME_PERIOD,
     KEY_SL_VERTICAL_COEFF,
     KEY_SL_ZONE_FACTOR,
-    KEY_SPAN,
     KEY_TL_BRIDGE_TEMP_MAX,
     KEY_TL_BRIDGE_TEMP_MIN,
     KEY_TL_HIGHEST_MAX_TEMP,
     KEY_TL_LOWEST_MIN_TEMP,
     KEY_TL_TEMP_FALL,
     KEY_TL_TEMP_RISE,
-    KEY_WC_LD_LANE_TABLE_COUNT,
     KEY_WC_MATERIAL,
     KEY_WC_THICKNESS,
     KEY_WL_AVG_EXPOSED_HEIGHT,
@@ -53,86 +42,16 @@ from osdagbridge.core.utils.common import (
     KEY_WL_VERTICAL_WIND_FORCE
 )
 
-from osdagbridge.core.reports.report_utils import _tex, _render_value
+from osdagbridge.core.reports.report_utils import _render_value
 
-from .load_tables import live_load_tables, selected
+from .load_tables import live_load_tables
 from .styles import report_section
 
 @report_section
 def ch3_loads(input_dict):
-    # Live load vehicle names mapping
-    vehicles = []
-    if selected(input_dict.get(KEY_LL_IRC_CLASS_A)):
-        vehicles.append("Class A")
-    if selected(input_dict.get(KEY_LL_IRC_70R_WHEELED)):
-        vehicles.append("Class 70R (Wheeled)")
-    if selected(input_dict.get(KEY_LL_IRC_70R_TRACKED)):
-        vehicles.append("Class 70R (Tracked)")
-    if selected(input_dict.get(KEY_LL_IRC_AA_WHEELED)):
-        vehicles.append("Class AA (Wheeled)")
-    if selected(input_dict.get(KEY_LL_IRC_AA_TRACKED)):
-        vehicles.append("Class AA (Tracked)")
-    if selected(input_dict.get(KEY_LL_IRC_CLASS_SV)):
-        vehicles.append("Class SV")
-    if selected(input_dict.get(KEY_LL_IRC_70R_BOGIE)):
-        vehicles.append("Class 70R (Bogie)")
-    if selected(input_dict.get(KEY_LL_IRC_CLASS_FATIGUE)):
-        vehicles.append("Class Fatigue")
-
-    custom = input_dict.get(KEY_LL_CUSTOM_VEHICLES)
-    if custom and isinstance(custom, list):
-        for c in custom:
-            if isinstance(c, dict) and c.get('name'):
-                vehicles.append(c['name'])
-            elif isinstance(c, str):
-                vehicles.append(c)
-
-    vehicles_str = ", ".join(vehicles) if vehicles else "None"
-
+    # Vehicle and footway live-load tables (3.3, 3.4) are built in load_tables.py
+    # from the Loading-tab selection, so no vehicle data is assembled here.
     from osdagbridge.core.utils.codes.irc6_2017 import IRC6_2017
-    span = input_dict.get(KEY_SPAN)
-    impact_factor_str = ""
-    if span not in (None, ""):
-        try:
-            span_m = float(span)
-            factors = []
-            if selected(input_dict.get(KEY_LL_IRC_CLASS_A)):
-                im_a = IRC6_2017.cl_208_2_impact_factor(span_m)
-                factors.append(f"Class A: {1.0 + im_a:.3f}")
-            is_wheeled_heavy = (
-                selected(input_dict.get(KEY_LL_IRC_70R_WHEELED)) or
-                selected(input_dict.get(KEY_LL_IRC_AA_WHEELED)) or
-                selected(input_dict.get(KEY_LL_IRC_70R_BOGIE))
-            )
-            is_tracked_heavy = (
-                selected(input_dict.get(KEY_LL_IRC_70R_TRACKED)) or
-                selected(input_dict.get(KEY_LL_IRC_AA_TRACKED))
-            )
-            if is_wheeled_heavy or is_tracked_heavy:
-                im_aa = IRC6_2017.cl_208_3_impact_factor(span_m)
-                factors.append(f"Class AA/70R: {1.0 + im_aa:.3f}")
-
-            if factors:
-                impact_factor_str = ", ".join(factors)
-            else:
-                impact_factor_str = "N/A"
-        except Exception:
-            impact_factor_str = "N/A"
-    else:
-        impact_factor_str = "N/A"
-
-    lanes = input_dict.get(KEY_WC_LD_LANE_TABLE_COUNT)
-    braking_force_str = ""
-    if lanes not in (None, ""):
-        try:
-            lanes_int = int(lanes)
-            braking_force_t = IRC6_2017.cl_211_2_braking_force(lanes_int)
-            braking_force_kN = braking_force_t * 9.81
-            braking_force_str = f"{braking_force_kN:.2f} kN ({braking_force_t:.2f} tonnes)"
-        except Exception:
-            braking_force_str = "N/A"
-    else:
-        braking_force_str = "N/A"
 
     fp_mode  = input_dict.get(KEY_LL_FOOTPATH_PRESSURE_MODE, "")
     fp_value = input_dict.get(KEY_LL_FOOTPATH_PRESSURE_VALUE, "")
@@ -316,7 +235,7 @@ This section summarizes all loads applied to the bridge and the load combination
 \end{longtable}
 
 \ReportTableGap
-""" + live_load_tables(input_dict, vehicles, impact_factor_str, braking_force_str) + r"""
+""" + live_load_tables(input_dict) + r"""
 
 \ReportTableGap
 \begin{longtable}{|L{5.5cm}|p{10.0cm}|}

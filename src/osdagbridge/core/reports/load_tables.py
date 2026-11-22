@@ -189,13 +189,8 @@ def _vehicle_notes(inputs, rows):
 
 
 @report_section
-def live_load_tables(inputs, vehicles=None, impact='', braking=''):
-    """Vehicle table (brief layout) and footway table.
-
-    `vehicles`, `impact` and `braking` are accepted for compatibility with
-    ch3_loads; the rows are rebuilt from `inputs` so every column reads the same
-    selection.
-    """
+def live_load_tables(inputs):
+    """Vehicle table (brief layout) and footway table, built from the report inputs."""
     rows = vehicle_rows(inputs)
     footpath = str(inputs.get(KEY_FOOTPATH, '')).strip()
     if footpath.lower() in {'none', 'no', 'false', '0'}:

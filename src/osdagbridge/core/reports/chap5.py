@@ -774,7 +774,6 @@ Fatigue Shear Resistance, $Q_r$ & IRC 22 Table 8 ($\phi d$, $N_{sc}$) & """
             top_chord_enabled = bridge.output_dict.get("member_properties.cross_bracing_details.top_chord", True)
             bottom_chord_enabled = bridge.output_dict.get("member_properties.cross_bracing_details.bottom_chord", True)
 
-            num_rows = 1 + int(top_chord_enabled) + int(bottom_chord_enabled)
             row_tex = r"\makecell{" + _tex(pair) + r"}"
             row_tex += f" & Diagonal & C & {kl_diag} & {slnd_diag} & 250 --- {status_diag} \\\\[\\ReportRowGap]"
 
