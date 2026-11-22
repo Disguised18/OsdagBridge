@@ -331,3 +331,50 @@ def test_bracing_results_with_live_text_entries():
     assert member_ur('unexpected') is None
     outputs = {'crossbracing_design_results': results}
     assert utilization_values(outputs)['Cross\nbracing'] == pytest.approx(.4)
+
+
+def test_every_longtable_gets_page_break_notices(tmp_path, monkeypatch, metadata):
+    from osdagbridge.core.reports.styles import continued_tables, _column_count
+    assert _column_count(r'|L{5.5cm}|>{\centering\arraybackslash}p{4.2cm}|c|C{1.8cm}|') == 4
+    numbered = (r'\begin{longtable}{|l|c|}' '\n' r'\caption{\textbf{T}}\\' '\n' r'\hline' '\n'
+                r'\textbf{A} & \textbf{B} \\ \hline' '\n' r'\endfirsthead' '\n' r'\hline' '\n'
+                r'\textbf{A} & \textbf{B} \\ \hline' '\n' r'\endhead' '\n' r'1 & 2 \\ \hline' '\n'
+                r'\end{longtable}')
+    out = continued_tables(numbered)
+    assert r'\multicolumn{2}{@{}l}{\ReportContinuedFromNumbered}' in out
+    assert r'\multicolumn{2}{@{}r@{}}{\ReportContinuedOn}' in out
+    assert out.index(r'\endhead') < out.index(r'\endfoot') < out.index(r'\endlastfoot') < out.index('1 & 2')
+    assert continued_tables(out) == out                    # applying twice changes nothing
+    assert r'\ReportContinuedFrom}' in continued_tables(numbered.replace(r'\caption{\textbf{T}}\\', ''))
+    # Every table in a generated report gets the notices from the shared preamble.
+    options = report.ReportOptions(['loads', 'analysis', 'design_checks'], True, False, True)
+    payload = report.ReportPayload(metadata, options, {}, {}, [], report.ReportFigures())
+    request = report.ReportRequest(metadata, options, str(tmp_path), 'Notices')
+    monkeypatch.setattr(report.subprocess, 'run', lambda *a, **k: SimpleNamespace(returncode=1, stdout=b'', stderr=b''))
+    tex = Path(report.generate_report(payload, request).tex_path).read_text(encoding='utf-8')
+    tables = tex.count(r'\begin{longtable}')
+    assert tables and tex.count(r'\endfoot') == tables == tex.count(r'\endlastfoot')
+    assert r'\newcommand{\ReportContinuedOn}' in tex
+    assert_headers(tex)
+
+
+def test_boq_respects_cross_bracing_chord_configuration():
+    import copy
+    import json
+    from osdagbridge.core.boq.boq_generator import calculate_material_quantities
+    if not (VALIDATION / 'outputs.json').exists():
+        pytest.skip('validation snapshot not present')
+    inputs = json.loads((VALIDATION / 'inputs.json').read_text(encoding='utf-8'))
+    outputs = json.loads((VALIDATION / 'outputs.json').read_text(encoding='utf-8'))
+    both = calculate_material_quantities(inputs, outputs)
+    assert float(both['bracing_top_wt_total']) > 0 and float(both['bracing_bot_wt_total']) > 0
+    for flag in ('top_chord', 'bottom_chord'):
+        for as_text in (False, 'No'):
+            data = copy.deepcopy(outputs)
+            data['crossbracing_forces_dict'][flag] = as_text
+            data['crossbracing_forces_dict']['geometry'][flag] = as_text
+            q = calculate_material_quantities(inputs, data)
+            key = 'bracing_top_wt_total' if flag == 'top_chord' else 'bracing_bot_wt_total'
+            other = 'bracing_bot_wt_total' if flag == 'top_chord' else 'bracing_top_wt_total'
+            assert q[key] == '0.00' and q[other] == both[other]
+            assert q['bracing_diag_wt_total'] == both['bracing_diag_wt_total']

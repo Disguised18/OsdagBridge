@@ -11,9 +11,9 @@
 | Original report | [`validation/design/Report_Before.pdf`](validation/design/Report_Before.pdf) |
 | Enhanced report | [`validation/design/Report_After.pdf`](validation/design/Report_After.pdf) |
 | Enhanced report from the desktop app, with drawings | [`validation/design/Report_After_GUI.pdf`](validation/design/Report_After_GUI.pdf) |
-| Technical changes document | [`docs/FOSSEE_TECHNICAL_CHANGES.md`](docs/FOSSEE_TECHNICAL_CHANGES.md) |
+| Technical changes document | [`docs/FOSSEE_TECHNICAL_CHANGES.pdf`](docs/FOSSEE_TECHNICAL_CHANGES.pdf) (typeset from [`.tex`](docs/FOSSEE_TECHNICAL_CHANGES.tex); same content as [`.md`](docs/FOSSEE_TECHNICAL_CHANGES.md)) |
 | Design inputs used for both reports | [`validation/design/Report_Validation.osi`](validation/design/Report_Validation.osi) |
-| Regression tests | `tests/unit/test_reports.py` (38 tests) |
+| Regression tests | `tests/unit/test_reports.py` (35 report tests; 40 in the full suite) |
 
 ## Where to look in Report_After.pdf
 

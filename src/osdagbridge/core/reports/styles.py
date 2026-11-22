@@ -26,6 +26,74 @@ def report_section(function):
     return render
 
 
+def _column_count(spec):
+    """Number of columns in a tabular/longtable column specification."""
+    count, i = 0, 0
+    while i < len(spec):
+        ch = spec[i]
+        if ch in '>@<!':                      # >{..} <{..} @{..} !{..}: no column
+            i = _skip_group(spec, i + 1)
+            continue
+        if ch in 'LCRpmb':                    # width columns take one {..} argument
+            count += 1
+            i = _skip_group(spec, i + 1)
+            continue
+        if ch in 'lcrX':
+            count += 1
+        i += 1
+    return count
+
+
+def _skip_group(spec, i):
+    """Index just after the balanced {..} group starting at spec[i]."""
+    if i >= len(spec) or spec[i] != '{':
+        return i
+    depth = 0
+    for j in range(i, len(spec)):
+        depth += {'{': 1, '}': -1}.get(spec[j], 0)
+        if depth == 0:
+            return j + 1
+    return len(spec)
+
+
+def continued_tables(tex):
+    """Add page-break notices and a closing rule to every longtable.
+
+    The continuation head gets "Table N continued from previous page" (or an
+    unnumbered notice when the table has no caption); every page except the
+    last gets a closing rule and "Continued on next page". The rule is drawn
+    one rule-width higher, so it overlaps a row's own \\hline instead of
+    doubling it.
+    """
+    out, pos = [], 0
+    begin = r'\begin{longtable}'
+    while True:
+        start = tex.find(begin, pos)
+        if start < 0:
+            out.append(tex[pos:])
+            return ''.join(out)
+        spec_open = start + len(begin)
+        spec_close = _skip_group(tex, spec_open)
+        end = tex.find(r'\end{longtable}', spec_close)
+        first = tex.find(r'\endfirsthead', spec_close, end)
+        head = tex.find(r'\endhead', spec_close, end)
+        if end < 0 or first < 0 or head < 0 or r'\endfoot' in tex[spec_close:end]:
+            out.append(tex[pos:spec_close])
+            pos = spec_close
+            continue
+        n = _column_count(tex[spec_open + 1:spec_close - 1])
+        notice_from = (r'\ReportContinuedFromNumbered' if r'\caption' in tex[spec_close:first]
+                       else r'\ReportContinuedFrom')
+        head_start = first + len(r'\endfirsthead')
+        head_end = head + len(r'\endhead')
+        out.append(tex[pos:head_start])
+        out.append('\n\\multicolumn{%d}{@{}l}{%s}\\\\' % (n, notice_from))
+        out.append(tex[head_start:head_end])
+        out.append('\n\\noalign{\\vskip-\\arrayrulewidth}\\hline\n'
+                   '\\multicolumn{%d}{@{}r@{}}{\\ReportContinuedOn}\\\\\n\\endfoot\n\\endlastfoot' % n)
+        pos = head_end
+
+
 def preamble(project_name, job_number, report_date, report_version='Rev 0'):
     from .report_utils import _tex
     pn = _tex(project_name)
@@ -110,6 +178,10 @@ def preamble(project_name, job_number, report_date, report_version='Rev 0'):
 % Check status labels
 \newcommand{\ReportPass}{PASS}
 \newcommand{\ReportFail}{\textcolor{reportFail}{FAIL}}
+% Page-break notices for long tables (added to every longtable by continued_tables)
+\newcommand{\ReportContinuedFromNumbered}{\ReportFootnoteFont\textit{\tablename~\thetable{} continued from previous page}}
+\newcommand{\ReportContinuedFrom}{\ReportFootnoteFont\textit{Continued from previous page}}
+\newcommand{\ReportContinuedOn}{\ReportFootnoteFont\textit{Continued on next page}}
 \newcommand{\ReportSmallFont}{\small}
 \newcommand{\ReportFootnoteFont}{\footnotesize}
 \newcommand{\ReportNormalFont}{\normalsize}

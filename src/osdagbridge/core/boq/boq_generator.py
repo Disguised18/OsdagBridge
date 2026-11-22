@@ -240,16 +240,29 @@ def calculate_material_quantities(inputs: dict, outputs: dict) -> dict:
         # Find bracing section properties from outputs or skip if not present
         bracing_area = 0.0
         bracing_len = 0.0
-        top_chord_enabled = True
-        bot_chord_enabled = True
 
         bracing_area_val = outputs.get("transverse_member_design.cb.section_properties.bracing.G1G2.A")
         cb_forces = outputs.get("crossbracing_forces_dict")
         bracing_len_val = None
+        cb_geom = {}
         if cb_forces:
-            cb_geom = cb_forces.get("geometry")
+            cb_geom = cb_forces.get("geometry") or {}
             if cb_geom:
                 bracing_len_val = cb_geom.get("diagonal_length_m")
+
+        # Chords exist only when the user enables them; CrossBracingForces resolves
+        # this from the inputs and records it (top level and in "geometry").
+        def _chord_enabled(name):
+            for source in (cb_forces or {}, cb_geom):
+                if name in source and source[name] is not None:
+                    value = source[name]
+                    if isinstance(value, str):
+                        return value.strip().lower() not in ("no", "false", "0", "none")
+                    return bool(value)
+            return True  # previous behaviour when no bracing configuration is available
+
+        top_chord_enabled = _chord_enabled("top_chord")
+        bot_chord_enabled = _chord_enabled("bottom_chord")
 
         if bracing_area_val is not None and bracing_len_val is not None:
             try:
