@@ -7,6 +7,7 @@
 | `Report_Before.pdf` / `.tex` | Unchanged upstream report code (`d74f56d`) |
 | `Report_After.pdf` / `.tex` | This branch's report code |
 | `Report_After_assets/` | Charts and logo referenced by `Report_After.tex` |
+| `Report_After_GUI.pdf` / `.tex` / `_assets/` | Same report code, generated in the desktop app with CAD drawings and analysis plots (70 pages, 24 images) |
 
 **Design case:** 20 m span, 7.5 m carriageway, 1.5 m footways on both sides,
 zero skew, Maharashtra location, all IRC vehicle classes, optimized design with
@@ -23,7 +24,10 @@ state of the chart and tables is visible.
 
 The original generator runs pdfTeX in non-stop mode and keeps the PDF even when
 compilation fails, so `Report_Before.pdf` is the real original output.
-Drawings need CAD exports from the GUI and are not included in either report.
+Drawings need CAD exports from the GUI, so they are placeholders in these two
+script-made reports. `Report_After_GUI.pdf` shows them: it was generated in the
+desktop app with the same bridge geometry, but its session inputs differ
+slightly, so a few values differ (girder fatigue UR 2.55 vs 2.56).
 
 ## Regenerate
 
