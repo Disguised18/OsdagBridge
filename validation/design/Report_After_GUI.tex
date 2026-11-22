@@ -78,6 +78,10 @@
 % Check status labels
 \newcommand{\ReportPass}{PASS}
 \newcommand{\ReportFail}{\textcolor{reportFail}{FAIL}}
+% Page-break notices for long tables (added to every longtable by continued_tables)
+\newcommand{\ReportContinuedFromNumbered}{\ReportFootnoteFont\textit{\tablename~\thetable{} continued from previous page}}
+\newcommand{\ReportContinuedFrom}{\ReportFootnoteFont\textit{Continued from previous page}}
+\newcommand{\ReportContinuedOn}{\ReportFootnoteFont\textit{Continued on next page}}
 \newcommand{\ReportSmallFont}{\small}
 \newcommand{\ReportFootnoteFont}{\footnotesize}
 \newcommand{\ReportNormalFont}{\normalsize}
@@ -88,7 +92,7 @@
 \fancypagestyle{main}{
   \fancyhf{}
   \fancyhead[L]{FOSSEE report validation — 20 m bridge $|$ FOSSEE-WI-2026}
-  \fancyhead[R]{2026-11-22 $|$ Rev 0}
+  \fancyhead[R]{2026-11-23 $|$ Rev 0}
   \fancyfoot[L]{\scriptsize Osdag $|$ FOSSEE $|$ Indian Institute of Technology Bombay}
   \fancyfoot[R]{\scriptsize Page \thepage\ of \pageref{LastPage}}
   \renewcommand{\headrule}{\color{osdagGreen}\hrule width\headwidth height 1pt \vspace{2pt}}
@@ -106,7 +110,7 @@
 \fancypagestyle{plain}{
   \fancyhf{}
   \fancyhead[L]{FOSSEE report validation — 20 m bridge $|$ FOSSEE-WI-2026}
-  \fancyhead[R]{2026-11-22 $|$ Rev 0}
+  \fancyhead[R]{2026-11-23 $|$ Rev 0}
   \fancyfoot[L]{\scriptsize Osdag $|$ FOSSEE $|$ Indian Institute of Technology Bombay}
   \fancyfoot[R]{\scriptsize Page \thepage\ of \pageref{LastPage}}
   \renewcommand{\headrule}{\color{osdagGreen}\hrule width\headwidth height 1pt \vspace{2pt}}
@@ -185,7 +189,7 @@
 \hline
 \textbf{Project Location} & Ahmednagar, Maharashtra \\
 \hline
-\textbf{Author / Designer} & Ribhav Sharma  \\
+\textbf{Author / Designer} & Ribhav Sharma \\
 \hline
 \textbf{Reviewer} &  \\
 \hline
@@ -195,7 +199,7 @@
 \hline
 \textbf{Job Number} & FOSSEE-WI-2026 \\
 \hline
-\textbf{Date} & 2026-11-22 \\
+\textbf{Date} & 2026-11-23 \\
 \hline
 \textbf{Report Version} & Rev 0 \\
 \hline
@@ -246,10 +250,15 @@ This section provides a concise summary of the bridge design, key inputs, govern
 \textbf{Parameter} & \textbf{Value} \\
 \hline
 \endfirsthead
+\multicolumn{2}{@{}l}{\ReportContinuedFrom}\\
 \hline
 \textbf{Parameter} & \textbf{Value} \\
 \hline
 \endhead
+\noalign{\vskip-\arrayrulewidth}\hline
+\multicolumn{2}{@{}r@{}}{\ReportContinuedOn}\\
+\endfoot
+\endlastfoot
 \textbf{Bridge Type} & Highway Bridge \\
 \hline
 \textbf{Design Standard} & IRC 5, IRC 6, IRC 22, IRC 24, IS 800 \\
@@ -307,6 +316,7 @@ This section provides a concise summary of the bridge design, key inputs, govern
   \textbf{G5} \\
 \hline
 \endfirsthead
+\multicolumn{6}{@{}l}{\ReportContinuedFrom}\\
 \hline
   \textbf{} &
   \textbf{G1} &
@@ -316,6 +326,10 @@ This section provides a concise summary of the bridge design, key inputs, govern
   \textbf{G5} \\
 \hline
 \endhead
+\noalign{\vskip-\arrayrulewidth}\hline
+\multicolumn{6}{@{}r@{}}{\ReportContinuedOn}\\
+\endfoot
+\endlastfoot
 Member ID & G1M1 & G2M1 & G3M1 & G4M1 & G5M1 \\
 \hline
 Section Designation & 1120 x 340 x 16 x 340 x 16 & 1120 x 340 x 16 x 340 x 16 & 1120 x 340 x 16 x 340 x 16 & 1120 x 340 x 16 x 340 x 16 & 1120 x 340 x 16 x 340 x 16 \\
@@ -369,16 +383,21 @@ This section records all project metadata as entered by the designer.
 \textbf{Parameter} & \textbf{Value} \\
 \hline
 \endfirsthead
+\multicolumn{2}{@{}l}{\ReportContinuedFrom}\\
 \hline
 \textbf{Parameter} & \textbf{Value} \\
 \hline
 \endhead
+\noalign{\vskip-\arrayrulewidth}\hline
+\multicolumn{2}{@{}r@{}}{\ReportContinuedOn}\\
+\endfoot
+\endlastfoot
 
 \textbf{Project Name} & FOSSEE report validation — 20 m bridge \\
 \hline
 \textbf{Project Location} & Ahmednagar, Maharashtra \\
 \hline
-\textbf{Designer} & Ribhav Sharma  \\
+\textbf{Designer} & Ribhav Sharma \\
 \hline
 \textbf{Reviewer} &  \\
 \hline
@@ -427,10 +446,15 @@ This section documents all inputs provided to OsdagBridge. User-provided inputs 
 \textbf{Parameter} & \textbf{Value} \\
 \hline
 \endfirsthead
+\multicolumn{2}{@{}l}{\ReportContinuedFromNumbered}\\
 \hline
 \textbf{Parameter} & \textbf{Value} \\
 \hline
 \endhead
+\noalign{\vskip-\arrayrulewidth}\hline
+\multicolumn{2}{@{}r@{}}{\ReportContinuedOn}\\
+\endfoot
+\endlastfoot
 
 \textnormal{Project Location} & Ahmednagar, Maharashtra \\
 \hline
@@ -454,10 +478,15 @@ This section documents all inputs provided to OsdagBridge. User-provided inputs 
 \textbf{Parameter} & \textbf{Value} \\
 \hline
 \endfirsthead
+\multicolumn{2}{@{}l}{\ReportContinuedFromNumbered}\\
 \hline
 \textbf{Parameter} & \textbf{Value} \\
 \hline
 \endhead
+\noalign{\vskip-\arrayrulewidth}\hline
+\multicolumn{2}{@{}r@{}}{\ReportContinuedOn}\\
+\endfoot
+\endlastfoot
 
 \textnormal{Type of Structure} & Highway Bridge \\
 \hline
@@ -483,10 +512,15 @@ This section documents all inputs provided to OsdagBridge. User-provided inputs 
 \textbf{Parameter} & \textbf{Value} \\
 \hline
 \endfirsthead
+\multicolumn{2}{@{}l}{\ReportContinuedFromNumbered}\\
 \hline
 \textbf{Parameter} & \textbf{Value} \\
 \hline
 \endhead
+\noalign{\vskip-\arrayrulewidth}\hline
+\multicolumn{2}{@{}r@{}}{\ReportContinuedOn}\\
+\endfoot
+\endlastfoot
 
 \textnormal{Girder Steel Grade (IS 2062)} & E 350A \\
 \hline
@@ -514,10 +548,15 @@ Where the user has modified additional inputs, those values are reported here. W
 \textbf{Parameter} & \textbf{Value} \\
 \hline
 \endfirsthead
+\multicolumn{2}{@{}l}{\ReportContinuedFromNumbered}\\
 \hline
 \textbf{Parameter} & \textbf{Value} \\
 \hline
 \endhead
+\noalign{\vskip-\arrayrulewidth}\hline
+\multicolumn{2}{@{}r@{}}{\ReportContinuedOn}\\
+\endfoot
+\endlastfoot
 
 \textnormal{Overall Bridge Width (m)} & 12.149999999999999 \\[\ReportRowGap]
 \hline
@@ -543,10 +582,15 @@ Where the user has modified additional inputs, those values are reported here. W
 \textbf{Parameter} & \textbf{Value} \\
 \hline
 \endfirsthead
+\multicolumn{2}{@{}l}{\ReportContinuedFromNumbered}\\
 \hline
 \textbf{Parameter} & \textbf{Value} \\
 \hline
 \endhead
+\noalign{\vskip-\arrayrulewidth}\hline
+\multicolumn{2}{@{}r@{}}{\ReportContinuedOn}\\
+\endfoot
+\endlastfoot
 
 \textnormal{Crash Barrier Type} & IRC 5 - RCC Crash Barrier \\[\ReportRowGap]
 \hline
@@ -576,10 +620,15 @@ Where the user has modified additional inputs, those values are reported here. W
 \textbf{Girder} & \textbf{Member ID} & \textbf{Design Mode} & \textbf{Girder Type} & \textbf{Girder Symmetry} \\[\ReportRowGap]
 \hline
 \endfirsthead
+\multicolumn{5}{@{}l}{\ReportContinuedFromNumbered}\\
 \hline
 \textbf{Girder} & \textbf{Member ID} & \textbf{Design Mode} & \textbf{Girder Type} & \textbf{Girder Symmetry} \\[\ReportRowGap]
 \hline
 \endhead
+\noalign{\vskip-\arrayrulewidth}\hline
+\multicolumn{5}{@{}r@{}}{\ReportContinuedOn}\\
+\endfoot
+\endlastfoot
 
 G1 & G1M1 & Optimized & Welded & Girder Symmetric \\[\ReportRowGapLarge]
 \hline
@@ -602,10 +651,15 @@ G5 & G5M1 & Optimized & Welded & Girder Symmetric \\[\ReportRowGapLarge]
 \textbf{Girder} & \textbf{Total Depth, D (mm)} & \textbf{Web, $t_w$ (mm)} & \textbf{Top Flange (b\textsubscript{tf}, t\textsubscript{tf}) mm} & \textbf{Bottom Flange (b\textsubscript{bf}, t\textsubscript{bf}) mm} \\[\ReportRowGap]
 \hline
 \endfirsthead
+\multicolumn{5}{@{}l}{\ReportContinuedFromNumbered}\\
 \hline
 \textbf{Girder} & \textbf{Total Depth, D (mm)} & \textbf{Web, $t_w$ (mm)} & \textbf{Top Flange (b\textsubscript{tf}, t\textsubscript{tf}) mm} & \textbf{Bottom Flange (b\textsubscript{bf}, t\textsubscript{bf}) mm} \\[\ReportRowGap]
 \hline
 \endhead
+\noalign{\vskip-\arrayrulewidth}\hline
+\multicolumn{5}{@{}r@{}}{\ReportContinuedOn}\\
+\endfoot
+\endlastfoot
 
 G1 & 1.12 mm & 0.008 mm & 0.34 mm, 0.016 mm & 0.34 mm, 0.016 mm \\[\ReportRowGapLarge]
 \hline
@@ -628,10 +682,15 @@ G5 & 1.12 mm & 0.008 mm & 0.34 mm, 0.016 mm & 0.34 mm, 0.016 mm \\[\ReportRowGap
 \textbf{Girder} & \textbf{Torsional / Warping Restraint} & \textbf{Web Philosophy} & \textbf{Intermediate Stiffeners} & \textbf{Longi\-tudinal Stiffeners} & \textbf{Bearing Stiffener} \\[\ReportRowGap]
 \hline
 \endfirsthead
+\multicolumn{6}{@{}l}{\ReportContinuedFromNumbered}\\
 \hline
 \textbf{Girder} & \textbf{Torsional / Warping Restraint} & \textbf{Web Philosophy} & \textbf{Intermediate Stiffeners} & \textbf{Longi\-tudinal Stiffeners} & \textbf{Bearing Stiffener} \\[\ReportRowGap]
 \hline
 \endhead
+\noalign{\vskip-\arrayrulewidth}\hline
+\multicolumn{6}{@{}r@{}}{\ReportContinuedOn}\\
+\endfoot
+\endlastfoot
 
 
 
@@ -661,10 +720,15 @@ G5 & Fully Restrained, Both Flanges Restrained & Thin Web with ITS & Yes; Spacin
 \textbf{Location} & \textbf{Member IDs} & \textbf{Type of Bracing} & \textbf{Bracing Section} & \textbf{Spacing (m)} \\
 \hline
 \endfirsthead
+\multicolumn{6}{@{}l}{\ReportContinuedFromNumbered}\\
 \hline
 \textbf{Location} & \textbf{Member IDs} & \textbf{Type of Bracing} & \textbf{Bracing Section} & \textbf{Spacing (m)} \\
 \hline
 \endhead
+\noalign{\vskip-\arrayrulewidth}\hline
+\multicolumn{6}{@{}r@{}}{\ReportContinuedOn}\\
+\endfoot
+\endlastfoot
 
 G1 to G2 & B1M1 to B1M1 & X-Bracing & IS 100 x 100 x 10 & 10.0 m \\[\ReportRowGap]
 \hline
@@ -687,10 +751,15 @@ G4 to G5 & B4M1 to B4M1 & X-Bracing & IS 100 x 100 x 10 & 10.0 m \\[\ReportRowGa
 \textbf{Location} & \textbf{Member IDs} & \textbf{Type of Bracing} & \textbf{Bracing Section} \\
 \hline
 \endfirsthead
+\multicolumn{6}{@{}l}{\ReportContinuedFromNumbered}\\
 \hline
 \textbf{Location} & \textbf{Member IDs} & \textbf{Type of Bracing} & \textbf{Bracing Section} \\
 \hline
 \endhead
+\noalign{\vskip-\arrayrulewidth}\hline
+\multicolumn{6}{@{}r@{}}{\ReportContinuedOn}\\
+\endfoot
+\endlastfoot
 
 G1 to G2 & E1M1 to E1M2 & Cross Bracing & IS 100 x 100 x 10 \\[\ReportRowGap]
 \hline
@@ -715,10 +784,15 @@ G4 to G5 & E4M1 to E4M2 & Cross Bracing & IS 100 x 100 x 10 \\[\ReportRowGap]
 \textbf{Parameter} & \textbf{Value} \\
 \hline
 \endfirsthead
+\multicolumn{2}{@{}l}{\ReportContinuedFromNumbered}\\
 \hline
 \textbf{Parameter} & \textbf{Value} \\
 \hline
 \endhead
+\noalign{\vskip-\arrayrulewidth}\hline
+\multicolumn{2}{@{}r@{}}{\ReportContinuedOn}\\
+\endfoot
+\endlastfoot
 
 \textnormal{Stud Diameter (mm)} & 20.0 mm \\[\ReportRowGap]
 \hline
@@ -748,10 +822,15 @@ G4 to G5 & E4M1 to E4M2 & Cross Bracing & IS 100 x 100 x 10 \\[\ReportRowGap]
 \textbf{Parameter} & \textbf{Value} \\
 \hline
 \endfirsthead
+\multicolumn{2}{@{}l}{\ReportContinuedFromNumbered}\\
 \hline
 \textbf{Parameter} & \textbf{Value} \\
 \hline
 \endhead
+\noalign{\vskip-\arrayrulewidth}\hline
+\multicolumn{2}{@{}r@{}}{\ReportContinuedOn}\\
+\endfoot
+\endlastfoot
 
 \textnormal{$\gamma_{M0}$ (Yielding / Buckling)} & 1.1 \\[\ReportRowGap]
 \hline
@@ -782,10 +861,15 @@ This section summarizes all loads applied to the bridge and the load combination
 \textbf{Parameter} & \textbf{Value} \\
 \hline
 \endfirsthead
+\multicolumn{2}{@{}l}{\ReportContinuedFromNumbered}\\
 \hline
 \textbf{Parameter} & \textbf{Value} \\
 \hline
 \endhead
+\noalign{\vskip-\arrayrulewidth}\hline
+\multicolumn{2}{@{}r@{}}{\ReportContinuedOn}\\
+\endfoot
+\endlastfoot
 
 \textnormal{Steel Self-Weight Applied} & 76.4 kN/m\textsuperscript{3} \\[\ReportRowGap]
 \hline
@@ -802,10 +886,15 @@ This section summarizes all loads applied to the bridge and the load combination
 \textbf{Parameter} & \textbf{Value} \\
 \hline
 \endfirsthead
+\multicolumn{2}{@{}l}{\ReportContinuedFromNumbered}\\
 \hline
 \textbf{Parameter} & \textbf{Value} \\
 \hline
 \endhead
+\noalign{\vskip-\arrayrulewidth}\hline
+\multicolumn{2}{@{}r@{}}{\ReportContinuedOn}\\
+\endfoot
+\endlastfoot
 
 \textnormal{Wearing Course Load} & Concrete x 50.0 \\[\ReportRowGap]
 \hline
@@ -825,12 +914,17 @@ This section summarizes all loads applied to the bridge and the load combination
  & \textbf{(kN)} & \textbf{(1 + IM)} & \textbf{Considered?} & \textbf{Value (kN)} & \textbf{Eccentricity (m)} \\
 \hline
 \endfirsthead
+\multicolumn{6}{@{}l}{\ReportContinuedFromNumbered}\\
 \hline
 \textbf{Vehicle} & \textbf{Total Load} & \textbf{Impact Factor} & \multicolumn{3}{c|}{\textbf{Braking Load}} \\
 \cline{4-6}
  & \textbf{(kN)} & \textbf{(1 + IM)} & \textbf{Considered?} & \textbf{Value (kN)} & \textbf{Eccentricity (m)} \\
 \hline
 \endhead
+\noalign{\vskip-\arrayrulewidth}\hline
+\multicolumn{6}{@{}r@{}}{\ReportContinuedOn}\\
+\endfoot
+\endlastfoot
 Class A & 543.5 & 1.269 & Yes & N/A & 1.20 \\
 \hline
 Class 70R (Wheeled) & 981.0 & 1.100 & Yes & N/A & 1.20 \\
@@ -863,10 +957,15 @@ Class Fatigue & 392.4 & N/A & No & -- & -- \\
 \textbf{Parameter} & \textbf{Value} & \textbf{Unit} \\
 \hline
 \endfirsthead
+\multicolumn{3}{@{}l}{\ReportContinuedFromNumbered}\\
 \hline
 \textbf{Parameter} & \textbf{Value} & \textbf{Unit} \\
 \hline
 \endhead
+\noalign{\vskip-\arrayrulewidth}\hline
+\multicolumn{3}{@{}r@{}}{\ReportContinuedOn}\\
+\endfoot
+\endlastfoot
 Footway configuration & Both Sides & -- \\
 \hline
 Pressure mode & As per IRC 6 & -- \\
@@ -882,10 +981,15 @@ Footway live load & 4.905 & kN/m$^2$ \\
 \textbf{Parameter} & \textbf{Value} \\
 \hline
 \endfirsthead
+\multicolumn{2}{@{}l}{\ReportContinuedFromNumbered}\\
 \hline
 \textbf{Parameter} & \textbf{Value} \\
 \hline
 \endhead
+\noalign{\vskip-\arrayrulewidth}\hline
+\multicolumn{2}{@{}r@{}}{\ReportContinuedOn}\\
+\endfoot
+\endlastfoot
 
 \textnormal{Basic Wind Speed, Vb} &  [from Project Location] \\[\ReportRowGap]
 \hline
@@ -912,10 +1016,15 @@ Footway live load & 4.905 & kN/m$^2$ \\
 \textbf{Parameter} & \textbf{Value} \\
 \hline
 \endfirsthead
+\multicolumn{2}{@{}l}{\ReportContinuedFromNumbered}\\
 \hline
 \textbf{Parameter} & \textbf{Value} \\
 \hline
 \endhead
+\noalign{\vskip-\arrayrulewidth}\hline
+\multicolumn{2}{@{}r@{}}{\ReportContinuedOn}\\
+\endfoot
+\endlastfoot
 
 \textnormal{Seismic Zone} &  [from Project Location] \\[\ReportRowGap]
 \hline
@@ -944,10 +1053,15 @@ Footway live load & 4.905 & kN/m$^2$ \\
 \textbf{Parameter} & \textbf{Value} \\
 \hline
 \endfirsthead
+\multicolumn{2}{@{}l}{\ReportContinuedFromNumbered}\\
 \hline
 \textbf{Parameter} & \textbf{Value} \\
 \hline
 \endhead
+\noalign{\vskip-\arrayrulewidth}\hline
+\multicolumn{2}{@{}r@{}}{\ReportContinuedOn}\\
+\endfoot
+\endlastfoot
 
 \textnormal{Maximum Shade Temperature} & 48.2 $^\circ$C \\[\ReportRowGap]
 \hline
@@ -966,10 +1080,15 @@ Footway live load & 4.905 & kN/m$^2$ \\
 \textbf{Combination ID} & \textbf{Load Cases} \\[\ReportRowGap]
 \hline
 \endfirsthead
+\multicolumn{2}{@{}l}{\ReportContinuedFromNumbered}\\
 \hline
 \textbf{Combination ID} & \textbf{Load Cases} \\[\ReportRowGap]
 \hline
 \endhead
+\noalign{\vskip-\arrayrulewidth}\hline
+\multicolumn{2}{@{}r@{}}{\ReportContinuedOn}\\
+\endfoot
+\endlastfoot
 
 ULS-01 & DL(1.35/1.00) + SIDL(1.75/1.00) + LL(1.50) + WL(0.90) + TL(0.90) \\[\ReportRowGap]
 \hline
@@ -1046,6 +1165,7 @@ A grillage model was used for structural analysis. The deck is idealized as a gr
 & \makecell{\textbf{Right }}\\
 \hline
 \endfirsthead
+\multicolumn{9}{@{}l}{\ReportContinuedFromNumbered}\\
 
 \hline
 \multirow{2}{*}{\makecell{\textbf{Load Case/}\\\textbf{Comb.}}}
@@ -1064,100 +1184,104 @@ A grillage model was used for structural analysis. The deck is idealized as a gr
 & \makecell{\textbf{Right}}\\
 \hline
 \endhead
+\noalign{\vskip-\arrayrulewidth}\hline
+\multicolumn{9}{@{}r@{}}{\ReportContinuedOn}\\
+\endfoot
+\endlastfoot
 
 EQ\_\allowbreak{}Y & 75.019 & G3 & 9.231 & 18.398 & G1 & 0.000 & 78.060 & -78.060 \\[\ReportRowGap]
 \hline
-Railing load & 13.536 & G1 & 10.769 & 4.029 & G1 & 18.462 & -12.521 & 13.576 \\[\ReportRowGap]
-\hline
-Footpath load & 104.757 & G1 & 10.769 & 29.080 & G1 & 18.462 & -106.779 & 106.201 \\[\ReportRowGap]
-\hline
 1.0 DL & 695.235 & G3 & 9.231 & 177.567 & G1 & 18.462 & -728.895 & 728.318 \\[\ReportRowGap]
-\hline
-DD & 547.471 & G3 & 9.231 & 137.767 & G1 & 0.000 & -575.993 & 575.993 \\[\ReportRowGap]
-\hline
-BASIC\_\allowbreak{}1:\allowbreak{} 1.35DL + 1.75DW + 1.5LL + 0.9WL & -1270.673 & G3 & 9.231 & 287.338 & G1 & 0.000 & -1184.298 & 1124.819 \\[\ReportRowGap]
-\hline
-WL Uplift & 60.577 & G3 & 9.231 & 14.856 & G1 & 0.000 & 63.032 & -63.032 \\[\ReportRowGap]
-\hline
-1.5 EQ (a) & 33.759 & G3 & 10.769 & 8.279 & G1 & 18.462 & 35.127 & -35.127 \\[\ReportRowGap]
-\hline
-ACCIDENTAL\_\allowbreak{}2:\allowbreak{} 1.0DL + 1.0DW + 0.75LL & 1331.250 & G3 & 9.231 & 302.194 & G1 & 0.000 & -1247.330 & 1187.851 \\[\ReportRowGap]
-\hline
-1.5 EQ (b) & 33.759 & G3 & 9.231 & 8.279 & G1 & 18.462 & 35.127 & -35.127 \\[\ReportRowGap]
-\hline
-SLS\_\allowbreak{}FREQUENT\_\allowbreak{}4:\allowbreak{} 1.0DL + 1.0DW + 0.75LL + 0.5WL & -1270.673 & G3 & 9.231 & 287.338 & G1 & 0.000 & -1184.298 & 1124.819 \\[\ReportRowGap]
-\hline
-1.0 WL & 60.577 & G3 & 9.231 & 14.856 & G1 & 18.462 & 63.032 & -63.032 \\[\ReportRowGap]
-\hline
-BASIC\_\allowbreak{}3:\allowbreak{} 1.35DL + 1.75DW + 1.15LL + 0.9WL & -1270.673 & G3 & 9.231 & 287.338 & G1 & 0.000 & -1184.298 & 1124.819 \\[\ReportRowGap]
-\hline
-SLS\_\allowbreak{}RARE\_\allowbreak{}5:\allowbreak{} 1.0DL + 1.0DW + 0.75LL + 1.0WL & -1270.673 & G3 & 9.231 & 287.338 & G1 & 0.000 & -1184.298 & 1124.819 \\[\ReportRowGap]
-\hline
-SLS\_\allowbreak{}FREQUENT\_\allowbreak{}5:\allowbreak{} 1.0DL + 1.0DW + 0.2LL + 0.6WL & -1270.673 & G3 & 9.231 & 287.338 & G1 & 0.000 & -1184.298 & 1124.819 \\[\ReportRowGap]
-\hline
-SLS\_\allowbreak{}RARE\_\allowbreak{}2:\allowbreak{} 1.0DL + 1.2DW + 0.75LL + 1.0WL & -1270.673 & G3 & 9.231 & 287.338 & G1 & 0.000 & -1184.298 & 1124.819 \\[\ReportRowGap]
-\hline
-SLS\_\allowbreak{}FREQUENT\_\allowbreak{}3:\allowbreak{} 1.0DL + 1.2DW + 0.2LL + 0.5WL & -1270.673 & G3 & 9.231 & 287.338 & G1 & 0.000 & -1184.298 & 1124.819 \\[\ReportRowGap]
-\hline
-1.0 DL + 1.0 LL & -1221.756 & G3 & 9.231 & 274.641 & G1 & 0.000 & -1132.132 & 1072.653 \\[\ReportRowGap]
-\hline
-SLS\_\allowbreak{}RARE\_\allowbreak{}3:\allowbreak{} 1.0DL + 1.2DW + 0.75LL + 0.6WL & -1270.673 & G3 & 9.231 & 287.338 & G1 & 0.000 & -1184.298 & 1124.819 \\[\ReportRowGap]
-\hline
-WL Longitudinal & 0.000 & — & --- & 0.000 & — & --- & -0.000 & 0.000 \\[\ReportRowGap]
-\hline
-BASIC\_\allowbreak{}2:\allowbreak{} 1.35DL + 1.75DW + 1.15LL + 1.5WL & -1270.673 & G3 & 9.231 & 287.338 & G1 & 0.000 & -1184.298 & 1124.819 \\[\ReportRowGap]
-\hline
-BASIC\_\allowbreak{}6:\allowbreak{} 1.0DL + 1.0DW + 1.15LL + 0.9WL & -1270.673 & G3 & 9.231 & 287.338 & G1 & 0.000 & -1184.298 & 1124.819 \\[\ReportRowGap]
-\hline
-EQ\_\allowbreak{}X & 0.000 & — & --- & 0.000 & — & --- & -0.000 & -0.000 \\[\ReportRowGap]
-\hline
-SLS\_\allowbreak{}QP\_\allowbreak{}1:\allowbreak{} 1.0DL + 1.2DW & 804.729 & G3 & 9.231 & 205.121 & G1 & 18.462 & -844.094 & 843.516 \\[\ReportRowGap]
-\hline
-BASIC\_\allowbreak{}4:\allowbreak{} 1.0DL + 1.0DW + 1.5LL + 0.9WL & -1270.673 & G3 & 9.231 & 287.338 & G1 & 0.000 & -1184.298 & 1124.819 \\[\ReportRowGap]
-\hline
-SEISMIC\_\allowbreak{}2:\allowbreak{} 1.35DL + 1.75DW + 0.2LL + 0.75EL & -1256.231 & G3 & 9.231 & 283.796 & G1 & 0.000 & -1169.271 & 1109.791 \\[\ReportRowGap]
-\hline
-SW & 44.324 & G3 & 9.231 & 10.720 & G1 & 0.000 & -46.123 & 46.123 \\[\ReportRowGap]
-\hline
-Crash barrier load & 60.138 & G3 & 10.769 & 15.593 & G1 & 18.462 & -57.871 & 62.632 \\[\ReportRowGap]
-\hline
-SLS\_\allowbreak{}RARE\_\allowbreak{}6:\allowbreak{} 1.0DL + 1.0DW + 0.75LL + 0.6WL & -1270.673 & G3 & 9.231 & 287.338 & G1 & 0.000 & -1184.298 & 1124.819 \\[\ReportRowGap]
-\hline
-SLS\_\allowbreak{}FREQUENT\_\allowbreak{}1:\allowbreak{} 1.0DL + 1.2DW + 0.75LL + 0.5WL & -1270.673 & G3 & 9.231 & 287.338 & G1 & 0.000 & -1184.298 & 1124.819 \\[\ReportRowGap]
-\hline
-SLS\_\allowbreak{}QP\_\allowbreak{}2:\allowbreak{} 1.0DL + 1.0DW & 804.729 & G3 & 9.231 & 205.121 & G1 & 18.462 & -844.094 & 843.516 \\[\ReportRowGap]
-\hline
-SEISMIC\_\allowbreak{}1:\allowbreak{} 1.35DL + 1.75DW + 0.2LL + 1.5EL & -1256.231 & G3 & 9.231 & 283.796 & G1 & 0.000 & -1169.271 & 1109.791 \\[\ReportRowGap]
-\hline
-SEISMIC\_\allowbreak{}4:\allowbreak{} 1.0DL + 1.0DW + 0.2LL + 0.75EL & -1256.231 & G3 & 9.231 & 283.796 & G1 & 0.000 & -1169.271 & 1109.791 \\[\ReportRowGap]
-\hline
-ACCIDENTAL\_\allowbreak{}3:\allowbreak{} 1.0DL + 1.0DW + 0.75LL & 1331.250 & G3 & 9.231 & 302.194 & G1 & 0.000 & -1247.330 & 1187.851 \\[\ReportRowGap]
-\hline
-SLS\_\allowbreak{}RARE\_\allowbreak{}4:\allowbreak{} 1.0DL + 1.0DW + 1.0LL + 0.6WL & -1270.673 & G3 & 9.231 & 287.338 & G1 & 0.000 & -1184.298 & 1124.819 \\[\ReportRowGap]
-\hline
-SLS\_\allowbreak{}FREQUENT\_\allowbreak{}2:\allowbreak{} 1.0DL + 1.2DW + 0.2LL + 0.6WL & -1270.673 & G3 & 9.231 & 287.338 & G1 & 0.000 & -1184.298 & 1124.819 \\[\ReportRowGap]
-\hline
-1.5 EQ (c) & 112.529 & G3 & 9.231 & 27.597 & G1 & 0.000 & 117.090 & -117.090 \\[\ReportRowGap]
-\hline
-SLS\_\allowbreak{}FREQUENT\_\allowbreak{}6:\allowbreak{} 1.0DL + 1.0DW + 0.2LL + 0.5WL & -1270.673 & G3 & 9.231 & 287.338 & G1 & 0.000 & -1184.298 & 1124.819 \\[\ReportRowGap]
-\hline
-EQ\_\allowbreak{}Z & 0.000 & — & --- & 0.000 & — & --- & 0.000 & -0.000 \\[\ReportRowGap]
-\hline
-WL Transverse & 0.000 & — & --- & 0.000 & — & --- & 0.000 & 0.000 \\[\ReportRowGap]
-\hline
-BASIC\_\allowbreak{}5:\allowbreak{} 1.0DL + 1.0DW + 1.15LL + 1.5WL & -1270.673 & G3 & 9.231 & 287.338 & G1 & 0.000 & -1184.298 & 1124.819 \\[\ReportRowGap]
 \hline
 SEISMIC\_\allowbreak{}3:\allowbreak{} 1.0DL + 1.0DW + 0.2LL + 1.5EL & -1256.231 & G3 & 9.231 & 283.796 & G1 & 0.000 & -1169.271 & 1109.791 \\[\ReportRowGap]
 \hline
-SLS\_\allowbreak{}RARE\_\allowbreak{}1:\allowbreak{} 1.0DL + 1.2DW + 1.0LL + 0.6WL & -1270.673 & G3 & 9.231 & 287.338 & G1 & 0.000 & -1184.298 & 1124.819 \\[\ReportRowGap]
+EQ\_\allowbreak{}Z & 0.000 & — & --- & 0.000 & — & --- & 0.000 & -0.000 \\[\ReportRowGap]
+\hline
+BASIC\_\allowbreak{}1:\allowbreak{} 1.35DL + 1.75DW + 1.5LL + 0.9WL & -1270.673 & G3 & 9.231 & 287.338 & G1 & 0.000 & -1184.298 & 1124.819 \\[\ReportRowGap]
+\hline
+EQ\_\allowbreak{}X & 0.000 & — & --- & 0.000 & — & --- & -0.000 & -0.000 \\[\ReportRowGap]
+\hline
+SLS\_\allowbreak{}RARE\_\allowbreak{}2:\allowbreak{} 1.0DL + 1.2DW + 0.75LL + 1.0WL & -1270.673 & G3 & 9.231 & 287.338 & G1 & 0.000 & -1184.298 & 1124.819 \\[\ReportRowGap]
+\hline
+SLS\_\allowbreak{}FREQUENT\_\allowbreak{}4:\allowbreak{} 1.0DL + 1.0DW + 0.75LL + 0.5WL & -1270.673 & G3 & 9.231 & 287.338 & G1 & 0.000 & -1184.298 & 1124.819 \\[\ReportRowGap]
+\hline
+SLS\_\allowbreak{}QP\_\allowbreak{}1:\allowbreak{} 1.0DL + 1.2DW & 804.729 & G3 & 9.231 & 205.121 & G1 & 18.462 & -844.094 & 843.516 \\[\ReportRowGap]
+\hline
+SLS\_\allowbreak{}FREQUENT\_\allowbreak{}1:\allowbreak{} 1.0DL + 1.2DW + 0.75LL + 0.5WL & -1270.673 & G3 & 9.231 & 287.338 & G1 & 0.000 & -1184.298 & 1124.819 \\[\ReportRowGap]
+\hline
+WL Transverse & 0.000 & — & --- & 0.000 & — & --- & 0.000 & 0.000 \\[\ReportRowGap]
+\hline
+1.5 EQ (b) & 33.759 & G3 & 9.231 & 8.279 & G1 & 18.462 & 35.127 & -35.127 \\[\ReportRowGap]
+\hline
+Crash barrier load & 60.138 & G3 & 10.769 & 15.593 & G1 & 18.462 & -57.871 & 62.632 \\[\ReportRowGap]
+\hline
+1.0 DL + 1.0 LL & -1221.756 & G3 & 9.231 & 274.641 & G1 & 0.000 & -1132.132 & 1072.653 \\[\ReportRowGap]
+\hline
+WL Longitudinal & 0.000 & — & --- & 0.000 & — & --- & -0.000 & 0.000 \\[\ReportRowGap]
+\hline
+SLS\_\allowbreak{}RARE\_\allowbreak{}5:\allowbreak{} 1.0DL + 1.0DW + 0.75LL + 1.0WL & -1270.673 & G3 & 9.231 & 287.338 & G1 & 0.000 & -1184.298 & 1124.819 \\[\ReportRowGap]
+\hline
+WL Uplift & 60.577 & G3 & 9.231 & 14.856 & G1 & 0.000 & 63.032 & -63.032 \\[\ReportRowGap]
+\hline
+ACCIDENTAL\_\allowbreak{}3:\allowbreak{} 1.0DL + 1.0DW + 0.75LL & 1331.250 & G3 & 9.231 & 302.194 & G1 & 0.000 & -1247.330 & 1187.851 \\[\ReportRowGap]
+\hline
+SEISMIC\_\allowbreak{}2:\allowbreak{} 1.35DL + 1.75DW + 0.2LL + 0.75EL & -1256.231 & G3 & 9.231 & 283.796 & G1 & 0.000 & -1169.271 & 1109.791 \\[\ReportRowGap]
+\hline
+SLS\_\allowbreak{}FREQUENT\_\allowbreak{}5:\allowbreak{} 1.0DL + 1.0DW + 0.2LL + 0.6WL & -1270.673 & G3 & 9.231 & 287.338 & G1 & 0.000 & -1184.298 & 1124.819 \\[\ReportRowGap]
+\hline
+SLS\_\allowbreak{}FREQUENT\_\allowbreak{}6:\allowbreak{} 1.0DL + 1.0DW + 0.2LL + 0.5WL & -1270.673 & G3 & 9.231 & 287.338 & G1 & 0.000 & -1184.298 & 1124.819 \\[\ReportRowGap]
+\hline
+ACCIDENTAL\_\allowbreak{}2:\allowbreak{} 1.0DL + 1.0DW + 0.75LL & 1331.250 & G3 & 9.231 & 302.194 & G1 & 0.000 & -1247.330 & 1187.851 \\[\ReportRowGap]
+\hline
+1.0 WL & 60.577 & G3 & 9.231 & 14.856 & G1 & 18.462 & 63.032 & -63.032 \\[\ReportRowGap]
+\hline
+ACCIDENTAL\_\allowbreak{}1:\allowbreak{} 1.0DL + 1.0DW + 0.75LL & 1331.250 & G3 & 9.231 & 302.194 & G1 & 0.000 & -1247.330 & 1187.851 \\[\ReportRowGap]
+\hline
+SLS\_\allowbreak{}FREQUENT\_\allowbreak{}2:\allowbreak{} 1.0DL + 1.2DW + 0.2LL + 0.6WL & -1270.673 & G3 & 9.231 & 287.338 & G1 & 0.000 & -1184.298 & 1124.819 \\[\ReportRowGap]
 \hline
 Envelope ULS & 1331.250 & G3 & 9.231 & 302.194 & G1 & 0.000 & -1247.330 & 1187.851 \\[\ReportRowGap]
 \hline
+SEISMIC\_\allowbreak{}1:\allowbreak{} 1.35DL + 1.75DW + 0.2LL + 1.5EL & -1256.231 & G3 & 9.231 & 283.796 & G1 & 0.000 & -1169.271 & 1109.791 \\[\ReportRowGap]
+\hline
+Railing load & 13.536 & G1 & 10.769 & 4.029 & G1 & 18.462 & -12.521 & 13.576 \\[\ReportRowGap]
+\hline
+BASIC\_\allowbreak{}2:\allowbreak{} 1.35DL + 1.75DW + 1.15LL + 1.5WL & -1270.673 & G3 & 9.231 & 287.338 & G1 & 0.000 & -1184.298 & 1124.819 \\[\ReportRowGap]
+\hline
+DD & 547.471 & G3 & 9.231 & 137.767 & G1 & 0.000 & -575.993 & 575.993 \\[\ReportRowGap]
+\hline
+SLS\_\allowbreak{}RARE\_\allowbreak{}3:\allowbreak{} 1.0DL + 1.2DW + 0.75LL + 0.6WL & -1270.673 & G3 & 9.231 & 287.338 & G1 & 0.000 & -1184.298 & 1124.819 \\[\ReportRowGap]
+\hline
+BASIC\_\allowbreak{}4:\allowbreak{} 1.0DL + 1.0DW + 1.5LL + 0.9WL & -1270.673 & G3 & 9.231 & 287.338 & G1 & 0.000 & -1184.298 & 1124.819 \\[\ReportRowGap]
+\hline
+1.5 EQ (a) & 33.759 & G3 & 10.769 & 8.279 & G1 & 18.462 & 35.127 & -35.127 \\[\ReportRowGap]
+\hline
+SLS\_\allowbreak{}FREQUENT\_\allowbreak{}3:\allowbreak{} 1.0DL + 1.2DW + 0.2LL + 0.5WL & -1270.673 & G3 & 9.231 & 287.338 & G1 & 0.000 & -1184.298 & 1124.819 \\[\ReportRowGap]
+\hline
+BASIC\_\allowbreak{}3:\allowbreak{} 1.35DL + 1.75DW + 1.15LL + 0.9WL & -1270.673 & G3 & 9.231 & 287.338 & G1 & 0.000 & -1184.298 & 1124.819 \\[\ReportRowGap]
+\hline
 Envelope SLS & -1270.673 & G3 & 9.231 & 287.338 & G1 & 0.000 & -1184.298 & 1124.819 \\[\ReportRowGap]
+\hline
+BASIC\_\allowbreak{}6:\allowbreak{} 1.0DL + 1.0DW + 1.15LL + 0.9WL & -1270.673 & G3 & 9.231 & 287.338 & G1 & 0.000 & -1184.298 & 1124.819 \\[\ReportRowGap]
 \hline
 1.0 DW & 109.494 & G3 & 10.769 & 27.553 & G1 & 18.462 & -115.199 & 115.199 \\[\ReportRowGap]
 \hline
-ACCIDENTAL\_\allowbreak{}1:\allowbreak{} 1.0DL + 1.0DW + 0.75LL & 1331.250 & G3 & 9.231 & 302.194 & G1 & 0.000 & -1247.330 & 1187.851 \\[\ReportRowGap]
+SLS\_\allowbreak{}RARE\_\allowbreak{}1:\allowbreak{} 1.0DL + 1.2DW + 1.0LL + 0.6WL & -1270.673 & G3 & 9.231 & 287.338 & G1 & 0.000 & -1184.298 & 1124.819 \\[\ReportRowGap]
+\hline
+SLS\_\allowbreak{}QP\_\allowbreak{}2:\allowbreak{} 1.0DL + 1.0DW & 804.729 & G3 & 9.231 & 205.121 & G1 & 18.462 & -844.094 & 843.516 \\[\ReportRowGap]
+\hline
+BASIC\_\allowbreak{}5:\allowbreak{} 1.0DL + 1.0DW + 1.15LL + 1.5WL & -1270.673 & G3 & 9.231 & 287.338 & G1 & 0.000 & -1184.298 & 1124.819 \\[\ReportRowGap]
+\hline
+SEISMIC\_\allowbreak{}4:\allowbreak{} 1.0DL + 1.0DW + 0.2LL + 0.75EL & -1256.231 & G3 & 9.231 & 283.796 & G1 & 0.000 & -1169.271 & 1109.791 \\[\ReportRowGap]
+\hline
+SLS\_\allowbreak{}RARE\_\allowbreak{}4:\allowbreak{} 1.0DL + 1.0DW + 1.0LL + 0.6WL & -1270.673 & G3 & 9.231 & 287.338 & G1 & 0.000 & -1184.298 & 1124.819 \\[\ReportRowGap]
+\hline
+SW & 44.324 & G3 & 9.231 & 10.720 & G1 & 0.000 & -46.123 & 46.123 \\[\ReportRowGap]
+\hline
+SLS\_\allowbreak{}RARE\_\allowbreak{}6:\allowbreak{} 1.0DL + 1.0DW + 0.75LL + 0.6WL & -1270.673 & G3 & 9.231 & 287.338 & G1 & 0.000 & -1184.298 & 1124.819 \\[\ReportRowGap]
+\hline
+Footpath load & 104.757 & G1 & 10.769 & 29.080 & G1 & 18.462 & -106.779 & 106.201 \\[\ReportRowGap]
+\hline
+1.5 EQ (c) & 112.529 & G3 & 9.231 & 27.597 & G1 & 0.000 & 117.090 & -117.090 \\[\ReportRowGap]
 
 \hline
 \end{longtable}
@@ -1170,10 +1294,15 @@ ACCIDENTAL\_\allowbreak{}1:\allowbreak{} 1.0DL + 1.0DW + 0.75LL & 1331.250 & G3 
 \textbf{Load Case} & \textbf{Left Support (kN)} & \textbf{Right Support (kN)} \\[\ReportRowGap]
 \hline
 \endfirsthead
+\multicolumn{3}{@{}l}{\ReportContinuedFromNumbered}\\
 \hline
 \textbf{Load Case} & \textbf{Left Support (kN)} & \textbf{Right Support (kN)} \\[\ReportRowGap]
 \hline
 \endhead
+\noalign{\vskip-\arrayrulewidth}\hline
+\multicolumn{3}{@{}r@{}}{\ReportContinuedOn}\\
+\endfoot
+\endlastfoot
 
  &  &  \\[\ReportRowGap]
 \hline
@@ -1190,10 +1319,15 @@ ACCIDENTAL\_\allowbreak{}1:\allowbreak{} 1.0DL + 1.0DW + 0.75LL & 1331.250 & G3 
 \textbf{Parameter} & \textbf{Value} \\
 \hline
 \endfirsthead
+\multicolumn{2}{@{}l}{\ReportContinuedFromNumbered}\\
 \hline
 \textbf{Parameter} & \textbf{Value} \\
 \hline
 \endhead
+\noalign{\vskip-\arrayrulewidth}\hline
+\multicolumn{2}{@{}r@{}}{\ReportContinuedOn}\\
+\endfoot
+\endlastfoot
 
 \textnormal{Deflection due to Live Load, $\delta_{LL}$} & 28.688 mm \\[\ReportRowGap]
 \hline
@@ -1246,10 +1380,15 @@ This section presents all structural design checks performed by OsdagBridge. For
 \textbf{Girder} & \textbf{Property} & \textbf{Value} \\[\ReportRowGap]
 \hline
 \endfirsthead
+\multicolumn{3}{@{}l}{\ReportContinuedFromNumbered}\\
 \hline
 \textbf{Girder} & \textbf{Property} & \textbf{Value} \\[\ReportRowGap]
 \hline
 \endhead
+\noalign{\vskip-\arrayrulewidth}\hline
+\multicolumn{3}{@{}r@{}}{\ReportContinuedOn}\\
+\endfoot
+\endlastfoot
 
 \makecell{G1} & \textnormal{Depth, D (mm)} & 1120.0 \\[\ReportRowGap]
 \cline{2-3}
@@ -1387,13 +1526,18 @@ G5 & \textnormal{Depth to Plastic Neutral Axis (mm)} & 179.4 \\[\ReportRowGap]
 \begin{longtable}{|C{2.5cm}|L{3cm}|C{3.5cm}|C{2.5cm}|>{\centering\arraybackslash}p{4.0cm}|}
 \caption{\textbf{Girder Section Classification}}\\
 \hline
-\textbf{} & \textbf{Element} & \textbf{Slenderness Ratio} & \textbf{Class Limit} & \textbf{Classification} \\[\ReportRowGap]
+\textbf{Girder} & \textbf{Element} & \textbf{Slenderness Ratio} & \textbf{Class Limit} & \textbf{Classification} \\[\ReportRowGap]
 \hline
 \endfirsthead
+\multicolumn{5}{@{}l}{\ReportContinuedFromNumbered}\\
 \hline
-\textbf{} & \textbf{Element} & \textbf{Slenderness Ratio} & \textbf{Class Limit} & \textbf{Classification} \\[\ReportRowGap]
+\textbf{Girder} & \textbf{Element} & \textbf{Slenderness Ratio} & \textbf{Class Limit} & \textbf{Classification} \\[\ReportRowGap]
 \hline
 \endhead
+\noalign{\vskip-\arrayrulewidth}\hline
+\multicolumn{5}{@{}r@{}}{\ReportContinuedOn}\\
+\endfoot
+\endlastfoot
 
 \makecell{G1} & Top Flange & 10.38 & 11.49 & Semi-Compact \\[\ReportRowGap]
 \cline{2-5}
@@ -1435,10 +1579,15 @@ G5 & Overall Section & --- & --- & Slender \\[\ReportRowGap]
 \textbf{Girder} & \textbf{Parameter} & \textbf{Formula} & \textbf{Value} & \textbf{Status} \\[\ReportRowGap]
 \hline
 \endfirsthead
+\multicolumn{5}{@{}l}{\ReportContinuedFromNumbered}\\
 \hline
 \textbf{Girder} & \textbf{Parameter} & \textbf{Formula} & \textbf{Value} & \textbf{Status} \\[\ReportRowGap]
 \hline
 \endhead
+\noalign{\vskip-\arrayrulewidth}\hline
+\multicolumn{5}{@{}r@{}}{\ReportContinuedOn}\\
+\endfoot
+\endlastfoot
 
 \makecell{G1} & Applied Moment, $M_u$ & Governing LC (ULS) & 1331.25 kN-m & --- \\[\ReportRowGap]
 \cline{2-5}
@@ -1480,10 +1629,15 @@ G5 & Utilization Ratio, $M_u / M_d$ & $M_u / M_d$ & 0.29 & PASS \\[\ReportRowGap
 \textbf{Girder} & \textbf{Parameter} & \textbf{Formula} & \textbf{Value} & \textbf{Status} \\[\ReportRowGap]
 \hline
 \endfirsthead
+\multicolumn{5}{@{}l}{\ReportContinuedFromNumbered}\\
 \hline
 \textbf{Girder} & \textbf{Parameter} & \textbf{Formula} & \textbf{Value} & \textbf{Status} \\[\ReportRowGap]
 \hline
 \endhead
+\noalign{\vskip-\arrayrulewidth}\hline
+\multicolumn{5}{@{}r@{}}{\ReportContinuedOn}\\
+\endfoot
+\endlastfoot
 
 \makecell{G1} & Applied Shear, $V_u$ & Governing LC (ULS) & 224.09 kN & --- \\[\ReportRowGap]
 \cline{2-5}
@@ -1572,13 +1726,18 @@ G5 & Utilization Ratio, $V_u / V_d$ & $V_u / V_d$ & 0.41 & PASS \\[\ReportRowGap
 \begin{longtable}{|C{2.5cm}|C{3.5cm}|C{3.5cm}|>{\centering\arraybackslash}p{4.2cm}|C{1.8cm}|}
 \caption{\textbf{Interaction Checks (M-V and M-N)}}\\
 \hline
-\textbf{} & \textbf{Check} & \textbf{Condition} & \textbf{Value} & \textbf{Status} \\[\ReportRowGap]
+\textbf{Girder} & \textbf{Check} & \textbf{Condition} & \textbf{Value} & \textbf{Status} \\[\ReportRowGap]
 \hline
 \endfirsthead
+\multicolumn{5}{@{}l}{\ReportContinuedFromNumbered}\\
 \hline
-\textbf{} & \textbf{Check} & \textbf{Condition} & \textbf{Value} & \textbf{Status} \\[\ReportRowGap]
+\textbf{Girder} & \textbf{Check} & \textbf{Condition} & \textbf{Value} & \textbf{Status} \\[\ReportRowGap]
 \hline
 \endhead
+\noalign{\vskip-\arrayrulewidth}\hline
+\multicolumn{5}{@{}r@{}}{\ReportContinuedOn}\\
+\endfoot
+\endlastfoot
 
 \makecell{G1} & High Shear Condition? & $V_u > 0.6\,V_d$ & No & --- \\[\ReportRowGap]
 \cline{2-5}
@@ -1630,10 +1789,15 @@ G5 & Interaction Check: $N_u/N_{Rd} + M_u/M_{dv} \leq 1.0$ & 0.00 + 0.29 = 0.292
 \textbf{Girder} & \textbf{Parameter} & \textbf{Formula} & \textbf{Value} & \textbf{Status} \\[\ReportRowGap]
 \hline
 \endfirsthead
+\multicolumn{5}{@{}l}{\ReportContinuedFromNumbered}\\
 \hline
 \textbf{Girder} & \textbf{Parameter} & \textbf{Formula} & \textbf{Value} & \textbf{Status} \\[\ReportRowGap]
 \hline
 \endhead
+\noalign{\vskip-\arrayrulewidth}\hline
+\multicolumn{5}{@{}r@{}}{\ReportContinuedOn}\\
+\endfoot
+\endlastfoot
 
 \makecell{G1} & Elastic Critical Moment, $M_{cr}$ & IRC 22 Cl. 603.3.3.1 & 12769.32 kN-m & --- \\[\ReportRowGap]
 \cline{2-5}
@@ -1695,10 +1859,15 @@ G5 & $M_u \leq M_b$ & $M_u / M_b$ & 0.30 & PASS \\[\ReportRowGap]
 \textbf{Girder} & \textbf{Parameter} & \textbf{Value} \\
 \hline
 \endfirsthead
+\multicolumn{3}{@{}l}{\ReportContinuedFromNumbered}\\
 \hline
 \textbf{Girder} & \textbf{Parameter} & \textbf{Value} \\
 \hline
 \endhead
+\noalign{\vskip-\arrayrulewidth}\hline
+\multicolumn{3}{@{}r@{}}{\ReportContinuedOn}\\
+\endfoot
+\endlastfoot
 
 \makecell{G1} & \textnormal{Shear Buckling Design Method} & post\_\allowbreak{}critical \\[\ReportRowGap]
 \cline{2-3}
@@ -1767,13 +1936,18 @@ G5 & \textnormal{Longitudinal Stiffeners} & None \\[\ReportRowGap]
 \begin{longtable}{|C{2.5cm}|L{3.5cm}|C{3.5cm}|>{\centering\arraybackslash}p{4.2cm}|C{1.8cm}|}
 \caption{\textbf{End Panel Stiffener Checks}}\\
 \hline
-\textbf{} & \textbf{Check} & \textbf{Required} & \textbf{Provided} & \textbf{Status} \\[\ReportRowGap]
+\textbf{Girder} & \textbf{Check} & \textbf{Required} & \textbf{Provided} & \textbf{Status} \\[\ReportRowGap]
 \hline
 \endfirsthead
+\multicolumn{5}{@{}l}{\ReportContinuedFromNumbered}\\
 \hline
-\textbf{} & \textbf{Check} & \textbf{Required} & \textbf{Provided} & \textbf{Status} \\[\ReportRowGap]
+\textbf{Girder} & \textbf{Check} & \textbf{Required} & \textbf{Provided} & \textbf{Status} \\[\ReportRowGap]
 \hline
 \endhead
+\noalign{\vskip-\arrayrulewidth}\hline
+\multicolumn{5}{@{}r@{}}{\ReportContinuedOn}\\
+\endfoot
+\endlastfoot
 
 \makecell{G1} & Web Buckling Resistance & 302.19 kN & 109506.26 kN & PASS \\[\ReportRowGap]
 \cline{2-5}
@@ -1822,13 +1996,18 @@ G5 & Column Buckling Resistance & 302.19 kN & 1864.55 kN & PASS \\[\ReportRowGap
 \begin{longtable}{|C{2.5cm}|L{3.5cm}|C{3.5cm}|>{\centering\arraybackslash}p{3.5cm}|C{2.5cm}|}
 \caption{\textbf{Serviceability -- Deflection Checks}}\\
 \hline
-\textbf{} & \textbf{Check} & \textbf{Allowable} & \textbf{Actual} & \textbf{Status} \\[\ReportRowGap]
+\textbf{Girder} & \textbf{Check} & \textbf{Allowable} & \textbf{Actual} & \textbf{Status} \\[\ReportRowGap]
 \hline
 \endfirsthead
+\multicolumn{5}{@{}l}{\ReportContinuedFromNumbered}\\
 \hline
-\textbf{} & \textbf{Check} & \textbf{Allowable} & \textbf{Actual} & \textbf{Status} \\[\ReportRowGap]
+\textbf{Girder} & \textbf{Check} & \textbf{Allowable} & \textbf{Actual} & \textbf{Status} \\[\ReportRowGap]
 \hline
 \endhead
+\noalign{\vskip-\arrayrulewidth}\hline
+\multicolumn{5}{@{}r@{}}{\ReportContinuedOn}\\
+\endfoot
+\endlastfoot
 
 \makecell{G1} & Live Load Deflection, $\delta_{LL}$ (mm) & L/800 = 25.0 mm & 25.979 & \textcolor{reportFail}{FAIL} \\[\ReportRowGap]
 \cline{2-5}
@@ -1857,13 +2036,18 @@ G5 & Column Buckling Resistance & 302.19 kN & 1864.55 kN & PASS \\[\ReportRowGap
 \begin{longtable}{|C{2.5cm}|L{3.5cm}|C{3.5cm}|>{\centering\arraybackslash}p{3.5cm}|C{2.5cm}|}
 \caption{\textbf{Serviceability -- Maximum Stress Limitation}}\\
 \hline
-\textbf{} & \textbf{Element} & \textbf{Allowable Stress} & \textbf{Actual Stress} & \textbf{Status} \\[\ReportRowGap]
+\textbf{Girder} & \textbf{Element} & \textbf{Allowable Stress} & \textbf{Actual Stress} & \textbf{Status} \\[\ReportRowGap]
 \hline
 \endfirsthead
+\multicolumn{5}{@{}l}{\ReportContinuedFromNumbered}\\
 \hline
-\textbf{} & \textbf{Element} & \textbf{Allowable Stress} & \textbf{Actual Stress} & \textbf{Status} \\[\ReportRowGap]
+\textbf{Girder} & \textbf{Element} & \textbf{Allowable Stress} & \textbf{Actual Stress} & \textbf{Status} \\[\ReportRowGap]
 \hline
 \endhead
+\noalign{\vskip-\arrayrulewidth}\hline
+\multicolumn{5}{@{}r@{}}{\ReportContinuedOn}\\
+\endfoot
+\endlastfoot
 
 \makecell{G1} & Structural Steel ($0.9\,f_y$) & 315.00 MPa & 125.11 MPa & PASS \\[\ReportRowGap]
 \hline
@@ -1881,13 +2065,18 @@ G5 & Column Buckling Resistance & 302.19 kN & 1864.55 kN & PASS \\[\ReportRowGap
 \begin{longtable}{|C{2.5cm}|C{3.5cm}|C{3.5cm}|>{\centering\arraybackslash}p{3.5cm}|C{2.5cm}|}
 \caption{\textbf{Serviceability -- Fatigue Assessment}}\\
 \hline
-\textbf{} & \textbf{Stress Range, $\Delta\sigma$ (MPa)} & \textbf{Fatigue Limit, $f_{fd}$ (MPa)} & \textbf{Utilization Ratio} & \textbf{Status} \\[\ReportRowGap]
+\textbf{Girder} & \textbf{Stress Range, $\Delta\sigma$ (MPa)} & \textbf{Fatigue Limit, $f_{fd}$ (MPa)} & \textbf{Utilization Ratio} & \textbf{Status} \\[\ReportRowGap]
 \hline
 \endfirsthead
+\multicolumn{5}{@{}l}{\ReportContinuedFromNumbered}\\
 \hline
-\textbf{} & \textbf{Stress Range, $\Delta\sigma$ (MPa)} & \textbf{Fatigue Limit, $f_{fd}$ (MPa)} & \textbf{Utilization Ratio} & \textbf{Status} \\[\ReportRowGap]
+\textbf{Girder} & \textbf{Stress Range, $\Delta\sigma$ (MPa)} & \textbf{Fatigue Limit, $f_{fd}$ (MPa)} & \textbf{Utilization Ratio} & \textbf{Status} \\[\ReportRowGap]
 \hline
 \endhead
+\noalign{\vskip-\arrayrulewidth}\hline
+\multicolumn{5}{@{}r@{}}{\ReportContinuedOn}\\
+\endfoot
+\endlastfoot
 
 \makecell{G1} & 214.67 MPa & 92.49 MPa & 2.32 & \textcolor{reportFail}{FAIL} \\[\ReportRowGap]
 \hline
@@ -1910,10 +2099,15 @@ G5 & Column Buckling Resistance & 302.19 kN & 1864.55 kN & PASS \\[\ReportRowGap
 \textbf{Girder} & \textbf{Controlling LC / Combination} & \textbf{Controlling Check} & \textbf{Demand} & \textbf{Capacity} & \textbf{UR} & \textbf{Status} \\[\ReportRowGap]
 \hline
 \endfirsthead
+\multicolumn{7}{@{}l}{\ReportContinuedFromNumbered}\\
 \hline
 \textbf{Girder} & \textbf{Controlling LC / Combination} & \textbf{Controlling Check} & \textbf{Demand} & \textbf{Capacity} & \textbf{UR} & \textbf{Status} \\[\ReportRowGap]
 \hline
 \endhead
+\noalign{\vskip-\arrayrulewidth}\hline
+\multicolumn{7}{@{}r@{}}{\ReportContinuedOn}\\
+\endfoot
+\endlastfoot
 
 G1 & SLS\_\allowbreak{}FREQUENT\_\allowbreak{}1:\allowbreak{} 1.0DL + 1.2DW + 0.75LL + 0.5WL & Fatigue Normal Stress & 214.67 MPa & 92.49 MPa & 2.321 & \textcolor{reportFail}{FAIL} \\[\ReportRowGap]
 \hline
@@ -1936,10 +2130,15 @@ G5 & SLS\_\allowbreak{}FREQUENT\_\allowbreak{}1:\allowbreak{} 1.0DL + 1.2DW + 0.
 \textbf{Parameter} & \textbf{Formula} & \textbf{Value} & \textbf{Reference} \\[\ReportRowGap]
 \hline
 \endfirsthead
+\multicolumn{4}{@{}l}{\ReportContinuedFromNumbered}\\
 \hline
 \textbf{Parameter} & \textbf{Formula} & \textbf{Value} & \textbf{Reference} \\[\ReportRowGap]
 \hline
 \endhead
+\noalign{\vskip-\arrayrulewidth}\hline
+\multicolumn{4}{@{}r@{}}{\ReportContinuedOn}\\
+\endfoot
+\endlastfoot
 
 Design Resistance, $Q_u$ & \ReportFootnoteFont\makecell{$Q_u=\min(Q_{u,s},\,Q_{u,c})$\\[\ReportCellLineGap]$Q_{u,s}=\dfrac{0.8\,f_u\,(\pi d^2/4)}{\gamma_v}$\\[\ReportCellLineGap]$Q_{u,c}=\dfrac{0.29\,\alpha\,d^2\sqrt{f_{ck}\,E_{cm}}}{\gamma_v}$} & 95.36 kN & IRC 22 Cl. 606.3.1 (Eq. 6.1) \\[\ReportRowGap]
 \hline
@@ -1957,10 +2156,15 @@ Fatigue Shear Resistance, $Q_r$ & IRC 22 Table 8 ($\phi d$, $N_{sc}$) & 25.00 kN
 \textbf{Criterion} & \textbf{Governing Spacing} & \textbf{Actual Spacing Provided} & \textbf{Status} \\[\ReportRowGap]
 \hline
 \endfirsthead
+\multicolumn{4}{@{}l}{\ReportContinuedFromNumbered}\\
 \hline
 \textbf{Criterion} & \textbf{Governing Spacing} & \textbf{Actual Spacing Provided} & \textbf{Status} \\[\ReportRowGap]
 \hline
 \endhead
+\noalign{\vskip-\arrayrulewidth}\hline
+\multicolumn{4}{@{}r@{}}{\ReportContinuedOn}\\
+\endfoot
+\endlastfoot
 
 ULS Shear (SL1) & 1582.3 mm & 303.8 mm & PASS \\[\ReportRowGap]
 \hline
@@ -1980,10 +2184,15 @@ Max Spacing Limit (IRC 22) & 400.0 mm & 303.8 mm & PASS \\[\ReportRowGap]
 \textbf{Check} & \textbf{Value} & \textbf{Status} \\[\ReportRowGap]
 \hline
 \endfirsthead
+\multicolumn{3}{@{}l}{\ReportContinuedFromNumbered}\\
 \hline
 \textbf{Check} & \textbf{Value} & \textbf{Status} \\[\ReportRowGap]
 \hline
 \endhead
+\noalign{\vskip-\arrayrulewidth}\hline
+\multicolumn{3}{@{}r@{}}{\ReportContinuedOn}\\
+\endfoot
+\endlastfoot
 
 \textnormal{Longitudinal Shear per unit length, $V_L$} & 120.54 kN/m & --- \\[\ReportRowGap]
 \hline
@@ -2014,10 +2223,15 @@ The reinforced concrete deck slab is designed per IRC~112:2011 (flexure, shear, 
 \textbf{Parameter} & \textbf{Value} \\
 \hline
 \endfirsthead
+\multicolumn{2}{@{}l}{\ReportContinuedFromNumbered}\\
 \hline
 \textbf{Parameter} & \textbf{Value} \\
 \hline
 \endhead
+\noalign{\vskip-\arrayrulewidth}\hline
+\multicolumn{2}{@{}r@{}}{\ReportContinuedOn}\\
+\endfoot
+\endlastfoot
 
 \textnormal{Effective Span of Deck Slab, $l_{eff}$} & 2430 mm (girder spacing, c/c) \\[\ReportRowGap]
 \hline
@@ -2048,10 +2262,15 @@ The reinforced concrete deck slab is designed per IRC~112:2011 (flexure, shear, 
 \textbf{Location} & \textbf{Parameter} & \textbf{Formula / Reference} & \textbf{Value} & \textbf{Status} \\[\ReportRowGap]
 \hline
 \endfirsthead
+\multicolumn{5}{@{}l}{\ReportContinuedFromNumbered}\\
 \hline
 \textbf{Location} & \textbf{Parameter} & \textbf{Formula / Reference} & \textbf{Value} & \textbf{Status} \\[\ReportRowGap]
 \hline
 \endhead
+\noalign{\vskip-\arrayrulewidth}\hline
+\multicolumn{5}{@{}r@{}}{\ReportContinuedOn}\\
+\endfoot
+\endlastfoot
 
 \makecell{At Midspan\\(Sagging)} & Transverse BM (DL), $M_{T,DL}$ & $w_{DL}\,l_{eff}^2/10$ & 3.62 kN-m/m & --- \\[\ReportRowGap]
 \cline{2-5}
@@ -2079,10 +2298,15 @@ The reinforced concrete deck slab is designed per IRC~112:2011 (flexure, shear, 
 \textbf{Parameter} & \textbf{Formula} & \textbf{Value} & \textbf{Status} \\[\ReportRowGap]
 \hline
 \endfirsthead
+\multicolumn{4}{@{}l}{\ReportContinuedFromNumbered}\\
 \hline
 \textbf{Parameter} & \textbf{Formula} & \textbf{Value} & \textbf{Status} \\[\ReportRowGap]
 \hline
 \endhead
+\noalign{\vskip-\arrayrulewidth}\hline
+\multicolumn{4}{@{}r@{}}{\ReportContinuedOn}\\
+\endfoot
+\endlastfoot
 
 Overhang Length, $l_{oh}$ & --- & 1.215 m & --- \\[\ReportRowGap]
 \hline
@@ -2106,10 +2330,15 @@ Moment Capacity (top steel), $M_{Rd,oh}$ & IRC 112 Cl. 12.2 & 114.71 kN-m/m & PA
 \textbf{Parameter} & \textbf{Formula / Reference} & \textbf{Value} & \textbf{Status} \\[\ReportRowGap]
 \hline
 \endfirsthead
+\multicolumn{4}{@{}l}{\ReportContinuedFromNumbered}\\
 \hline
 \textbf{Parameter} & \textbf{Formula / Reference} & \textbf{Value} & \textbf{Status} \\[\ReportRowGap]
 \hline
 \endhead
+\noalign{\vskip-\arrayrulewidth}\hline
+\multicolumn{4}{@{}r@{}}{\ReportContinuedOn}\\
+\endfoot
+\endlastfoot
 
 Design Wheel Load (ULS), $V_{Ed}$ & $\gamma_Q\,(1+IF)\,P_w$ & 137.6 kN & --- \\[\ReportRowGap]
 \hline
@@ -2136,10 +2365,15 @@ Punching Shear Check & $v_{Ed} \leq v_{Rd,c}$ & 0.34 & PASS \\[\ReportRowGap]
 \textbf{Parameter} & \textbf{Value / Reference} \\[\ReportRowGap]
 \hline
 \endfirsthead
+\multicolumn{2}{@{}l}{\ReportContinuedFromNumbered}\\
 \hline
 \textbf{Parameter} & \textbf{Value / Reference} \\[\ReportRowGap]
 \hline
 \endhead
+\noalign{\vskip-\arrayrulewidth}\hline
+\multicolumn{2}{@{}r@{}}{\ReportContinuedOn}\\
+\endfoot
+\endlastfoot
 
 \textnormal{Min. Reinforcement for Crack Control, $A_{s,min}$} & 303 mm²/m [IRC 112 Cl. 16.5.1] \\[\ReportRowGap]
 \hline
@@ -2160,10 +2394,15 @@ Punching Shear Check & $v_{Ed} \leq v_{Rd,c}$ & 0.34 & PASS \\[\ReportRowGap]
 \textbf{Parameter} & \textbf{Formula / Reference} & \textbf{Value} & \textbf{Status} \\[\ReportRowGap]
 \hline
 \endfirsthead
+\multicolumn{4}{@{}l}{\ReportContinuedFromNumbered}\\
 \hline
 \textbf{Parameter} & \textbf{Formula / Reference} & \textbf{Value} & \textbf{Status} \\[\ReportRowGap]
 \hline
 \endhead
+\noalign{\vskip-\arrayrulewidth}\hline
+\multicolumn{4}{@{}r@{}}{\ReportContinuedOn}\\
+\endfoot
+\endlastfoot
 
 Design Shear per unit width, $V_{Ed}$ & $\gamma_{DL} V_{DL} + \gamma_{LL}(1{+}IF)V_{LL}$ & 84.75 kN/m & --- \\[\ReportRowGap]
 \hline
@@ -2187,10 +2426,15 @@ One-Way Shear Check & $V_{Ed} \leq V_{Rd,c}$ & 0.79 & PASS \\[\ReportRowGap]
 \textbf{Parameter} & \textbf{Required / Limit} & \textbf{Provided} & \textbf{Status} \\[\ReportRowGap]
 \hline
 \endfirsthead
+\multicolumn{4}{@{}l}{\ReportContinuedFromNumbered}\\
 \hline
 \textbf{Parameter} & \textbf{Required / Limit} & \textbf{Provided} & \textbf{Status} \\[\ReportRowGap]
 \hline
 \endhead
+\noalign{\vskip-\arrayrulewidth}\hline
+\multicolumn{4}{@{}r@{}}{\ReportContinuedOn}\\
+\endfoot
+\endlastfoot
 
 \multicolumn{4}{|l|}{\textbf{Main Reinforcement --- Bottom (Transverse)}} \\[\ReportRowGap]
 \hline
@@ -2237,10 +2481,15 @@ Cross bracing between adjacent plate girders provides lateral stability during c
 \textbf{Panel} & \textbf{Member} & \textbf{Connection} & \textbf{Section} & \textbf{$A_g$ (mm²)} & \textbf{$r_{min}$ (mm)} \\[\ReportRowGap]
 \hline
 \endfirsthead
+\multicolumn{6}{@{}l}{\ReportContinuedFromNumbered}\\
 \hline
 \textbf{Panel} & \textbf{Member} & \textbf{Connection} & \textbf{Section} & \textbf{$A_g$ (mm²)} & \textbf{$r_{min}$ (mm)} \\[\ReportRowGap]
 \hline
 \endhead
+\noalign{\vskip-\arrayrulewidth}\hline
+\multicolumn{6}{@{}r@{}}{\ReportContinuedOn}\\
+\endfoot
+\endlastfoot
 
 \makecell{G1-G2} & Diagonal & Bolted & 40 x 40 x 3 & 237.0 & 8.0 \\[\ReportRowGap]\cline{2-6}
 \makecell{G1-G2} & Top / Bottom chord & Bolted & 40 x 40 x 3 & 237.0 & 8.0 \\[\ReportRowGap]\cline{2-6}
@@ -2264,10 +2513,15 @@ Cross bracing between adjacent plate girders provides lateral stability during c
 \textbf{Panel} & \textbf{Member} & \textbf{Nature} & \textbf{Eff.\ Length $KL$ (mm)} & \textbf{$KL/r$} & \textbf{Limit / Status} \\[\ReportRowGap]
 \hline
 \endfirsthead
+\multicolumn{6}{@{}l}{\ReportContinuedFromNumbered}\\
 \hline
 \textbf{Panel} & \textbf{Member} & \textbf{Nature} & \textbf{Eff.\ Length $KL$ (mm)} & \textbf{$KL/r$} & \textbf{Limit / Status} \\[\ReportRowGap]
 \hline
 \endhead
+\noalign{\vskip-\arrayrulewidth}\hline
+\multicolumn{6}{@{}r@{}}{\ReportContinuedOn}\\
+\endfoot
+\endlastfoot
 
 \makecell{G1-G2} & Diagonal & C & 2610 & 137.9 & 250 --- \ReportPass \\[\ReportRowGap]
 \cline{2-6}
@@ -2303,10 +2557,15 @@ Cross bracing between adjacent plate girders provides lateral stability during c
 \textbf{Panel} & \textbf{Member} & \textbf{Section} & \textbf{Governing LC} & \textbf{Demand (kN)} & \textbf{Capacity (kN)} & \textbf{UR} & \textbf{Status} \\[\ReportRowGap]
 \hline
 \endfirsthead
+\multicolumn{8}{@{}l}{\ReportContinuedFromNumbered}\\
 \hline
 \textbf{Panel} & \textbf{Member} & \textbf{Section} & \textbf{Governing LC} & \textbf{Demand (kN)} & \textbf{Capacity (kN)} & \textbf{UR} & \textbf{Status} \\[\ReportRowGap]
 \hline
 \endhead
+\noalign{\vskip-\arrayrulewidth}\hline
+\multicolumn{8}{@{}r@{}}{\ReportContinuedOn}\\
+\endfoot
+\endlastfoot
 
 \makecell{G1-G2} & Diagonal & 40 x 40 x 3 & 1.5 EQ (b) & 4.482 & 16.060 & 0.410 & \ReportPass \\[\ReportRowGap]\cline{2-8}
  & Chord & 40 x 40 x 3 & 1.5 EQ (b) & 4.173 & 17.940 & 0.380 & \ReportPass \\[\ReportRowGap]\cline{2-8}
@@ -2343,10 +2602,15 @@ End diaphragms at the supports transfer transverse loads to the bearings, restra
 \textbf{Panel} & \textbf{Member} & \textbf{Connection} & \textbf{Section} & \textbf{$A_g$ (mm²)} & \textbf{$r_{min}$ (mm)} \\[\ReportRowGap]
 \hline
 \endfirsthead
+\multicolumn{6}{@{}l}{\ReportContinuedFromNumbered}\\
 \hline
 \textbf{Panel} & \textbf{Member} & \textbf{Connection} & \textbf{Section} & \textbf{$A_g$ (mm²)} & \textbf{$r_{min}$ (mm)} \\[\ReportRowGap]
 \hline
 \endhead
+\noalign{\vskip-\arrayrulewidth}\hline
+\multicolumn{6}{@{}r@{}}{\ReportContinuedOn}\\
+\endfoot
+\endlastfoot
 
 \makecell{G1-G2} & Diagonal & Bolted & 40 x 40 x 3 & 237.0 & 8.0 \\[\ReportRowGap]\cline{2-6}
 \makecell{G1-G2} & Top / Bottom chord & Bolted & 40 x 40 x 3 & 237.0 & 8.0 \\[\ReportRowGap]\cline{2-6}
@@ -2370,10 +2634,15 @@ End diaphragms at the supports transfer transverse loads to the bearings, restra
 \textbf{Panel} & \textbf{Member} & \textbf{Nature} & \textbf{Eff.\ Length $KL$ (mm)} & \textbf{$KL/r$} & \textbf{Limit / Status} \\[\ReportRowGap]
 \hline
 \endfirsthead
+\multicolumn{6}{@{}l}{\ReportContinuedFromNumbered}\\
 \hline
 \textbf{Panel} & \textbf{Member} & \textbf{Nature} & \textbf{Eff.\ Length $KL$ (mm)} & \textbf{$KL/r$} & \textbf{Limit / Status} \\[\ReportRowGap]
 \hline
 \endhead
+\noalign{\vskip-\arrayrulewidth}\hline
+\multicolumn{6}{@{}r@{}}{\ReportContinuedOn}\\
+\endfoot
+\endlastfoot
 
 \makecell{G1-G2} & Diagonal & C & 2610 & 137.9 & 250 --- \ReportPass \\[\ReportRowGap]
 \cline{2-6}
@@ -2410,10 +2679,15 @@ End diaphragms at the supports transfer transverse loads to the bearings, restra
 \textbf{Panel} & \textbf{Member} & \textbf{Section} & \textbf{Governing LC} & \textbf{Demand (kN)} & \textbf{Capacity (kN)} & \textbf{UR} & \textbf{Status} \\[\ReportRowGap]
 \hline
 \endfirsthead
+\multicolumn{8}{@{}l}{\ReportContinuedFromNumbered}\\
 \hline
 \textbf{Panel} & \textbf{Member} & \textbf{Section} & \textbf{Governing LC} & \textbf{Demand (kN)} & \textbf{Capacity (kN)} & \textbf{UR} & \textbf{Status} \\[\ReportRowGap]
 \hline
 \endhead
+\noalign{\vskip-\arrayrulewidth}\hline
+\multicolumn{8}{@{}r@{}}{\ReportContinuedOn}\\
+\endfoot
+\endlastfoot
 
 \makecell{G1-G2} & Diagonal & 40 x 40 x 3 & 1.5 EQ (b) & 4.482 & 16.060 & 0.410 & \ReportPass \\[\ReportRowGap]\cline{2-8}
  & Chord & 40 x 40 x 3 & 1.5 EQ (b) & 4.173 & 17.940 & 0.380 & \ReportPass \\[\ReportRowGap]\cline{2-8}
@@ -2447,10 +2721,15 @@ End diaphragms at the supports transfer transverse loads to the bearings, restra
 \textbf{Member / Check} & \textbf{Governing Load Combo} & \textbf{Demand} & \textbf{Capacity} & \textbf{UR} \\[\ReportRowGap]
 \hline
 \endfirsthead
+\multicolumn{5}{@{}l}{\ReportContinuedFromNumbered}\\
 \hline
 \textbf{Member / Check} & \textbf{Governing Load Combo} & \textbf{Demand} & \textbf{Capacity} & \textbf{UR} \\[\ReportRowGap]
 \hline
 \endhead
+\noalign{\vskip-\arrayrulewidth}\hline
+\multicolumn{5}{@{}r@{}}{\ReportContinuedOn}\\
+\endfoot
+\endlastfoot
 
 Girder --- Moment & ACCIDENTAL\_\allowbreak{}1:\allowbreak{} 1.0DL + 1.0DW + 0.75LL & 1331.25 kNm & 4600.16 kNm & 0.29 \\[\ReportRowGap]
 \hline
@@ -2650,10 +2929,15 @@ This section presents CAD-generated views of the designed bridge and its compone
 \textbf{S.N.} & \textbf{Item Description} & \textbf{Volume (m$^3$)} & \textbf{Quantity} & \textbf{Total Volume (m$^3$)} & \textbf{Weight (MT)} & \textbf{Total Weight (MT)} \\
 \hline
 \endfirsthead
+\multicolumn{7}{@{}l}{\ReportContinuedFrom}\\
 \hline
 \textbf{S.N.} & \textbf{Item Description} & \textbf{Volume (m$^3$)} & \textbf{Quantity} & \textbf{Total Volume (m$^3$)} & \textbf{Weight (MT)} & \textbf{Total Weight (MT)} \\
 \hline
 \endhead
+\noalign{\vskip-\arrayrulewidth}\hline
+\multicolumn{7}{@{}r@{}}{\ReportContinuedOn}\\
+\endfoot
+\endlastfoot
 
 1 & Structural Steel (IS 2062) for Girders & $0.01559\text{ m}^2 \times 20.00\text{ m} = 0.31184\text{ m}^3$ & 5 & 1.56 & 2.45 & 12.24 \\
 \hline
@@ -2707,10 +2991,15 @@ form the basis of all design calculations in this software.
 \textbf{Code} & \textbf{Year} & \textbf{Title / Scope} \\
 \hline
 \endfirsthead
+\multicolumn{3}{@{}l}{\ReportContinuedFromNumbered}\\
 \hline
 \textbf{Code} & \textbf{Year} & \textbf{Title / Scope} \\
 \hline
 \endhead
+\noalign{\vskip-\arrayrulewidth}\hline
+\multicolumn{3}{@{}r@{}}{\ReportContinuedOn}\\
+\endfoot
+\endlastfoot
 
 IRC 5 & 2015 & General Features of Design - carriageway widths, kerb, footpath dimensions \\
 \hline
@@ -2737,10 +3026,15 @@ IRC SP 114 & 2018 & Seismic Design of Road Bridges \\
 \textbf{Code} & \textbf{Year} & \textbf{Scope} \\
 \hline
 \endfirsthead
+\multicolumn{3}{@{}l}{\ReportContinuedFromNumbered}\\
 \hline
 \textbf{Code} & \textbf{Year} & \textbf{Scope} \\
 \hline
 \endhead
+\noalign{\vskip-\arrayrulewidth}\hline
+\multicolumn{3}{@{}r@{}}{\ReportContinuedOn}\\
+\endfoot
+\endlastfoot
 
 IS 800 & 2007 & Steel construction - tension, compression, bending, shear, LTB, stiffeners, combined checks \\
 \hline

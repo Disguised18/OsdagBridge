@@ -7,7 +7,7 @@
 | `Report_Before.pdf` / `.tex` | Unchanged upstream report code (`d74f56d`) |
 | `Report_After.pdf` / `.tex` | This branch's report code |
 | `Report_After_assets/` | Charts and logo referenced by `Report_After.tex` |
-| `Report_After_GUI.pdf` / `.tex` / `_assets/` | Same report code, generated in the desktop app with CAD drawings and analysis plots (70 pages, 24 images) |
+| `Report_After_GUI.pdf` / `.tex` / `_assets/` | Same report code, generated in the desktop app with CAD drawings and analysis plots (72 pages, 24 images) |
 
 **Design case:** 20 m span, 7.5 m carriageway, 1.5 m footways on both sides,
 zero skew, Maharashtra location, all IRC vehicle classes, optimized design with
