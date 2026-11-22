@@ -303,3 +303,31 @@ def test_formatting_comes_only_from_styles():
     pre = preamble('P', 'J', 'D')
     for name in ('ReportRowGap', 'ReportPass', 'ReportFail', 'ReportTitleBlockGap'):
         assert '\\' + name in pre
+
+
+def test_file_menu_report_captures_figures_like_output_dock():
+    """File -> Create Design Report must go through the Output dock's figure capture."""
+    pytest.importorskip('PySide6')
+    from osdagbridge.desktop.ui import template_page
+    calls = []
+    page = SimpleNamespace(output_dock=SimpleNamespace(generate_report=lambda: calls.append('capture')),
+                           open_report_dialog=lambda **kw: calls.append('dialog-without-figures'))
+    template_page.CustomWindow.create_design_report(page)
+    assert calls == ['capture']
+    source = Path(template_page.__file__).read_text(encoding='utf-8')
+    assert 'triggered.connect(lambda _: self.create_design_report())' in source
+
+
+def test_bracing_results_with_live_text_entries():
+    """The Transverse Member Design dialog adds text entries to each pair at runtime."""
+    from osdagbridge.core.reports.plots import member_ur
+    from osdagbridge.core.reports.executive_summary import _max_member_efficiency
+    results = {'G1-G2': {'diagonal': {'compression': {'Member.efficiency': .3, 'Member.Slenderness': 100.0}},
+                         'chord': {'tension': {'Member.efficiency': .1}},
+                         'ed_type': 'Cross Bracing', 'ed_bracing_type': 'X-Bracing'},
+               'note': 'not a pair'}
+    assert member_ur(results) == pytest.approx(.4)        # 100 / 250
+    assert _max_member_efficiency(results) == pytest.approx(.4)
+    assert member_ur('unexpected') is None
+    outputs = {'crossbracing_design_results': results}
+    assert utilization_values(outputs)['Cross\nbracing'] == pytest.approx(.4)

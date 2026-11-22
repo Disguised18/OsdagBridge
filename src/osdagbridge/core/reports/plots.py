@@ -49,11 +49,20 @@ def member_ur(results):
 
     Slenderness follows the Section 5.5 table: the compression result's KL/r is
     used (tension only when compression is missing), against the member limit.
+
+    In a live session each pair can also carry plain-text entries such as
+    ``ed_type`` / ``ed_bracing_type`` (added when the Transverse Member Design
+    dialog loads), so only dictionaries are read as member results.
     """
     values = []
-    for members in (results or {}).values():
-        for member, forces in (members or {}).items():
-            forces = {k: v for k, v in (forces or {}).items() if isinstance(v, dict)}
+    pairs = results if isinstance(results, dict) else {}
+    for members in pairs.values():
+        if not isinstance(members, dict):
+            continue
+        for member, forces in members.items():
+            if not isinstance(forces, dict):
+                continue
+            forces = {k: v for k, v in forces.items() if isinstance(v, dict)}
             for raw in forces.values():
                 values.append(osdag_summary(raw)['efficiency'])
             limit = CB_SLENDERNESS_LIMITS.get(str(member).lower())

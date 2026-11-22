@@ -12,7 +12,7 @@
 | Enhanced report | [`validation/design/Report_After.pdf`](validation/design/Report_After.pdf) |
 | Technical changes document | [`docs/FOSSEE_TECHNICAL_CHANGES.md`](docs/FOSSEE_TECHNICAL_CHANGES.md) |
 | Design inputs used for both reports | [`validation/design/Report_Validation.osi`](validation/design/Report_Validation.osi) |
-| Regression tests | `tests/unit/test_reports.py` (36 tests) |
+| Regression tests | `tests/unit/test_reports.py` (38 tests) |
 
 ## Where to look in Report_After.pdf
 

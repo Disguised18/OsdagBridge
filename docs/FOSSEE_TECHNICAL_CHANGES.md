@@ -7,9 +7,10 @@ Refactoring & Enhancements*.
 - Base: upstream `dev` at `d74f56d` (Nidhikhare12/OsdagBridge)
 - Reports: `validation/design/Report_Before.pdf` and `validation/design/Report_After.pdf`
 
-Only the report layer (`src/osdagbridge/core/reports/`) was refactored. No
-analysis, design or CAD code was changed, so every number in the report still
-comes from the existing OsdagBridge solver.
+The refactoring is in the report layer (`src/osdagbridge/core/reports/`), plus a
+small fix to how the desktop app starts a report (see Section 2). No analysis,
+design or CAD code was changed, so every number in the report still comes from
+the existing OsdagBridge solver.
 
 ## 1. Summary of the six requested changes
 
@@ -34,7 +35,8 @@ All under `src/osdagbridge/core/reports/` unless noted.
 | `report_generator.py` | Uses `styles.preamble`. Generates chart assets into the report's temporary folder and keeps a sibling `<report>_assets` folder so the saved `.tex` can be recompiled. Reports success only when the current compiler run produced the PDF. Always emits Chapter 6 so Chapter 7 keeps its number. Generates the Chapter 5/7 charts whether or not *Drawings* is ticked (the GUI ties `include_figures` to that checkbox). |
 | `chap1.py` – `chap9.py`, `executive_summary.py` | Converted to `longtable` with repeated headers. Use the shared style commands. Consistent header capitalisation. Chapter 3 uses the new load tables. Chapter 5 removes tall `multirow` cells, embeds the UR chart and adds the missing summary rows. Chapter 7 embeds the quantity charts. |
 | `report_utils.py` | Single-pass LaTeX escaping, so backslashes are not escaped twice. Removed negative figure spacing. |
-| `tests/unit/test_reports.py` (new) | 36 regression tests (see Section 6). |
+| `desktop/ui/template_page.py`, `desktop/ui/docks/output_dock.py` (under `src/osdagbridge/`) | *File → Create Design Report* now goes through the same 3D-view and plot capture as the Output panel's *Generate Report* button. Before, the menu skipped the capture, so every drawing in the report was a placeholder. |
+| `tests/unit/test_reports.py` (new) | 38 regression tests (see Section 6). |
 | `scripts/` (new) | `run_design_validation.py` (backend design run), `generate_validation_report.py` (Before/After PDFs), `report_layout_fixture.py` (synthetic layout stress test), `check_environment.py`. |
 | `pyproject.toml`, `requirements-reports.txt` | Declare PyLaTeX and Matplotlib, and a light install for running the report tests. |
 
@@ -141,7 +143,8 @@ Every numeric value in `Report_Before.pdf` also appears in `Report_After.pdf`,
 and spot checks against the solver output (girder moment, fatigue stress, SLS
 stress, LTB, governing UR) match in both.
 
-**Tests.** `pytest tests` → 36 passed (Python 3.12, PyLaTeX 1.4.2, Matplotlib
+**Tests.** `pytest tests` → 38 passed in the full environment; the one GUI test
+is skipped where PySide6 is not installed (Python 3.12, PyLaTeX 1.4.2, Matplotlib
 3.10). They cover header repetition in every table, checkbox parsing, vehicle
 and footway cases, the per-vehicle table layout, invalid and missing data, chart/table agreement on the real
 design snapshot, PNG creation and embedding, shared styles and palette, the
@@ -170,8 +173,9 @@ and the generator's asset and compiler handling.
   N/A. A bracing-type end diaphragm has no separate design results, so it is
   reported with the cross-bracing members, as the upstream table already did.
 - **Wind and earthquake load tables** have empty rows that upstream does not fill.
-- **Drawings** (Chapter 6 figures) need CAD exports from the GUI and were not
-  part of the backend validation run.
+- **Drawings** (Chapter 6 figures) need CAD exports from the GUI, so the
+  script-made Before/After reports show placeholders. A report started from the
+  GUI (Output panel or File menu) includes them.
 - **GUI run.** The desktop app starts and its CAD view initialises, but on the
   test machine it closed during the input-file dialog (Windows COM errors
   0x8001010d / 0x80010108). The reports were therefore produced by the backend
