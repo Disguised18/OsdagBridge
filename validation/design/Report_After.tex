@@ -57,6 +57,39 @@
 \definecolor{reportFail}{HTML}{C43C39}
 \definecolor{reportInfo}{HTML}{245A81}
 \definecolor{reportMissing}{HTML}{777777}
+\DeclareUnicodeCharacter{2264}{\ensuremath{\le}}
+\DeclareUnicodeCharacter{2265}{\ensuremath{\ge}}
+\DeclareUnicodeCharacter{2260}{\ensuremath{\neq}}
+\DeclareUnicodeCharacter{2248}{\ensuremath{\approx}}
+\DeclareUnicodeCharacter{00B1}{\ensuremath{\pm}}
+\DeclareUnicodeCharacter{00B7}{\ensuremath{\cdot}}
+\DeclareUnicodeCharacter{2192}{\ensuremath{\rightarrow}}
+\DeclareUnicodeCharacter{2190}{\ensuremath{\leftarrow}}
+\DeclareUnicodeCharacter{221A}{\ensuremath{\surd}}
+\DeclareUnicodeCharacter{221E}{\ensuremath{\infty}}
+\DeclareUnicodeCharacter{2212}{\ensuremath{-}}
+\DeclareUnicodeCharacter{2026}{\ldots{}}
+\DeclareUnicodeCharacter{03B1}{\ensuremath{\alpha}}
+\DeclareUnicodeCharacter{03B2}{\ensuremath{\beta}}
+\DeclareUnicodeCharacter{03B3}{\ensuremath{\gamma}}
+\DeclareUnicodeCharacter{03B4}{\ensuremath{\delta}}
+\DeclareUnicodeCharacter{0394}{\ensuremath{\Delta}}
+\DeclareUnicodeCharacter{03B5}{\ensuremath{\varepsilon}}
+\DeclareUnicodeCharacter{03B7}{\ensuremath{\eta}}
+\DeclareUnicodeCharacter{03B8}{\ensuremath{\theta}}
+\DeclareUnicodeCharacter{03BB}{\ensuremath{\lambda}}
+\DeclareUnicodeCharacter{03BC}{\ensuremath{\mu}}
+\DeclareUnicodeCharacter{03C1}{\ensuremath{\rho}}
+\DeclareUnicodeCharacter{03C3}{\ensuremath{\sigma}}
+\DeclareUnicodeCharacter{03A3}{\ensuremath{\Sigma}}
+\DeclareUnicodeCharacter{03C4}{\ensuremath{\tau}}
+\DeclareUnicodeCharacter{03C6}{\ensuremath{\phi}}
+\DeclareUnicodeCharacter{03D5}{\ensuremath{\phi}}
+\DeclareUnicodeCharacter{03C7}{\ensuremath{\chi}}
+\DeclareUnicodeCharacter{03C8}{\ensuremath{\psi}}
+\DeclareUnicodeCharacter{03C9}{\ensuremath{\omega}}
+\DeclareUnicodeCharacter{2713}{\ensuremath{\checkmark}}
+\DeclareUnicodeCharacter{2717}{\ensuremath{\times}}
 \newcommand{\ReportSectionStyle}{\small\setlength{\tabcolsep}{3pt}\renewcommand{\arraystretch}{1.15}}
 \newcommand{\ReportCompactTable}{\setlength{\tabcolsep}{2pt}}
 \newcommand{\ReportCaptionStyle}{\setlength{\abovecaptionskip}{2pt}\setlength{\belowcaptionskip}{2pt}}
@@ -466,9 +499,9 @@ This section documents all inputs provided to OsdagBridge. User-provided inputs 
 \hline
 \textnormal{Latitude / Longitude} & 19.0948, 74.748 \\
 \hline
-\textnormal{Seismic Zone (IRC 6)} &  \\
+\textnormal{Seismic Zone (IRC 6)} & N/A \\
 \hline
-\textnormal{Basic Wind Speed (IRC 6)} &  \\
+\textnormal{Basic Wind Speed (IRC 6)} & N/A \\
 \hline
 \textnormal{Shade Temp. Max / Min (IRC 6)} & 48.2 °C / 2.2 °C \\
 \hline
@@ -576,7 +609,7 @@ Where the user has modified additional inputs, those values are reported here. W
 \hline
 \textnormal{Footpath Width (m)} & 1.5 m (IRC 5 Cl. 104.3.6 min: 1.5 m) \\[\ReportRowGap]
 \hline
-\textnormal{No. of Traffic Lanes} &  (per IRC 5 Cl. 104.3.1) \\[\ReportRowGap]
+\textnormal{No. of Traffic Lanes} & N/A (per IRC 5 Cl. 104.3.1) \\[\ReportRowGap]
 \hline
 \end{longtable}
 
@@ -931,29 +964,29 @@ This section summarizes all loads applied to the bridge and the load combination
 \multicolumn{6}{@{}r@{}}{\ReportContinuedOn}\\
 \endfoot
 \endlastfoot
-Class A & 543.5 & 1.269 & Yes & N/A & 1.20 \\
+Class A & 543.5 & 1.269 & Yes & 108.7 & 1.20 \\
 \hline
-Class 70R (Wheeled) & 981.0 & 1.100 & Yes & N/A & 1.20 \\
+Class 70R (Wheeled) & 981.0 & 1.100 & Yes & 196.2 & 1.20 \\
 \hline
-Class 70R (Tracked) & 686.8 & 1.100 & Yes & N/A & 1.20 \\
+Class 70R (Tracked) & 686.8 & 1.100 & Yes & 137.4 & 1.20 \\
 \hline
 Class AA (Wheeled) & N/A & 1.100 & Yes & N/A & 1.20 \\
 \hline
 Class AA (Tracked) & N/A & 1.100 & Yes & N/A & 1.20 \\
 \hline
-Class SV & 3776.8 & N/A & Yes & N/A & 1.20 \\
+Class SV & 3776.8 & N/A & Yes & 755.4 & 1.20 \\
 \hline
 Class 70R (Bogie) & N/A & 1.100 & Yes & N/A & 1.20 \\
 \hline
-Class Fatigue & 392.4 & N/A & No & -- & -- \\
+Class Fatigue & 392.4 & N/A & Yes & 78.5 & 1.20 \\
 \hline
 \end{longtable}
 \noindent\textit{Notes:}
 \begin{itemize}[leftmargin=*,itemsep=0pt,topsep=2pt]
 \item \textit{Total load is the unfactored vehicle load from the IRC 6 vehicle definitions; N/A means the current code has no definition for that vehicle.}
 \item \textit{Impact factor per IRC 6 Cl. 208.2 (Class A) and Cl. 208.3 (Class 70R / AA), as used in deck design; custom vehicles use their own value. N/A:\allowbreak{} no impact factor is defined for that vehicle in the current code. The grillage analysis applies 1.100 (Cl. 208.3) to all vehicle load cases.}
-\item \textit{Braking:\allowbreak{} the Class SV option and eccentricity come from the Loading tab; the fatigue vehicle is used only for fatigue checks. Braking force values are not available because the current analysis does not apply braking load.}
-\item \textit{Centrifugal force:\allowbreak{} N/A, not supplied by the current analysis.}
+\item \textit{Braking:\allowbreak{} considered for every selected vehicle, except Class SV, which has its own option in the Loading tab. Value is 20\% of the vehicle load (IRC 6 Cl. 211.2, first train in one lane), acting at the eccentricity from top of deck given in the Loading tab (IRC 6 Cl. 211.3:\allowbreak{} 1.2 m). The current grillage analysis does not include a braking load case.}
+\item \textit{Centrifugal force (IRC 6 Cl. 212):\allowbreak{} not applicable; the inputs define a straight bridge with no horizontal curvature.}
 \item \textit{Live-load analysis cases place Class A and Class 70R (Wheeled) vehicles per IRC 6 Table 6; other selected vehicles are listed as selected.}
 \end{itemize}
 \ReportTableGap
@@ -997,21 +1030,21 @@ Footway live load & 4.905 & kN/m$^2$ \\
 \endfoot
 \endlastfoot
 
-\textnormal{Basic Wind Speed, Vb} &  [from Project Location] \\[\ReportRowGap]
+\textnormal{Basic Wind Speed, Vb} & N/A [from Project Location] \\[\ReportRowGap]
 \hline
 \textnormal{Terrain Type} & Plain Terrain \\[\ReportRowGap]
 \hline
 \textnormal{Average Exposed Height, H (m)} & 10 m \\[\ReportRowGap]
 \hline
-\textnormal{Hourly Mean Wind Speed, Vz} &  \\[\ReportRowGap]
+\textnormal{Hourly Mean Wind Speed, Vz} & N/A \\[\ReportRowGap]
 \hline
-\textnormal{Hourly Wind Pressure, Pz} &  \\[\ReportRowGap]
+\textnormal{Hourly Wind Pressure, Pz} & N/A \\[\ReportRowGap]
 \hline
-\textnormal{Transverse Wind Force} &  \\[\ReportRowGap]
+\textnormal{Transverse Wind Force} & N/A \\[\ReportRowGap]
 \hline
-\textnormal{Longitudinal Wind Force} &  \\[\ReportRowGap]
+\textnormal{Longitudinal Wind Force} & N/A \\[\ReportRowGap]
 \hline
-\textnormal{Vertical Wind Force} &  \\[\ReportRowGap]
+\textnormal{Vertical Wind Force} & N/A \\[\ReportRowGap]
 \hline
 \end{longtable}
 
@@ -1032,23 +1065,23 @@ Footway live load & 4.905 & kN/m$^2$ \\
 \endfoot
 \endlastfoot
 
-\textnormal{Seismic Zone} &  [from Project Location] \\[\ReportRowGap]
+\textnormal{Seismic Zone} & N/A [from Project Location] \\[\ReportRowGap]
 \hline
-\textnormal{Zone Factor, Z} &  \\[\ReportRowGap]
+\textnormal{Zone Factor, Z} & N/A \\[\ReportRowGap]
 \hline
 \textnormal{Importance Factor, I} & 1.0 \\[\ReportRowGap]
 \hline
 \textnormal{Type of Soil} & Type I – Rocky or Hard \\[\ReportRowGap]
 \hline
-\textnormal{Sa/g} &  \\[\ReportRowGap]
+\textnormal{Sa/g} & N/A \\[\ReportRowGap]
 \hline
-\textnormal{Horizontal Seismic Coefficient, Ah} &  \\[\ReportRowGap]
+\textnormal{Horizontal Seismic Coefficient, Ah} & N/A \\[\ReportRowGap]
 \hline
-\textnormal{Vertical Seismic Coefficient, Av} &  \\[\ReportRowGap]
+\textnormal{Vertical Seismic Coefficient, Av} & N/A \\[\ReportRowGap]
 \hline
-\textnormal{Horizontal Seismic Force (longitudinal)} &  kN \\[\ReportRowGap]
+\textnormal{Horizontal Seismic Force, longitudinal (kN)} & N/A \\[\ReportRowGap]
 \hline
-\textnormal{Horizontal Seismic Force (transverse)} &  kN \\[\ReportRowGap]
+\textnormal{Horizontal Seismic Force, transverse (kN)} & N/A \\[\ReportRowGap]
 \hline
 \end{longtable}
 
@@ -1310,11 +1343,11 @@ Crash barrier load & 60.260 & G3 & 10.769 & 15.549 & G1 & 18.462 & -58.002 & 62.
 \endfoot
 \endlastfoot
 
- &  &  \\[\ReportRowGap]
+Envelope ULS & -1255.531 & 1195.819 \\[\ReportRowGap]
 \hline
- &  &  \\[\ReportRowGap]
+Envelope SLS & -1191.369 & 1131.657 \\[\ReportRowGap]
 \hline
- &  &  \\[\ReportRowGap]
+1.0 DL & -739.046 & 738.368 \\[\ReportRowGap]
 \hline
 \end{longtable}
 
@@ -1873,7 +1906,7 @@ G5 & $M_u \leq M_b$ & $M_u / M_b$ & 0.30 & PASS \\[\ReportRowGap]
 \cline{2-3}
 G1 & \textnormal{Intermediate Stiffener Thickness (mm)} & 14.0 \\[\ReportRowGap]
 \cline{2-3}
-G1 & \textnormal{Intermediate Stiffener Spacing (mm)} &  \\[\ReportRowGap]
+G1 & \textnormal{Intermediate Stiffener Spacing (mm)} & N/A \\[\ReportRowGap]
 \cline{2-3}
 G1 & \textnormal{End Panel Stiffener Thickness (mm)} & 1.4 \\[\ReportRowGap]
 \cline{2-3}
@@ -1885,7 +1918,7 @@ G1 & \textnormal{Longitudinal Stiffeners} & None \\[\ReportRowGap]
 \cline{2-3}
 G2 & \textnormal{Intermediate Stiffener Thickness (mm)} & 14.0 \\[\ReportRowGap]
 \cline{2-3}
-G2 & \textnormal{Intermediate Stiffener Spacing (mm)} &  \\[\ReportRowGap]
+G2 & \textnormal{Intermediate Stiffener Spacing (mm)} & N/A \\[\ReportRowGap]
 \cline{2-3}
 G2 & \textnormal{End Panel Stiffener Thickness (mm)} & 1.4 \\[\ReportRowGap]
 \cline{2-3}
@@ -1897,7 +1930,7 @@ G2 & \textnormal{Longitudinal Stiffeners} & None \\[\ReportRowGap]
 \cline{2-3}
 G3 & \textnormal{Intermediate Stiffener Thickness (mm)} & 14.0 \\[\ReportRowGap]
 \cline{2-3}
-G3 & \textnormal{Intermediate Stiffener Spacing (mm)} &  \\[\ReportRowGap]
+G3 & \textnormal{Intermediate Stiffener Spacing (mm)} & N/A \\[\ReportRowGap]
 \cline{2-3}
 G3 & \textnormal{End Panel Stiffener Thickness (mm)} & 1.4 \\[\ReportRowGap]
 \cline{2-3}
@@ -1909,7 +1942,7 @@ G3 & \textnormal{Longitudinal Stiffeners} & None \\[\ReportRowGap]
 \cline{2-3}
 G4 & \textnormal{Intermediate Stiffener Thickness (mm)} & 14.0 \\[\ReportRowGap]
 \cline{2-3}
-G4 & \textnormal{Intermediate Stiffener Spacing (mm)} &  \\[\ReportRowGap]
+G4 & \textnormal{Intermediate Stiffener Spacing (mm)} & N/A \\[\ReportRowGap]
 \cline{2-3}
 G4 & \textnormal{End Panel Stiffener Thickness (mm)} & 1.4 \\[\ReportRowGap]
 \cline{2-3}
@@ -1921,7 +1954,7 @@ G4 & \textnormal{Longitudinal Stiffeners} & None \\[\ReportRowGap]
 \cline{2-3}
 G5 & \textnormal{Intermediate Stiffener Thickness (mm)} & 14.0 \\[\ReportRowGap]
 \cline{2-3}
-G5 & \textnormal{Intermediate Stiffener Spacing (mm)} &  \\[\ReportRowGap]
+G5 & \textnormal{Intermediate Stiffener Spacing (mm)} & N/A \\[\ReportRowGap]
 \cline{2-3}
 G5 & \textnormal{End Panel Stiffener Thickness (mm)} & 1.4 \\[\ReportRowGap]
 \cline{2-3}
@@ -2814,6 +2847,8 @@ End Diaphragm --- Slenderness (as bracing) & --- & 137.9 & 250 & 0.55 \\[\Report
 2(b) & Cross Bracing - Bottom Chord & $0.00024\text{ m}^2 \times 2.43\text{ m} = 0.00058\text{ m}^3$ & 24 & 0.01 & 0.0045 & 0.11 \\
 \hline
 2(c) & Cross Bracing - Diagonal Chord & $0.00024\text{ m}^2 \times 2.61\text{ m} = 0.00062\text{ m}^3$ & 48 & 0.03 & 0.0049 & 0.23 \\
+\hline
+2(d) & End Diaphragms (bracing frames at supports) & $2 \times 2.61\text{ m}$ diagonals $+ 2 \times 2.43\text{ m}$ chords $= 0.01925\text{ m}^3$ & 8 & 0.15 & 0.1511 & 1.21 \\
 \hline
 3 & Concrete (M40) for Deck Slab & $12.15\text{ m} \times 0.25\text{ m} \times 20.00\text{ m} = 60.75\text{ m}^3$ & 1 & 60.75 & 151.87 & 151.87 \\
 \hline

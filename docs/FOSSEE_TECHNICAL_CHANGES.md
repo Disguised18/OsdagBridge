@@ -22,9 +22,9 @@ the existing OsdagBridge solver.
 |---|---|---|
 | 1 | Repeated table headers | Every body table is a `longtable` with an explicit `\endfirsthead` / `\endhead` pair, so the column header row repeats on each new page. Captions sit only in the first head and end with a row break, so they are not repeated or renumbered. An empty continuation header in Chapter 2 was filled in. At each page break the table is closed with a rule and marked *Continued on next page*, and the next page starts with *Table N continued from previous page* above the repeated header. These notices are added centrally to all 58 tables. |
 | 2 | Footer overlap and spacing | `geometry` now uses `includeheadfoot` with a 28 pt head height, 18 mm foot skip and 32 mm bottom margin, so the body can never run into the footer. Negative `\vspace` hacks near the footer were removed. Every table and longtable starts with `\Needspace{7\baselineskip}`, which moves it to the next page instead of leaving a header stranded at the bottom. Tall `multirow` cells in Chapter 5 (these caused the "G4" bleed) were replaced by a girder label on every row, so a table can break between any two rows. |
-| 3 | Live-load tables | Vehicle and footway live loads are two separate tables (3.3 and 3.4). Table 3.3 follows the layout of the example in the brief: one row per vehicle selected in the *Loading* tab (eight IRC classes plus custom vehicles), with Total Load (kN), Impact Factor (1 + IM) and Braking Load (Considered? / Value / Eccentricity). Total loads come from the IRC 6 vehicle definitions the analysis uses; impact factors follow IRC 6 Cl. 208.2 / 208.3 per class; braking follows the Loading tab (Class SV opt-in, eccentricity). Notes under the table explain each N/A, including centrifugal force. A serialized `"False"` is treated as unchecked. The footway table covers none / single / both sides, and automatic (IRC 6 Cl. 206.1) or user-defined pressure. |
+| 3 | Live-load tables | Vehicle and footway live loads are two separate tables (3.3 and 3.4). Table 3.3 follows the layout of the example in the brief: one row per vehicle selected in the *Loading* tab (eight IRC classes plus custom vehicles), with Total Load (kN), Impact Factor (1 + IM) and Braking Load (Considered? / Value / Eccentricity). Total loads come from the IRC 6 vehicle definitions the analysis uses; impact factors follow IRC 6 Cl. 208.2 / 208.3 per class; braking is considered for every selected vehicle (the app's own rule; Class SV has its own opt-in), its value is 20% of the vehicle load per IRC 6 Cl. 211.2, and its eccentricity comes from the Loading tab. Notes under the table explain each N/A and why centrifugal force does not apply (straight bridge). A serialized `"False"` is treated as unchecked. The footway table covers none / single / both sides, and automatic (IRC 6 Cl. 206.1) or user-defined pressure. |
 | 4 | Utilization-ratio chart | A bar chart in Section 5.5 shows the governing UR of steel plate girders, the concrete deck slab, cross bracing and end diaphragms, with a red dashed line at UR = 1.0. Bars above 1.0 are red and the rest green. Each bar is the maximum UR of that element's rows in the Section 5.5 summary table, and a regression test checks this against real design output. |
-| 5 | Material quantity charts | Chapter 7 has two figures built from the same BOQ values as Table 7.1: structural steel tonnage (girders, cross bracing, end diaphragms), and concrete volume (m³) beside reinforcement weight (MT). The last two are drawn on separate axes because they have different units. Plots are saved as PNGs during generation and embedded with PyLaTeX `Figure`. The BOQ previously counted top and bottom bracing chords even when the user had disabled them; it now follows the chord settings, so the bracing tonnage in Table 7.1 and Figure 7.1 is right for every configuration. |
+| 5 | Material quantity charts | Chapter 7 has two figures built from the same BOQ values as Table 7.1: structural steel tonnage (girders, cross bracing, end diaphragms), and concrete volume (m³) beside reinforcement weight (MT). The last two are drawn on separate axes because they have different units. Plots are saved as PNGs during generation and embedded with PyLaTeX `Figure`. The BOQ previously counted top and bottom bracing chords even when the user had disabled them; it now follows the chord settings, so the bracing tonnage in Table 7.1 and Figure 7.1 is right for every configuration. The BOQ also had no end-diaphragm quantity; row 2(d) now gives the steel in bracing-type end diaphragms (one frame per bay at each support, two diagonals plus enabled chords, designed section areas, 7.85 t/m³), 8 frames and 1.21 t for this design. |
 | 6 | Central style module | New `styles.py` is the single source of truth for page geometry, fonts, colours, header/footer, row and cell spacing, section and title-page gaps, PASS/FAIL labels and the chart theme. Every chapter imports it. The 259 hardcoded row gaps (`\\[6pt]` etc.) and the raw colours and title-page lengths were replaced by named commands, and a test fails if any report module hardcodes a row gap, colour or font size. |
 
 ## 2. Files changed
@@ -40,8 +40,8 @@ All under `src/osdagbridge/core/reports/` unless noted.
 | `chap1.py` – `chap9.py`, `executive_summary.py` | Converted to `longtable` with repeated headers. Use the shared style commands. Consistent header capitalisation. Chapter 3 uses the new load tables. Chapter 5 removes tall `multirow` cells, embeds the UR chart and adds the missing summary rows. Chapter 7 embeds the quantity charts. |
 | `report_utils.py` | Single-pass LaTeX escaping, so backslashes are not escaped twice. Removed negative figure spacing. |
 | `desktop/ui/template_page.py`, `desktop/ui/docks/output_dock.py` (under `src/osdagbridge/`) | *File → Create Design Report* now goes through the same 3D-view and plot capture as the Output panel's *Generate Report* button. Before, the menu skipped the capture, so every drawing in the report was a placeholder. |
-| `core/boq/boq_generator.py` (under `src/osdagbridge/`) | Bracing chord quantities follow the top/bottom chord settings recorded by the cross-bracing force calculation, instead of always being included. |
-| `tests/unit/test_reports.py` (new) | 35 report regression tests; with the 5 existing tests the suite has 40 (see Section 6). |
+| `core/boq/boq_generator.py` (under `src/osdagbridge/`) | Bracing chord quantities follow the top/bottom chord settings recorded by the cross-bracing force calculation, instead of always being included. End-diaphragm steel (Table 7.1 row 2(d)) added. |
+| `tests/unit/test_reports.py` (new) | 40 report regression tests; with the 5 existing tests the suite has 45 (see Section 6). |
 | `scripts/` (new) | `run_design_validation.py` (backend design run), `generate_validation_report.py` (Before/After PDFs), `report_layout_fixture.py` (synthetic layout stress test), `check_environment.py`. |
 | `pyproject.toml`, `requirements-reports.txt` | Declare PyLaTeX and Matplotlib, and a light install for running the report tests. |
 
@@ -110,6 +110,17 @@ they describe that table's data rather than the report's style.
 - Tables that break across pages are closed with a rule and labelled *Continued on next page* / *Table N continued from previous page*.
 - Failing UR values in the summary table are shown in red, matching the chart.
 - The page header no longer shows a stray "|" when the job number is empty.
+- Missing values are shown as N/A instead of empty cells (23 rows upstream left
+  blank, in the wind, seismic and stiffener tables).
+- The Reactions at Supports table (Table 4.2), which upstream left with three
+  empty rows, now shows the ULS and SLS envelopes and dead-load reactions from
+  the analysis.
+- Reports no longer fail for designs whose check names contain symbols such as
+  `≤` (e.g. "Int.Stiff: Leg ≤ H_limit"); `styles.py` maps these symbols for
+  pdfLaTeX. Found by running the real design for 15 m, 30 m (skewed, no footway)
+  and 40 m bridges: all three now produce clean reports.
+- UR chart labels have a white backing, so a value near 1.0 stays readable over
+  the red threshold line.
 - Chapter 6 is kept, with a short note, when drawings are not selected, so the
   contents never jump from Chapter 5 to 7.
 - Section 5.5 gained the deck SLS-stress, deck minimum-reinforcement and
@@ -144,7 +155,7 @@ unchanged upstream report code at `d74f56d`; `Report_After` uses this branch.
 | pdfTeX exit codes (2 passes) | 1, 1 | 0, 0 |
 | LaTeX errors | 138 | 0 |
 | Overfull boxes | 61 | 0 |
-| Pages | 54 | 62 |
+| Pages | 54 | 63 |
 
 The upstream generator runs pdfTeX in non-stop mode and keeps the PDF despite
 the errors, so `Report_Before.pdf` is the real original output, errors included.
@@ -152,7 +163,13 @@ Every numeric value in `Report_Before.pdf` also appears in `Report_After.pdf`,
 and spot checks against the solver output (girder moment, fatigue stress, SLS
 stress, LTB, governing UR) match in both.
 
-**Tests.** `pytest tests` → 40 passed in the full environment; the one GUI test
+**Other designs.** The real solver was also run for a 15 m span with a
+footway on one side, a 30 m span with an 11 m carriageway, 10° skew and no
+footway, and a 40 m span at a site with wind and seismic data. All three
+reports compile with no errors, no overfull boxes and no empty cells, and
+every table carries the page-break notices.
+
+**Tests.** `pytest tests` → 45 passed in the full environment; the one GUI test
 is skipped where PySide6 is not installed (Python 3.12, PyLaTeX 1.4.2, Matplotlib
 3.10). They cover header repetition in every table, checkbox parsing, vehicle
 and footway cases, the per-vehicle table layout, invalid and missing data, chart/table agreement on the real
@@ -162,10 +179,10 @@ and the generator's asset and compiler handling.
 
 ## 7. Known limitations (upstream, not changed here)
 
-- **Braking force value shows N/A.** The analysis does not apply braking load,
-  and `IRC6_2017.cl_211_2_braking_force` raises `UnboundLocalError`
-  (`braking_force_2`) for every lane count. Whether braking is considered and its
-  eccentricity are still reported from the Loading tab.
+- **No braking load case.** Table 3.3 gives each vehicle's braking force per
+  IRC 6 Cl. 211.2 (20% of the vehicle load), but the analysis does not apply a
+  braking load, and `IRC6_2017.cl_211_2_braking_force` raises `UnboundLocalError`
+  (`braking_force_2`) for every lane count.
 - **Vehicle selection does not drive the analysis.** The grillage analysis always
   places Class A and Class 70R (Wheeled) vehicles per IRC 6 Table 6 and applies
   the Cl. 208.3 impact factor to all vehicle cases, whatever is ticked in the
@@ -177,11 +194,14 @@ and the generator's asset and compiler handling.
   chart). The older deflection table in Sections 4 and 5.1 shows a larger value
   marked FAIL. Both values come from existing upstream code; the Before report
   shows the same mismatch.
-- **Centrifugal force** is not produced by the analysis, so it is shown as N/A.
-- **End-diaphragm steel tonnage** is not in the BOQ, so the quantity chart shows
-  N/A. A bracing-type end diaphragm has no separate design results, so it is
-  reported with the cross-bracing members, as the upstream table already did.
-- **Wind and earthquake load tables** have empty rows that upstream does not fill.
+- **End-diaphragm design results.** A bracing-type end diaphragm has no
+  separate design results, so its checks are reported with the cross-bracing
+  members, as the upstream table already did. Its steel quantity is in Table 7.1
+  (row 2(d)); end diaphragms of other types show N/A there.
+- **Wind and seismic data.** The location database has no wind speed or seismic
+  zone for the Ahmednagar station, so the analysis falls back to its defaults
+  (33 m/s, Zone II, Z = 0.10). The report shows these location values, and the
+  values derived from them, as N/A instead of the blank cells upstream printed.
 - **Drawings** (Chapter 6 figures) need CAD exports from the GUI, so the
   script-made Before/After reports show placeholders. A report started from the
   GUI (Output panel or File menu) includes them; see `Report_After_GUI.pdf`.

@@ -112,7 +112,7 @@ Branch          & \code{fossee-latex-refactor} \\
 Base            & \code{Nidhikhare12/OsdagBridge}, branch \code{dev} at \code{d74f56d} \\
 Pull request    & \url{https://github.com/Nidhikhare12/OsdagBridge/pull/243} (code only) \\
 Reports         & \file{validation/design/} (Before, After, After\_GUI) \\
-Test suite      & 40 passed (35 report tests and 5 existing tests) \\
+Test suite      & 45 passed (40 report tests and 5 existing tests) \\
 Date            & 23 November 2026 \\
 \end{tabular}
 \end{center}
@@ -148,7 +148,7 @@ Hardcoded row gaps in the generated \code{.tex} & 576              & 0 \\
 Negative \code{\bs vspace} hacks                & 5                & 0 \\
 \code{multirow} cells in table bodies           & 82               & 0 \\
 Utilization and quantity charts                 & 0                & 3 \\
-Pages                                           & 54               & 62 \\
+Pages                                           & 54               & 63 \\
 \bottomrule
 \end{tabularx}
 \end{table}
@@ -247,8 +247,8 @@ Total Load (kN)       & Sum of the unfactored axle or track loads in the IRC~6 v
                         use their axle loads; N/A where the code has no definition (Class~AA, 70R bogie) \\
 Impact Factor ($1+\mathit{IM}$) & IRC~6 Cl.~208.2 for Class~A and Cl.~208.3 for Class~70R / AA, as used in deck design;
                         custom vehicles use their own value \\
-Braking: Considered?  & Yes for live-load vehicles; Class~SV follows its own checkbox; No for the fatigue vehicle \\
-Braking: Value (kN)   & N/A: the analysis has no braking load case (Section~\ref{sec:limits}) \\
+Braking: Considered?  & Yes for every selected vehicle (the app's own rule); Class~SV follows its own checkbox \\
+Braking: Value (kN)   & 20\,\% of the vehicle load, IRC~6 Cl.~211.2 (first train in one lane); N/A where the vehicle has no load definition \\
 Braking: Eccentricity (m) & The eccentricity entered in the Loading tab (1.2\,m by default) \\
 \bottomrule
 \end{tabularx}
@@ -297,7 +297,7 @@ embedded with PyLaTeX \code{Figure}.
 \thead \hd{Figure} & \hd{Content} \\
 \midrule
 7.1 Structural steel   & Tonnage of plate girders, cross bracing (top chord + bottom chord + diagonals) and end
-                         diaphragms; N/A where the BOQ has no value \\
+                         diaphragms (Table~7.1 row 2(d)); N/A where the BOQ has no value \\
 7.2 Concrete and reinforcement & Deck concrete volume (m\textsuperscript{3}) and reinforcement weight (MT) in two panels with
                          separate axes, because the units differ \\
 \bottomrule
@@ -305,7 +305,11 @@ embedded with PyLaTeX \code{Figure}.
 \end{table}
 
 The BOQ previously counted the top and bottom bracing chords even when the user had disabled them; it now follows the
-chord settings (Section~\ref{sec:defects}).
+chord settings (Section~\ref{sec:defects}). It also had no end-diaphragm quantity, so the end-diaphragm bar
+could only show N/A. Row 2(d) now gives the steel in bracing-type end diaphragms with the same rules as the
+cross-bracing rows: one frame per bay at each support, two diagonals plus any enabled chords, the designed section
+areas, and 7.85\,t/m\textsuperscript{3}. For this design that is 8 frames and 1.21\,t. Other end-diaphragm types
+stay N/A rather than being estimated.
 
 \subsection{R6: Central style module}\label{sec:r6}
 
@@ -421,10 +425,10 @@ tall \code{multirow} cells, embeds the UR chart and adds the missing summary row
 charts. \\
 \file{report\_utils.py} \under{core/reports/} & Single-pass LaTeX escaping, so backslashes are not escaped twice;
 negative figure spacing removed. \\
-\file{boq\_generator.py} \under{core/boq/} & Bracing chord quantities follow the top and bottom chord settings. \\
+\file{boq\_generator.py} \under{core/boq/} & Bracing chord quantities follow the top and bottom chord settings; end-diaphragm steel (row 2(d)) added. \\
 \file{template\_page.py}, \file{output\_dock.py} \under{desktop/ui/, desktop/ui/docks/} & \emph{File $\rightarrow$ Create
 Design Report} goes through the same 3D-view and plot capture as the Output panel's \emph{Generate Report}. \\
-\file{test\_reports.py} (new) \under{tests/unit/} & 35 report tests (Section~\ref{sec:tests}). \\
+\file{test\_reports.py} (new) \under{tests/unit/} & 40 report tests (Section~\ref{sec:tests}). \\
 \file{scripts/} (new) \under{repository root} & \file{run\_design\_validation.py}, \file{generate\_validation\_report.py},
 \file{report\_layout\_fixture.py}, \file{check\_environment.py}. \\
 \file{pyproject.toml}, \file{requirements-\allowbreak{}reports.txt} \under{repository root} & Declare PyLaTeX and
@@ -435,8 +439,8 @@ Matplotlib, and a light install for the report tests. \\
 % ================================================================ 4 ===========
 \section{Defects found and fixed}\label{sec:defects}
 
-Three defects outside the six requirements were found while validating the reports. Each was fixed and covered by a
-regression test.
+Eight defects outside the six requirements were found while validating the reports, three of them only by running
+the real design for other bridges (Section~7.2). Each was fixed and is covered by a regression test.
 
 \begin{table}[!htbp]
 \caption{Defects Found and Fixed}
@@ -451,6 +455,15 @@ Read the chord settings recorded by the cross-bracing force calculation \\
 Drawings missing from menu reports & Every figure a placeholder when the report was started from the File menu &
 \emph{File $\rightarrow$ Create Design Report} opened the dialog without capturing the 3D views and plots &
 Route the menu through the Output panel's capture step \\
+Empty table cells & 23 rows with blank values (wind, seismic, stiffener spacing) & Missing values were printed as
+empty strings & Show N/A for every missing value \\
+Empty reactions table & Table~4.2 had three empty rows & The table was never connected to the analysis &
+Fill it with the ULS and SLS envelopes and dead load from the analysis reactions \\
+No end-diaphragm steel & Figure~7.1 end-diaphragm bar always N/A & The BOQ counted intermediate bracing frames only &
+Add row 2(d) for bracing-type end diaphragms, built like the cross-bracing rows \\
+No PDF for some designs & ``PDF could not be generated'' when a stiffener check governs & The design names that check \emph{Leg\,$\le$\,H\_limit} with the Unicode character $\le$ (U+2264), which pdfLaTeX cannot typeset &
+Map design symbols ($\le$, $\ge$, Greek letters, arrows) once in the \file{styles.py} preamble \\
+Empty Chapter~5 cells & Blank deflection, fatigue and summary cells when the design returns results for fewer girders & Number formatters returned an empty string & Show N/A \\
 Report crash with drawings & ``PDF could not be generated'' once drawings were captured &
 The bracing dialog adds text entries (\code{ed\_type}, \code{ed\_bracing\_type}) to the bracing results at run time,
 and the chart code expected only member results & Read only member results; ignore other entries \\
@@ -510,6 +523,7 @@ Section~5.5 summary & Some governing checks missing & Deck SLS stress, deck mini
 slenderness rows added \\
 Bracing-type end diaphragm & Rows labelled Moment / Shear & Compression / Tension / Slenderness (``as bracing'') \\
 Saved \code{.tex} & Referenced deleted temporary images & Images kept beside it; recompiles as delivered \\
+UR chart labels & A value near 1.0 sat on the red threshold line & White backing keeps a value near 1.0 readable over the threshold line \\
 \bottomrule
 \end{tabularx}
 \end{table}
@@ -533,7 +547,8 @@ All reports in this document come from the design case in Table~\ref{tab:case}.
 Span / carriageway width & 20\,m / 7.5\,m, no median \\
 Footways                 & both sides, 1.5\,m (overall width 12.15\,m) \\
 Skew                     & 0\textdegree \\
-Location                 & Maharashtra (wind and seismic data from the project-location database) \\
+Location                 & Maharashtra, Ahmednagar station (shade temperatures from the location database, which has
+                           no wind speed or seismic zone for this station; Section~\ref{sec:limits}) \\
 Vehicles                 & all eight IRC classes selected \\
 Design mode / materials  & Optimized / application defaults (E\,350A steel, M40 deck) \\
 Input files              & \file{validation/design/inputs.json} and the equivalent \file{Report\_Validation.osi} \\
@@ -557,6 +572,12 @@ despite the errors, so \file{Report\_Before.pdf} is the real original output, er
 \file{Report\_Before.pdf} also appears in \file{Report\_After.pdf}, and spot checks against the solver output (girder
 moment, fatigue stress, SLS stress, LTB, governing UR) match in both.
 
+To check that the generator works beyond this one case, the real solver was also run for three other bridges: a 15\,m
+span with a footway on one side; a 30\,m span with an 11\,m carriageway, 10\textdegree{} skew and no footway; and a
+40\,m span at a site with wind and seismic data. All three reports compile with no errors, no overfull boxes and no
+empty cells, and every table carries the page-break notices. This run found the last three defects in Table~9.
+
+\needspace{24\baselineskip}
 \subsection{Test suite}\label{sec:tests}
 
 Table~\ref{tab:tests} groups the report tests by area; Table~\ref{tab:env} lists the environment they ran in.
@@ -569,15 +590,15 @@ Table~\ref{tab:tests} groups the report tests by area; Table~\ref{tab:env} lists
 \thead \hd{Area} & \hd{What is checked} & \hd{Tests} \\
 \midrule
 Tables and styles & Header repetition and page-break notices in every table; footer space reserved; palette and page
-header; no hardcoded formatting outside \file{styles.py} & 5 \\
+header; no hardcoded formatting outside \file{styles.py}; missing values shown as N/A; reactions table from the analysis; design symbols such as $\le$ typeset; N/A for girders without results & 9 \\
 Live loads & GUI checkbox values; vehicle and footway selection; automatic footway pressure; Table~3.3 layout and values & 10 \\
 Utilization chart & Ratios from all members and load cases; bracing slenderness; end-diaphragm rule; agreement with the
 Section~5.5 table on the real design; live bracing entries; invalid data never drawn as zero & 12 \\
-Quantities & Units and partial sums; chord settings in the BOQ; chart files created and embedded & 3 \\
+Quantities & Units and partial sums; chord settings in the BOQ; end-diaphragm steel against a hand calculation; chart files created and embedded & 4 \\
 Generator and GUI & Assets and stale-PDF handling; missing compiler; charts without drawings; Chapter~6 placeholder; File
 menu capture & 5 \\
 \midrule
-\multicolumn{2}{@{}l}{\textbf{Total report tests} (the suite also has 5 existing tests; 40 in all)} & \textbf{35} \\
+\multicolumn{2}{@{}l}{\textbf{Total report tests} (the suite also has 5 existing tests; 45 in all)} & \textbf{40} \\
 \bottomrule
 \end{tabularx}
 \end{table}
@@ -593,7 +614,7 @@ Operating system & Windows 11 \\
 Python           & 3.12.16 (application environment from \file{environment.yml}) \\
 PyLaTeX / Matplotlib & 1.4.2 / 3.10.9 \\
 LaTeX            & pdfTeX 1.40.28 (TeX Live 2025, bundled with Osdag) \\
-Result           & 40 passed; the GUI test is skipped where PySide6 is not installed \\
+Result           & 45 passed; the GUI test is skipped where PySide6 is not installed \\
 \bottomrule
 \end{tabularx}
 \end{table}
@@ -611,14 +632,15 @@ are left for maintainer review. The report shows the values as computed and expl
 \toprule
 \thead \hd{Item} & \hd{Seen in the report} & \hd{Cause} \\
 \midrule
-Braking force & N/A in Table~3.3 & No braking load case in the analysis; \code{IRC6\_2017.cl\_211\_2\_braking\_force}
-raises \code{UnboundLocalError} for every lane count \\
+Braking force & Table~3.3 gives the Cl.~211.2 value per vehicle & The analysis has no braking load case;
+\code{IRC6\_2017.cl\_211\_2\_braking\_force} raises \code{UnboundLocalError} for every lane count \\
 Vehicle selection & Table~3.3 lists every selected vehicle & The grillage analysis takes Class~A and Class~70R
 (wheeled) from IRC~6 Table~6A and applies the Cl.~208.3 impact factor to every vehicle case \\
 Deflection & Sections 4 and 5.1: 28.81\,mm live load, 70.42\,mm total (FAIL); Section~5.5: 11.03\,mm and 24.50\,mm &
 The analysis tables and the design module's girder checks use different values; the original report shows the same \\
-Values not produced & N/A for centrifugal force and end-diaphragm tonnage; empty wind and earthquake rows &
-Not calculated by the current code \\
+Wind and seismic data & N/A for basic wind speed, seismic zone and the values derived from them & The location
+database has no wind speed or zone for the Ahmednagar station; the analysis then falls back to its defaults (33\,m/s,
+Zone~II, $Z = 0.10$) \\
 Drawings & Placeholders in the script-made reports & Need the GUI's CAD capture; \file{Report\_After\_GUI.pdf} has them \\
 Failing check & Fatigue UR 2.56 for this design & Kept to show the failing state of the chart and table \\
 \bottomrule

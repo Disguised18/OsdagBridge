@@ -20,7 +20,7 @@ state of the chart and tables is visible.
 | pdfTeX exit codes (2 passes) | 1, 1 | 0, 0 |
 | LaTeX errors | 138 | 0 |
 | Overfull boxes | 61 | 0 |
-| Pages | 54 | 62 |
+| Pages | 54 | 63 |
 
 The original generator runs pdfTeX in non-stop mode and keeps the PDF even when
 compilation fails, so `Report_Before.pdf` is the real original output.

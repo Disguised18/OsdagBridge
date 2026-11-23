@@ -17,6 +17,28 @@ CHART = {"pass": "#" + PALETTE["reportPass"], "fail": "#" + PALETTE["reportFail"
          "dpi": 160, "font_size": 10}
 FIGURE_WIDTH = r"0.94\textwidth"
 
+# Symbols that design check names and messages may contain (e.g. "Leg ≤ H_limit").
+# pdfLaTeX stops with "Unicode character not set up" on any of these, so map them
+# once here rather than escaping in every chapter.
+UNICODE_SYMBOLS = {
+    "≤": r"\ensuremath{\le}", "≥": r"\ensuremath{\ge}", "≠": r"\ensuremath{\neq}",
+    "≈": r"\ensuremath{\approx}", "±": r"\ensuremath{\pm}", "·": r"\ensuremath{\cdot}",
+    "→": r"\ensuremath{\rightarrow}", "←": r"\ensuremath{\leftarrow}", "√": r"\ensuremath{\surd}",
+    "∞": r"\ensuremath{\infty}", "−": r"\ensuremath{-}", "…": r"\ldots{}",
+    "α": r"\ensuremath{\alpha}", "β": r"\ensuremath{\beta}", "γ": r"\ensuremath{\gamma}",
+    "δ": r"\ensuremath{\delta}", "Δ": r"\ensuremath{\Delta}", "ε": r"\ensuremath{\varepsilon}",
+    "η": r"\ensuremath{\eta}", "θ": r"\ensuremath{\theta}", "λ": r"\ensuremath{\lambda}",
+    "μ": r"\ensuremath{\mu}", "ρ": r"\ensuremath{\rho}", "σ": r"\ensuremath{\sigma}",
+    "Σ": r"\ensuremath{\Sigma}", "τ": r"\ensuremath{\tau}", "φ": r"\ensuremath{\phi}",
+    "ϕ": r"\ensuremath{\phi}", "χ": r"\ensuremath{\chi}", "ψ": r"\ensuremath{\psi}",
+    "ω": r"\ensuremath{\omega}", "✓": r"\ensuremath{\checkmark}", "✗": r"\ensuremath{\times}",
+}
+
+
+def unicode_declarations():
+    return "\n".join(r"\DeclareUnicodeCharacter{%04X}{%s}" % (ord(ch), tex)
+                     for ch, tex in UNICODE_SYMBOLS.items())
+
 
 def report_section(function):
     """Apply the shared body style at each chapter entry point."""
@@ -156,7 +178,7 @@ def preamble(project_name, job_number, report_date, report_version='Rev 0'):
 \BeforeBeginEnvironment{table}{\Needspace{7\baselineskip}}
 \BeforeBeginEnvironment{longtable}{\Needspace{7\baselineskip}}
 
-""" + colours + r"""
+""" + colours + "\n" + unicode_declarations() + r"""
 \newcommand{\ReportSectionStyle}{\small\setlength{\tabcolsep}{3pt}\renewcommand{\arraystretch}{1.15}}
 \newcommand{\ReportCompactTable}{\setlength{\tabcolsep}{2pt}}
 \newcommand{\ReportCaptionStyle}{\setlength{\abovecaptionskip}{2pt}\setlength{\belowcaptionskip}{2pt}}
